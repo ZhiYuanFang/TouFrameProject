@@ -3,37 +3,43 @@ package xyz.ttyz.tourfrxohc;
 import android.content.Context;
 import android.widget.Toast;
 
-import xyz.ttyz.mylibrary.method.RfRxOHCBaseModule;
-import xyz.ttyz.mylibrary.method.RfRxSubscriber;
+import com.trello.rxlifecycle2.LifecycleProvider;
+
+import xyz.ttyz.mylibrary.method.BaseObserver;
 
 /**
  * Created by tou on 2019/5/21.
  */
 
-public abstract class BaseSubscriber<D> extends RfRxSubscriber<BaseModule<D>> {
+public abstract class BaseSubscriber<D> extends BaseObserver<BaseModule<D>> {
+
+    public BaseSubscriber(LifecycleProvider lifeCycle) {
+        super(lifeCycle);
+    }
+
     @Override
     public Context initContext() {
         return ActivityManager.getInstance();
     }
 
-    @Override
     public void onStart() {
         ProgressUtil.showCircleProgress(ActivityManager.getInstance());
     }
 
     @Override
-    public void onCompleted() {
+    public void onComplete() {
         ProgressUtil.missCircleProgress();
     }
 
     @Override
     public void onError(Throwable e) {
         e.getMessage();
-        onCompleted();
+        onComplete();
     }
 
     @Override
     public void onRfRxNext(BaseModule baseModule) {
+        onStart();
         if(baseModule.getErr() == 0){
             success((D) baseModule.getData());
         } else {

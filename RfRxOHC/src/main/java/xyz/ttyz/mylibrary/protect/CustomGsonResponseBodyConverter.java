@@ -30,6 +30,7 @@ public class CustomGsonResponseBodyConverter<T> implements Converter<ResponseBod
     }
 
     private void judgeJSONAndChange(Object object) throws JSONException {
+        System.out.println("---------- 网络反馈数据格式解析");
         if(object instanceof JSONObject){
             JSONObject json = (JSONObject) object;
             Iterator<String> iterator = json.keys();

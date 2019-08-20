@@ -1,7 +1,6 @@
 package xyz.ttyz.mylibrary;
 
 import android.app.Application;
-import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.ihsanbal.logging.Level;
@@ -10,12 +9,12 @@ import com.ihsanbal.logging.LoggingInterceptor;
 import java.io.File;
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import okhttp3.internal.platform.Platform;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
-import rx.schedulers.Schedulers;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import xyz.ttyz.mylibrary.protect.CustomGsonConverterFactory;
 import xyz.ttyz.mylibrary.protect.RfRxOHCIntercept;
 
@@ -52,8 +51,8 @@ public class RfRxOHCUtil {
      *                       .hostnameVerifier((s, sslSession) -> true);
      */
     public static void initApiService(Application application,
-                                      @NonNull String baseUrl,
-                                      @NonNull String directoryCache,
+                                      String baseUrl,
+                                      String directoryCache,
                                       long maxCache,
                                       long timeOut,
                                       boolean isReleaseType,
@@ -61,13 +60,13 @@ public class RfRxOHCUtil {
                                       String version,
                                       String flavor,
                                       String terminal,
-                                      @NonNull TouRRCDelegate touRRCDelegate) {
+                                      TouRRCDelegate touRRCDelegate) {
         Log.i(TAG, "initApiService: directoryCache --> " + directoryCache);
         OkHttpClient.Builder httpBuilder = new OkHttpClient.Builder();
         //创建OkHttpClient对象
         Cache cache = new Cache(new File(application.getExternalCacheDir(), directoryCache), maxCache);//设置缓存策略
         httpBuilder.cache(cache)
-                .addInterceptor(new RfRxOHCIntercept(application))
+//                .addInterceptor(new RfRxOHCIntercept(application))
                 .retryOnConnectionFailure(true)
                 .connectTimeout(timeOut, TimeUnit.SECONDS)
                 .readTimeout(timeOut, TimeUnit.SECONDS)
@@ -86,13 +85,13 @@ public class RfRxOHCUtil {
 
         OkHttpClient okHttpClient = httpBuilder
                 .addInterceptor(loggingInterceptor)
-                .addInterceptor(new RfRxOHCIntercept(application))
+//                .addInterceptor(new RfRxOHCIntercept(application))
                 .build();
         //返回数据格式处理
         Retrofit.Builder retBuilder = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .client(okHttpClient)
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.createWithScheduler(Schedulers.io()))
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
                 .addConverterFactory(CustomGsonConverterFactory.create());
         touRRCDelegate.initApiService(retBuilder.build());
     }
