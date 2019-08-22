@@ -4,12 +4,12 @@ import androidx.databinding.DataBindingUtil;
 
 import android.Manifest;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
 import io.reactivex.functions.Consumer;
+import xyz.ttyz.mylibrary.method.ActivityManager;
 import xyz.ttyz.tourfrxohc.databinding.ActivityMainBinding;
 
 
@@ -35,7 +35,7 @@ public class MainActivity extends RxAppCompatActivity {
                         @Override
                         public void accept(Boolean aBoolean) throws Exception {
                             if(aBoolean){
-                                mainViewModel.publish();
+//                                mainViewModel.jiemi(null);
                             }
                         }
                     });

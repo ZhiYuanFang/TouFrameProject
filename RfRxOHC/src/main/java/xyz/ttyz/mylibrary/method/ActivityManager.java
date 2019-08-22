@@ -1,4 +1,4 @@
-package xyz.ttyz.tourfrxohc;
+package xyz.ttyz.mylibrary.method;
 
 import android.app.Activity;
 

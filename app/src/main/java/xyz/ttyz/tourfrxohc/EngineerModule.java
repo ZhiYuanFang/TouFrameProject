@@ -1,6 +1,6 @@
 package xyz.ttyz.tourfrxohc;
 
-import java.io.Serializable;
+import xyz.ttyz.mylibrary.method.BaseModule;
 
 /**
  * Created by tou on 2019/5/20.

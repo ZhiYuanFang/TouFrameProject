@@ -1,5 +1,7 @@
 package xyz.ttyz.mylibrary.protect;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
@@ -15,12 +17,14 @@ import java.util.List;
 
 import okhttp3.ResponseBody;
 import retrofit2.Converter;
+import xyz.ttyz.mylibrary.encryption_decryption.AES;
 
 /**
  * Created by tou on 2019/1/7.
  */
 
 public class CustomGsonResponseBodyConverter<T> implements Converter<ResponseBody, T> {
+    private static final String TAG = "CustomGsonResponseBodyC";
     private final Gson gson;
     private final TypeAdapter<T> adapter;
 
@@ -30,7 +34,6 @@ public class CustomGsonResponseBodyConverter<T> implements Converter<ResponseBod
     }
 
     private void judgeJSONAndChange(Object object) throws JSONException {
-        System.out.println("---------- 网络反馈数据格式解析");
         if(object instanceof JSONObject){
             JSONObject json = (JSONObject) object;
             Iterator<String> iterator = json.keys();
@@ -64,6 +67,17 @@ public class CustomGsonResponseBodyConverter<T> implements Converter<ResponseBod
 
     @Override public T convert(ResponseBody value) throws IOException {
         String originalBody = value.string();
+        //如果不是json格式 则是密文信息，前往解密
+        try {
+            new JSONObject(originalBody);
+        } catch (JSONException e) {
+            try {
+                new JSONArray(originalBody);
+            } catch (JSONException e1) {
+                originalBody = AES.decryptFromBase64(originalBody, EncodeUtils.AESKey);
+                Log.i(TAG, "解密后: " + originalBody);
+            }
+        }
         // 获取json中的code，对json进行预处理
         JSONObject json = null;
         try {

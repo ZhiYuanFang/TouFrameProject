@@ -1,4 +1,4 @@
-package xyz.ttyz.tourfrxohc;
+package xyz.ttyz.mylibrary.method;
 
 import xyz.ttyz.mylibrary.method.RfRxOHCBaseModule;
 
@@ -7,16 +7,16 @@ import xyz.ttyz.mylibrary.method.RfRxOHCBaseModule;
  */
 
 public class BaseModule<D> extends RfRxOHCBaseModule {
-    int err;
+    int code;
     String message;
     D data;
 
-    public int getErr() {
-        return err;
+    public int getCode() {
+        return code;
     }
 
-    public void setErr(int err) {
-        this.err = err;
+    public void setCode(int code) {
+        this.code = code;
     }
 
     public String getMessage() {

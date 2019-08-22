@@ -1,10 +1,12 @@
-package xyz.ttyz.tourfrxohc;
+package xyz.ttyz.mylibrary.method;
 
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.view.LayoutInflater;
+
+import xyz.ttyz.mylibrary.R;
 
 /**
  * Created by tou on 2018/8/1 0001.
