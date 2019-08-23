@@ -46,7 +46,7 @@ dependencies {
     api 'io.reactivex.rxjava2:rxjava:2.2.9'
     //api module转换
     api 'com.squareup.retrofit2:converter-gson:2.4.0'
-
+    //同步activity生命周期
     api 'com.trello.rxlifecycle2:rxlifecycle:2.2.1'
     api 'com.trello.rxlifecycle2:rxlifecycle-android:2.2.1'
     api 'com.trello.rxlifecycle2:rxlifecycle-components:2.2.1'
