@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:binding="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="context"
+            type="xyz.ttyz.toubasemvvm.weight.CardImageView" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <androidx.cardview.widget.CardView
+            binding:visible="@{!context.isCircle}"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:cardBackgroundColor="@android:color/transparent"
+            app:cardElevation = "0dp"
+            binding:card_cornerRadius="@{context.imageRadius}">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <ImageView
+                    binding:visible='@{!(context.isCircle || context.imageUrl.toLowerCase().contains(".gif"))}'
+                    binding:notValid='@{context.isCircle || context.imageUrl.toLowerCase().contains(".gif")}'
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    tools:src="@drawable/testpic"
+                    android:scaleType="centerCrop"
+                    binding:loadProgressBar="@{context.loadProgressBar}"
+                    binding:isCircle="@{context.isCircle}"
+                    binding:imageFilePath="@{context.imageFilePath}"
+                    binding:imageFile="@{context.imageFile}"
+                    binding:isBlur="@{true}"
+                    binding:notJudgeGif="@{true}"
+                    binding:thumbnil="@{context.thumbnil}"
+                    binding:imageUrl="@{context.imageUrl}"/>
+                <ImageView
+                    binding:notValid="@{context.isCircle}"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    tools:src="@drawable/testpic"
+                    android:scaleType="fitCenter"
+                    binding:loadProgressBar="@{context.loadProgressBar}"
+                    binding:isCircle="@{context.isCircle}"
+                    binding:imageFilePath="@{context.imageFilePath}"
+                    binding:imageFile="@{context.imageFile}"
+                    binding:isBlur="@{context.isBlur}"
+                    binding:thumbnil="@{context.thumbnil}"
+                    binding:imageUrl="@{context.imageUrl}"/>
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+
+        <ImageView
+            tools:visibility="gone"
+            binding:visible="@{context.isCircle}"
+            binding:notValid="@{!context.isCircle}"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:src="@drawable/testpic"
+            binding:loadProgressBar="@{context.loadProgressBar}"
+            binding:isCircle="@{context.isCircle}"
+            binding:imageFilePath="@{context.imageFilePath}"
+            binding:imageFile="@{context.imageFile}"
+            binding:isBlur="@{context.isBlur}"
+            binding:thumbnil="@{context.thumbnil}"
+            binding:imageUrl="@{context.imageUrl}"/>
+    </RelativeLayout>
+
+
+</layout>

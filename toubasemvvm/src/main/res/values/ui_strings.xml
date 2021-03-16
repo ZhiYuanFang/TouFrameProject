@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="no_data">暂无数据</string>
+    <string name="use_local_cache">无网络，已智能读取缓存。</string>
+    <string name="no_net_work">无网络</string>
+    <string name="no_save_permission">没有存储权限</string>
+    <string name="create_folder_false">文件夹创建失败</string>
+    <string name="no_more">没有更多了~</string>
+    <string name="load_end">加载完毕</string>
+    <string name="net_error">网络出错</string>
+    <string name="error_ui">正在维护,敬请更新.</string>
+    <string name="back_again">再按一次退出</string>
+
+    <string name="no_read_permission">没有读取权限</string>
+    <string name="is_install_new_version">正在下载最新版 : V</string>
+</resources>

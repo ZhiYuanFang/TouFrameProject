@@ -10,36 +10,32 @@ import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
 import io.reactivex.functions.Consumer;
 import xyz.ttyz.mylibrary.method.ActivityManager;
+import xyz.ttyz.toubasemvvm.ui.BaseTouActivity;
 import xyz.ttyz.tourfrxohc.databinding.ActivityMainBinding;
 
 
-public class MainActivity extends RxAppCompatActivity {
-    MainViewModel mainViewModel;
+public class MainActivity extends BaseTouActivity<ActivityMainBinding> {
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        ActivityManager.popActivity(this);
-        ActivityMainBinding activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-        mainViewModel = new MainViewModel(this, this);
-        activityMainBinding.setVariable(BR.viewModel, mainViewModel);
-        requestRxPermissions();
+    protected int initLayoutId() {
+        return R.layout.activity_main;
     }
 
-    private void requestRxPermissions() {
-        RxPermissions rxPermissions = new RxPermissions(this);
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-            rxPermissions.request(Manifest.permission.INTERNET,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    Manifest.permission.READ_EXTERNAL_STORAGE)
-                    .subscribe(new Consumer<Boolean>() {
-                        @Override
-                        public void accept(Boolean aBoolean) throws Exception {
-                            if(aBoolean){
-//                                mainViewModel.jiemi(null);
-                            }
-                        }
-                    });
-        }
+    @Override
+    protected String[] initPermission() {
+        return new String[]{Manifest.permission.INTERNET,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE};
+    }
+
+    @Override
+    protected void initData() {
+        mBinding.setViewModel( new MainViewModel(this, this));
+    }
+
+    @Override
+    protected void initServer() {
+
     }
 }
 

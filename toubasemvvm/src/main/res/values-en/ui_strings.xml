@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="no_data">No data</string>
+    <string name="use_local_cache">No network, intelligent read cache.</string>
+    <string name="no_net_work">No network</string>
+    <string name="no_save_permission">No storage permission</string>
+    <string name="create_folder_false">Folder creation failed</string>
+    <string name="no_more">No more~</string>
+    <string name="load_end">Loading completed</string>
+    <string name="net_error">Network error</string>
+    <string name="error_ui">Maintenance in progress, please update.</string>
+    <string name="back_again">Press again to exit</string>
+</resources>

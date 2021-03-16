@@ -12,6 +12,8 @@ import okhttp3.Request;
 import okhttp3.Response;
 import retrofit2.Retrofit;
 import xyz.ttyz.mylibrary.RfRxOHCUtil;
+import xyz.ttyz.tou_example.init.ApplicationUtils;
+import xyz.ttyz.tou_example.init.TouDelegate;
 
 /**
  * Created by tou on 2019/5/20.
@@ -23,12 +25,38 @@ public class BaseApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        //http://172.16.10.12:5000
-        //https://yysyservice.com:20001
-        //https://hlqs.zyclp.top
+        ApplicationUtils.init(this, 750, 1334, new TouDelegate() {
+            @Override
+            public boolean isLogin() {
+                return false;//当前用户是否登录
+            }
+
+            @Override
+            public void gotoLoginActivity() {
+                //前往登录界面
+            }
+
+            @Override
+            public void checkVersion(VersionDelegate versionDelegate) {
+                //请求接口判断是否需要更新
+                if(true){
+                    versionDelegate.installVersion("", "更新了一些功能", BuildConfig.VERSION_CODE);
+                }
+            }
+
+            @Override
+            public String applicationId() {
+                return BuildConfig.APPLICATION_ID;
+            }
+
+            @Override
+            public void cacheMainThrowable(Throwable e) {
+
+            }
+        });
         RfRxOHCUtil.initApiService(this, "https://yysyservice.com:20001", getPackageName() + "-cache",
                 2 * 1024 * 1024, 30, BuildConfig.BUILD_TYPE.equals("release"), BuildConfig.DEBUG, BuildConfig.VERSION_NAME,
-                BuildConfig.FLAVOR, "android", new RfRxOHCUtil.TouRRCDelegate() {
+                "渠道在头部", "android", new RfRxOHCUtil.TouRRCDelegate() {
                     @Override
                     public void addMoreForOkHttpClient(OkHttpClient.Builder httpBuilder) {
                         //动态值
