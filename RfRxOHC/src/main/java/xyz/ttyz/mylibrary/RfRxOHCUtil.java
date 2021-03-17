@@ -28,6 +28,7 @@ import xyz.ttyz.mylibrary.protect.RfRxOHCIntercept;
 
 public class RfRxOHCUtil {
     private static final String TAG = "RfRxOHCUtil";
+    public static int successCode = 0;
     /**
      * @param baseUrl        后台端口地址：http://127.0.0.1:8080/
      * @param directoryCache 网络缓存文件名
@@ -38,6 +39,7 @@ public class RfRxOHCUtil {
      * @param version        版本号
      * @param flavor         渠道名
      * @param terminal       设备名
+     * @param successCode    接口请求成功返回的code值 ：code = 0
      * @param touRRCDelegate 建议根据产品需求在addMoreForInterceptor添加其它头部信息,
      *                       如果需要支持HTTPS，可以在addMoreForOkHttpClient中做自定义添加
      *                       eg:CustomTrust ct = new CustomTrust(application);
@@ -63,7 +65,9 @@ public class RfRxOHCUtil {
                                       String version,
                                       String flavor,
                                       String terminal,
+                                      int successCode,
                                       TouRRCDelegate touRRCDelegate) {
+        RfRxOHCUtil.successCode = successCode;
         Log.i(TAG, "initApiService: directoryCache --> " + directoryCache);
         OkHttpClient.Builder httpBuilder = new OkHttpClient.Builder();
         //创建OkHttpClient对象

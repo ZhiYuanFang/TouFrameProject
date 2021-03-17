@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:binding="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="toolBarViewModel"
+            type="xyz.ttyz.toubasemvvm.vm.ToolBarViewModel" />
+    </data>
+
+    <merge>
+
+        <LinearLayout
+            android:fitsSystemWindows="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            binding:bacColor="@{toolBarViewModel.bacColor}"
+            android:orientation="vertical">
+
+
+            <androidx.appcompat.widget.Toolbar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:contentInsetLeft="0dp"
+                app:contentInsetStart="0dp">
+
+                <ImageView
+                    android:layout_width="45dp"
+                    android:layout_height="match_parent"
+                    android:background="?selectableItemBackgroundBorderless"
+                    android:contentDescription="@null"
+                    android:padding="11dp"
+                    binding:noteJudgeLogin="@{toolBarViewModel.notJudgeLogin}"
+                    binding:onClickCommand="@{toolBarViewModel.backClick}"
+                    binding:srcRes="@{toolBarViewModel.backDraResID}"
+                    binding:visible="@{toolBarViewModel.backClick != null}"
+                    tools:src="@drawable/fanhui" />
+<!--                标题字体用dp  防止用户修改系统字体大小，导致标题变大， 引起不适
+15 22
+-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    tools:text="啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊"
+                    android:maxLength="15"
+                    tools:maxLength="@{(toolBarViewModel.rightTxt.length() == 0  &amp;&amp; toolBarViewModel.saveClick == null &amp;&amp; toolBarViewModel.shareClick == null) ? 22 : 15}"
+                    android:ellipsize="end"
+                    android:textSize="16dp"
+                    android:singleLine="true"
+                    android:textStyle="bold"
+                    android:textColor="@{toolBarViewModel.titleColor}"
+                    android:text="@{toolBarViewModel.title}"
+                    tools:ignore="SpUsage" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        tools:visibility="gone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginEnd="15dp"
+                        android:background="@{toolBarViewModel.rightNoBac ? @drawable/bg_none : @drawable/bg_conor_15_blue}"
+                        android:gravity="center"
+                        android:paddingStart="14dp"
+                        android:paddingTop="9dp"
+                        android:paddingEnd="14dp"
+                        android:paddingBottom="9dp"
+                        android:text='@{toolBarViewModel.rightTxt}'
+                        tools:textColor="@color/white"
+                        android:textColor="@{toolBarViewModel.rightNoBac ? @color/black : @color/white}"
+                        android:textSize="12sp"
+                        binding:onClickCommand="@{toolBarViewModel.rightClick}"
+                        binding:visible="@{toolBarViewModel.rightTxt.length() > 0}"
+                        tools:text="选择" />
+
+                    <ImageView
+                        android:layout_width="45dp"
+                        android:layout_height="match_parent"
+                        android:background="?selectableItemBackgroundBorderless"
+                        android:contentDescription="@null"
+                        android:padding="11dp"
+                        binding:noteJudgeLogin="@{toolBarViewModel.notJudgeLogin}"
+                        binding:onClickCommand="@{toolBarViewModel.saveClick}"
+                        binding:srcRes="@{toolBarViewModel.isFavored ? toolBarViewModel.saveLikeDraResID : toolBarViewModel.saveNoLikeDraResID}"
+                        binding:visible="@{toolBarViewModel.saveClick != null}"
+                        tools:src="@drawable/picture_ic_camera" />
+
+                    <ImageView
+                        android:layout_width="45dp"
+                        android:layout_height="match_parent"
+                        android:background="?selectableItemBackgroundBorderless"
+                        android:contentDescription="@null"
+                        android:padding="11dp"
+                        binding:noteJudgeLogin="@{toolBarViewModel.notJudgeLogin}"
+                        binding:onClickCommand="@{toolBarViewModel.shareClick}"
+                        binding:srcRes="@{toolBarViewModel.shareDraResID}"
+                        binding:visible="@{toolBarViewModel.shareClick != null}"
+                        tools:src="@drawable/picture_ic_camera" />
+                </LinearLayout>
+            </androidx.appcompat.widget.Toolbar>
+        </LinearLayout>
+    </merge>
+</layout>

@@ -28,7 +28,7 @@ public class BaseApplication extends Application {
         ApplicationUtils.init(this, 750, 1334, new TouDelegate() {
             @Override
             public boolean isLogin() {
-                return false;//当前用户是否登录
+                return DefaultUtils.token != null;//当前用户是否登录
             }
 
             @Override
@@ -39,7 +39,7 @@ public class BaseApplication extends Application {
             @Override
             public void checkVersion(VersionDelegate versionDelegate) {
                 //请求接口判断是否需要更新
-                if(true){
+                if (true) {
                     versionDelegate.installVersion("", "更新了一些功能", BuildConfig.VERSION_CODE);
                 }
             }
@@ -51,12 +51,12 @@ public class BaseApplication extends Application {
 
             @Override
             public void cacheMainThrowable(Throwable e) {
-
+                //捕获主线程异常，上传bugly
             }
         });
-        RfRxOHCUtil.initApiService(this, "https://yysyservice.com:20001", getPackageName() + "-cache",
+        RfRxOHCUtil.initApiService(this, "http://api.x16.com/", getPackageName() + "-cache",
                 2 * 1024 * 1024, 30, BuildConfig.BUILD_TYPE.equals("release"), BuildConfig.DEBUG, BuildConfig.VERSION_NAME,
-                "渠道在头部", "android", new RfRxOHCUtil.TouRRCDelegate() {
+                "渠道在头部", "android", 0, new RfRxOHCUtil.TouRRCDelegate() {
                     @Override
                     public void addMoreForOkHttpClient(OkHttpClient.Builder httpBuilder) {
                         //动态值

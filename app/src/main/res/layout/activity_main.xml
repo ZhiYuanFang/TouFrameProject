@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:binding="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
-            name="viewModel"
-            type="xyz.ttyz.tourfrxohc.MainViewModel"/>
+            name="context"
+            type="xyz.ttyz.tourfrxohc.MainActivity" />
+        <variable
+            name="userModule"
+            type="xyz.ttyz.tourfrxohc.models.UserModel" />
+        <variable
+            name="adapter"
+            type="xyz.ttyz.toubasemvvm.adapter.utils.BaseEmptyAdapterParent" />
+        <variable
+            name="toolBarViewModel"
+            type="xyz.ttyz.toubasemvvm.vm.ToolBarViewModel" />
     </data>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -11,52 +20,38 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:background="@color/white"
         tools:context="xyz.ttyz.tourfrxohc.MainActivity">
-
+        <include layout="@layout/layout_toolbar"
+            binding:toolBarViewModel="@{toolBarViewModel}"/>
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
             android:gravity="center"
-            android:text="@{viewModel.name}"/>
+            tools:text="@string/app_name"
+            android:text="@{userModule.name}"/>
 
-        <Button
+        <RelativeLayout
+            android:id="@+id/container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?selectableItemBackground"
-            android:text="获取验证码"
-            android:onClick="@{viewModel.publish}"/>
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="请输入验证码"
-            android:inputType="number"
-            android:text="@={viewModel.code}"/>
+            android:layout_height="match_parent">
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?selectableItemBackground"
-            android:text="登录"
-            android:onClick="@{viewModel.login}"/>
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?selectableItemBackground"
-            android:text="获取用户信息"
-            android:onClick="@{viewModel.userInfo}"/>
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?selectableItemBackground"
-            android:text="加密"
-            android:onClick="@{viewModel.jiami}"/>
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?selectableItemBackground"
-            android:text="解密"
-            android:onClick="@{viewModel.jiemi}"/>
+            <com.scwang.smartrefresh.layout.SmartRefreshLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                binding:enableLoadMore="@{false}"
+                binding:loadEnd="@{context.loadEnd}"
+                binding:refreshListener="@{context.refreshListener}">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    tools:itemCount="2"
+                    binding:verticalDis="@{5}"
+                    tools:listitem="@layout/viewholder_resorce"/>
+            </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+        </RelativeLayout>
     </LinearLayout>
 
 </layout>

@@ -23,7 +23,12 @@ import xyz.ttyz.mylibrary.protect.JsonEncryptUtils;
 
 public class RetrofitUtils {
     private static final String TAG = "RetrofitUtils";
-    public static RequestBody getRSARequestBody(HashMap hashMap) {
+    public static RequestBody getNormalBody(Map hashMap){
+        String str = new Gson().toJson(hashMap);
+        Log.i(TAG, "request中传递的json数据：" + str);
+        return RequestBody.create(MediaType.parse("application/json; charset=utf-8"), str);
+    }
+    public static RequestBody getRSARequestBody(Map hashMap) {
         //加密
         String str = new Gson().toJson(hashMap);
         Log.i(TAG, "request中传递的json数据：" + str);
@@ -31,7 +36,7 @@ public class RetrofitUtils {
         Log.i(TAG, "转化后的数据：" + postBody);
         return RequestBody.create(MediaType.parse("application/json; charset=utf-8"), postBody);
     }
-    public static RequestBody getAESRequestBody(HashMap hashMap) {
+    public static RequestBody getAESRequestBody(Map hashMap) {
         //加密
         String aesRandom = EncodeUtils.AESKey;
         Log.i(TAG, "AES  密钥：" + aesRandom);
