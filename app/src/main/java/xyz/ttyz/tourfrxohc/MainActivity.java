@@ -9,13 +9,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.HashMap;
 import java.util.Map;
 
-import xyz.ttyz.mylibrary.method.BaseTouSubscriber;
+import xyz.ttyz.mylibrary.method.ActivityManager;
 import xyz.ttyz.mylibrary.method.RetrofitUtils;
 import xyz.ttyz.mylibrary.method.RxOHCUtils;
-import xyz.ttyz.tou_example.init.ApplicationUtils;
 import xyz.ttyz.toubasemvvm.adapter.OnClickAdapter;
 import xyz.ttyz.toubasemvvm.adapter.utils.BaseEmptyAdapterParent;
 import xyz.ttyz.toubasemvvm.adapter.utils.BaseRecyclerAdapter;
+import xyz.ttyz.toubasemvvm.utils.DialogUtils;
+import xyz.ttyz.toubasemvvm.utils.MobileInfoUtil;
 import xyz.ttyz.toubasemvvm.vm.ToolBarViewModel;
 import xyz.ttyz.tourfrxohc.activity.BaseActivity;
 import xyz.ttyz.tourfrxohc.databinding.ActivityMainBinding;
@@ -26,7 +27,6 @@ import xyz.ttyz.tourfrxohc.models.ResorceModel;
 import xyz.ttyz.tourfrxohc.models.UserModel;
 import xyz.ttyz.tourfrxohc.viewholder.ResorceViewHolder;
 
-
 public class MainActivity extends BaseActivity<ActivityMainBinding> {
 
     @Override
@@ -36,25 +36,37 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
 
     @Override
     protected String[] initPermission() {
-        return new String[]{Manifest.permission.INTERNET,
+        return new String[]{
+                Manifest.permission.READ_PHONE_STATE,
+                Manifest.permission.INTERNET,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.READ_EXTERNAL_STORAGE};
     }
 
+    //recycler适配器
     BaseEmptyAdapterParent historyAdapter;
+    //标题栏
     ToolBarViewModel toolBarViewModel;
     @Override
     protected void initData() {
+        hardware = new hardware();
+        software = new software();
         mBinding.setContext(this);
         toolBarViewModel = new ToolBarViewModel.Builder()
-                .title("首页")
-                .shareClick(new OnClickAdapter.onClickCommand() {
+                .rightTxt("图片")
+                .rightClick(new OnClickAdapter.onClickCommand() {
                     @Override
                     public void click() {
-                        MainFragment mainFragment = new MainFragment();
-                        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                        fragmentTransaction.add(R.id.container, mainFragment);
-                        fragmentTransaction.commitAllowingStateLoss();
+                        DialogUtils.showDialog("点击返回按钮可以关闭图片", new DialogUtils.DialogButtonModule("显示图片", new DialogUtils.DialogClickDelegate() {
+                            @Override
+                            public void click(DialogUtils.DialogButtonModule dialogButtonModule) {
+                                MainFragment mainFragment = new MainFragment();
+                                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                                fragmentTransaction.add(R.id.container, mainFragment);
+                                fragmentTransaction.commitAllowingStateLoss();
+                                fragmentTransaction.addToBackStack("");
+                            }
+                        }));
                     }
                 })
                 .build();
@@ -76,30 +88,21 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
             }
         });
         mBinding.setAdapter(historyAdapter);
-
     }
 
     @Override
     protected void initServer() {
         //登录
         Map map = new HashMap();
-        map.put("mobild", "17758116193");
+        map.put("mobile", "17758116193");
         map.put("code", "339999");
-        Map hardMap = new HashMap();
-        hardMap.put("type", 0);
-        hardMap.put("uuid", "1234567890987654321");
-        hardMap.put("model", "web");
-        hardMap.put("system", "chrome");
-        map.put("hardware", hardMap);
-        Map softMap = new HashMap();
-        softMap.put("type", 1003);
-        softMap.put("build", 100);
-        map.put("software", softMap);
-        new RxOHCUtils<>(this).executeApi(BaseApplication.apiService.login(RetrofitUtils.getNormalBody(map)), new BaseTouSubscriber<UserModel>(this) {
+        map.put("hardware", hardware);
+        map.put("software", software);
+        new RxOHCUtils<>(this).executeApi(BaseApplication.apiService.login(RetrofitUtils.getNormalBody(map)), new BaseSubscriber<UserModel>(this) {
             @Override
             public void success(UserModel data) {
                 if (data != null) {
-                    mBinding.setUserModule(data);
+                    toolBarViewModel.title.set(data.getName() + " 的浏览历史");
                     DefaultUtils.token = data.getAccessToken();
                     loadHistory();
                 }
@@ -107,7 +110,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
 
             @Override
             public String initCacheKey() {
-                return null;//如果该页面涉及隐私，则不传cacheKey，就不会产生缓存数据
+                return "getNormalBody";//如果该页面涉及隐私，则不传cacheKey，就不会产生缓存数据
             }
 
         });
@@ -115,7 +118,10 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
 
     private void loadHistory(){
         //获取历史
-        new RxOHCUtils<>(this).executeApi(BaseApplication.apiService.getHistory(), new BaseSubscriber<MainModel>(this, loadEnd) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("hardware", hardware);
+        map.put("software", software);
+        new RxOHCUtils<>(this).executeApi(BaseApplication.apiService.getHistory(map), new BaseSubscriber<MainModel>(this, loadEnd) {
             @Override
             public void success(MainModel data) {
                 if (data != null) {
@@ -125,11 +131,28 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
 
             @Override
             public String initCacheKey() {
-                return null;//如果该页面涉及隐私，则不传cacheKey，就不会产生缓存数据
+                return "getHistory";//如果该页面涉及隐私，则不传cacheKey，就不会产生缓存数据
             }
 
         });
     }
+
+    //region 测试接口需要，不用管
+    public hardware hardware;
+    public software software;
+
+    static class hardware {
+        int type = MobileInfoUtil.isPad(ActivityManager.getInstance()) ? 6 : 7;//硬件分类：0跨平台 1Apple TV 2Mac desktop 3iPad 4iPhone 5android TV 6 android pad 7 android phone 8pc
+        String uuid = MobileInfoUtil.getUUID(ActivityManager.getInstance());
+        String model = MobileInfoUtil.getSystemModel();
+        String system = MobileInfoUtil.getSystemVersion();
+    }
+
+    static class software {
+        int type = 1;//0跨类型 1多元幼教 2多元智能 3师享童年 100小程序 1000web etc…
+        int build = /*AppUtils.getVersionCode(ActivityManager.getInstance())*/504;
+    }
+    //endregion
 }
 
 

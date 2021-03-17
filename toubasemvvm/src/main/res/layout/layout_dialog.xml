@@ -42,7 +42,7 @@
                 android:background="@color/divider"/>
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="54dp"
+                android:layout_height="45dp"
                 android:divider="@drawable/divider_1_gray_shu"
                 android:showDividers="middle"
                 android:orientation="horizontal"
@@ -57,7 +57,8 @@
                     android:background="@drawable/bg_conor_left_bottom_10"
                     android:text="取消"
                     android:layout_weight="1"
-                    android:textSize="16sp"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
                     android:textColor="#999999" />
 
                 <TextView
@@ -67,7 +68,8 @@
                     android:gravity="center"
                     android:foreground="?selectableItemBackground"
                     android:background="@drawable/bg_conor_right_bottom_10"
-                    android:textSize="16sp"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
                     android:text="确定"
                     android:layout_weight="1"
                     android:textColor="#4B8EFF" />

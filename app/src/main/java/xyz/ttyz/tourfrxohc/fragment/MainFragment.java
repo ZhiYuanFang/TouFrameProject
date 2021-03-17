@@ -4,9 +4,9 @@ import androidx.databinding.ObservableField;
 
 import xyz.ttyz.toubasemvvm.utils.ImageLoaderUtil;
 import xyz.ttyz.tourfrxohc.R;
-import xyz.ttyz.tourfrxohc.databinding.FragmentMainBindingImpl;
+import xyz.ttyz.tourfrxohc.databinding.FragmentMainBinding;
 
-public class MainFragment extends BaseFragment<FragmentMainBindingImpl>{
+public class MainFragment extends BaseFragment<FragmentMainBinding>{
 
     public ObservableField<String> imageFiled = new ObservableField<>("");
     @Override

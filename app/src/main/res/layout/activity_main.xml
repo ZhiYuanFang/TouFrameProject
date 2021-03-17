@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:binding="http://schemas.android.com/apk/res-auto">
+
     <data>
+
         <variable
             name="context"
             type="xyz.ttyz.tourfrxohc.MainActivity" />
-        <variable
-            name="userModule"
-            type="xyz.ttyz.tourfrxohc.models.UserModel" />
+
         <variable
             name="adapter"
             type="xyz.ttyz.toubasemvvm.adapter.utils.BaseEmptyAdapterParent" />
+
         <variable
             name="toolBarViewModel"
             type="xyz.ttyz.toubasemvvm.vm.ToolBarViewModel" />
@@ -19,18 +20,13 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:background="@color/white"
+        android:orientation="vertical"
         tools:context="xyz.ttyz.tourfrxohc.MainActivity">
-        <include layout="@layout/layout_toolbar"
-            binding:toolBarViewModel="@{toolBarViewModel}"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="15dp"
-            android:gravity="center"
-            tools:text="@string/app_name"
-            android:text="@{userModule.name}"/>
+
+        <include
+            layout="@layout/layout_toolbar"
+            binding:toolBarViewModel="@{toolBarViewModel}" />
 
         <RelativeLayout
             android:id="@+id/container"
@@ -44,13 +40,22 @@
                 binding:loadEnd="@{context.loadEnd}"
                 binding:refreshListener="@{context.refreshListener}">
 
-                <androidx.recyclerview.widget.RecyclerView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    tools:itemCount="2"
-                    binding:verticalDis="@{5}"
-                    tools:listitem="@layout/viewholder_resorce"/>
+                    android:orientation="vertical">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:layout_marginStart="15dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        binding:verticalDis="@{8}"
+                        binding:adapter="@{adapter}"
+                        tools:itemCount="2"
+                        tools:listitem="@layout/viewholder_resorce" />
+                </LinearLayout>
             </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
         </RelativeLayout>
     </LinearLayout>
 

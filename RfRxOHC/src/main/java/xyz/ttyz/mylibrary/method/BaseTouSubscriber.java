@@ -1,6 +1,7 @@
 package xyz.ttyz.mylibrary.method;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.trello.rxlifecycle2.LifecycleProvider;
@@ -14,6 +15,7 @@ import xyz.ttyz.mylibrary.method.ProgressUtil;
  */
 
 public abstract class BaseTouSubscriber<D> extends BaseObserver<BaseModule<D>> {
+    private static final String TAG = "BaseTouSubscriber";
 
     public BaseTouSubscriber(LifecycleProvider lifeCycle) {
         super(lifeCycle);
@@ -35,7 +37,8 @@ public abstract class BaseTouSubscriber<D> extends BaseObserver<BaseModule<D>> {
 
     @Override
     public void onError(Throwable e) {
-        e.getMessage();
+        Log.i(TAG, "onError: " + e.getMessage());
+        Toast.makeText(ActivityManager.getInstance(), e.getMessage(), Toast.LENGTH_LONG).show();
         onComplete();
     }
 

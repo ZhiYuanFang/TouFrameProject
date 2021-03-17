@@ -119,7 +119,7 @@ public class DialogUtils {
         DialogButtonModule okModule, cancelModule;
 
         public CustomDoubleButtonDialog(@NonNull Context context, String title, String message, DialogButtonModule okModule, DialogButtonModule cancelModule) {
-            super(context);
+            super(context, R.style.DialogTheme);
             this.okModule = okModule;
             this.cancelModule = cancelModule;
             View view = LayoutInflater.from(context).inflate(R.layout.layout_dialog, null);
@@ -234,7 +234,7 @@ public class DialogUtils {
         DialogButtonModule okModule;
 
         public CustomSingleButtonDialog(@NonNull Context context, String title, String message, DialogButtonModule okModule) {
-            super(context);
+            super(context, R.style.DialogTheme);
             this.okModule = okModule;
             View view = LayoutInflater.from(context).inflate(R.layout.layout_single_dialog, null);
             setContentView(view);

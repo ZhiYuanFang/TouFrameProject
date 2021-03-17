@@ -78,6 +78,7 @@ public abstract class BaseTouFragment<T extends ViewDataBinding> extends Fragmen
         }
     }
 
+    //是否在ViewPager中使用Fragment
     protected abstract boolean isInViewPager();
 
     @Override
@@ -130,7 +131,7 @@ public abstract class BaseTouFragment<T extends ViewDataBinding> extends Fragmen
 
     //region private
     protected void doInit(){
-        if(initPermission() != null){
+        if(initPermission() != null && initPermission().length > 0){
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 XXPermissions.with(this)
                         .permission(initPermission())

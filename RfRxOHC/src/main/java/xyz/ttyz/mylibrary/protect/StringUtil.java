@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.text.TextUtils;
 import android.util.Base64;
+import android.util.Log;
 import android.widget.TextView;
 
 import java.io.BufferedReader;
@@ -26,6 +27,7 @@ import java.util.regex.Pattern;
  */
 
 public class StringUtil {
+    private static final String TAG = "StringUtil";
     /**
      * 获取string值,保证不是null且为字符串类型
      * */
@@ -59,6 +61,7 @@ public class StringUtil {
      * string转换成对象
      */
     public static Object string2Object(String str) {
+        if(str == null || str.isEmpty()) return null;
         Object o = null;
         try {
             int flags = Base64.DEFAULT;
@@ -69,8 +72,8 @@ public class StringUtil {
             navBais.close();
             navOis.close();
         } catch (Exception e) {
-//            e.printStackTrace();
-            System.out.println(e.getMessage());
+            e.printStackTrace();
+            Log.i(TAG, "string2Object: " + e.getMessage());
         }
         return o;
     }

@@ -49,6 +49,7 @@ import xyz.ttyz.toubasemvvm.event.InputHideEvent;
 import xyz.ttyz.toubasemvvm.event.NetEvent;
 import xyz.ttyz.toubasemvvm.utils.Constants;
 import xyz.ttyz.toubasemvvm.utils.DialogUtils;
+import xyz.ttyz.toubasemvvm.utils.StatusBarUtil;
 import xyz.ttyz.toubasemvvm.utils.ToastUtil;
 
 
@@ -73,6 +74,18 @@ public abstract class BaseTouActivity<T extends ViewDataBinding> extends SwipeBa
         lifecycleSubject.onNext(ActivityEvent.CREATE);
         if (!EventBus.getDefault().isRegistered(this))
             EventBus.getDefault().register(this);
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.O) {
+            setTheme(R.style.MimeTheme);//设置全屏， 防止api 26闪退
+        } else setTheme(R.style.TouTheme);//使用swipeBack 需要设置主题，否则会显示titlebar
+        //当FitsSystemWindows设置 true 时，会在屏幕最上方预留出状态栏高度的 padding
+        StatusBarUtil.setRootViewFitsSystemWindows(this, true);
+        //设置状态栏透明
+        StatusBarUtil.setTranslucentStatus(this);
+        if (!StatusBarUtil.setStatusBarFontIconDark(this, true)) {
+            //如果不支持设置深色风格 为了兼容总不能让状态栏白白的看不清, 于是设置一个状态栏颜色为半透明,
+            //这样半透明+白=灰, 状态栏的文字能看得清
+            StatusBarUtil.setStatusBarColor(this, 0x55000000);
+        }
         mBinding = DataBindingUtil.setContentView(this, initLayoutId());
         //页面基础渲染之后，延迟300毫秒做逻辑渲染，防止逻辑渲染卡顿
         Observable.timer(300, TimeUnit.MILLISECONDS)

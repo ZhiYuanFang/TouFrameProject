@@ -2,14 +2,19 @@ package xyz.ttyz.toubasemvvm.adapter;
 
 import android.graphics.Rect;
 import android.view.View;
+import android.view.animation.AnimationUtils;
+import android.view.animation.GridLayoutAnimationController;
+import android.view.animation.LayoutAnimationController;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.BindingAdapter;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.scwang.smartrefresh.layout.util.DensityUtil;
 
+import xyz.ttyz.toubasemvvm.R;
 import xyz.ttyz.toubasemvvm.adapter.utils.BaseEmptyAdapterParent;
 
 import static android.widget.NumberPicker.OnScrollListener.SCROLL_STATE_IDLE;
@@ -25,6 +30,19 @@ public class RecyclerAdapter {
             recyclerView.setLayoutManager(manager);
         } else {
             recyclerView.setLayoutManager(layoutManager);
+        }
+        if (layoutManager instanceof GridLayoutManager) {
+            //默认给每一个列表添加动画展示效果
+            GridLayoutAnimationController gridLayoutAnimationController = new GridLayoutAnimationController(AnimationUtils.loadAnimation(recyclerView.getContext(), R.anim.item_anim));
+            gridLayoutAnimationController.setOrder(LayoutAnimationController.ORDER_REVERSE);
+            gridLayoutAnimationController.setDelay(0.15f);
+            recyclerView.setLayoutAnimation(gridLayoutAnimationController);
+        } else {
+            //默认给每一个列表添加动画展示效果
+            LayoutAnimationController layoutAnimationController = new LayoutAnimationController(AnimationUtils.loadAnimation(recyclerView.getContext(), R.anim.item_anim));
+            layoutAnimationController.setOrder(LayoutAnimationController.ORDER_NORMAL);
+            layoutAnimationController.setDelay(0.15f);
+            recyclerView.setLayoutAnimation(layoutAnimationController);
         }
         if (adapter != null) {
             recyclerView.setAdapter(adapter);

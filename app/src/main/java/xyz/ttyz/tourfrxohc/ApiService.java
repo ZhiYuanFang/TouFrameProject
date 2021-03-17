@@ -1,11 +1,15 @@
 package xyz.ttyz.tourfrxohc;
 
 
+import java.util.Map;
+
 import io.reactivex.Observable;
 import okhttp3.RequestBody;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
+import retrofit2.http.QueryMap;
 import xyz.ttyz.mylibrary.method.BaseModule;
 import xyz.ttyz.tourfrxohc.models.MainModel;
 import xyz.ttyz.tourfrxohc.models.UserModel;
@@ -19,8 +23,8 @@ public interface ApiService {
     @POST("msu/v1/signin/code")
     Observable<BaseModule<UserModel>> login(@Body RequestBody data);
 
-    @POST("msr/v1/app/personal/index")
-    Observable<BaseModule<MainModel>> getHistory();
+    @GET("msr/v1/app/personal/index")
+    Observable<BaseModule<MainModel>> getHistory(@QueryMap Map<String, Object> map);
 
 
 //    @Headers("Content-type:text/x-plain-rsa-json")

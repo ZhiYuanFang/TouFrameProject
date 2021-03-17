@@ -56,7 +56,7 @@ public class BaseApplication extends Application {
         });
         RfRxOHCUtil.initApiService(this, "http://api.x16.com/", getPackageName() + "-cache",
                 2 * 1024 * 1024, 30, BuildConfig.BUILD_TYPE.equals("release"), BuildConfig.DEBUG, BuildConfig.VERSION_NAME,
-                "渠道在头部", "android", 0, new RfRxOHCUtil.TouRRCDelegate() {
+                "huawei", "android", 0, new RfRxOHCUtil.TouRRCDelegate() {
                     @Override
                     public void addMoreForOkHttpClient(OkHttpClient.Builder httpBuilder) {
                         //动态值
@@ -69,6 +69,7 @@ public class BaseApplication extends Application {
                                 }
                                 Request authorised = originalRequest.newBuilder()
                                         .header("Authorization", "Bearer " + DefaultUtils.token)
+                                        .header("Role", "32")
                                         .build();
                                 return chain.proceed(authorised);
                             }
