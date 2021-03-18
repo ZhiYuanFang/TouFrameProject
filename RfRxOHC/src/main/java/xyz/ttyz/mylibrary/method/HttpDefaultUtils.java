@@ -1,9 +1,12 @@
 package xyz.ttyz.mylibrary.method;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class HttpDefaultUtils {
+    private static final String TAG = "HttpDefaultUtils";
     public static int HTTPCODE;
 
     private static List<BaseTouSubscriber> waitUiSubscriber = new ArrayList<>();
@@ -17,7 +20,7 @@ public class HttpDefaultUtils {
     public static void popSubscriber(BaseTouSubscriber BaseSubscriber){
         if(waitUiSubscriber.contains(BaseSubscriber)){
             waitUiSubscriber.remove(BaseSubscriber);
-            System.out.println("剩余数据请求数量---------------> " + waitUiSubscriber.size());
+            Log.i(TAG, "popSubscriber: 剩余数据请求数量--------------->" + waitUiSubscriber.size());
         }
     }
 

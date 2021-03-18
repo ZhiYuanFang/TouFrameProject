@@ -33,7 +33,6 @@ public abstract class BaseObserver<T extends RfRxOHCBaseModule> implements Obser
 
     @Override
     public void onNext(T t) {
-        System.out.println("---------- onNext");
         //本地数据展示 不做缓存
         if(!isLocalObserver && !StringUtil.safeString(initCacheKey()).isEmpty()){
             //缓存请求的数据，便于网络异步请求刷新数据
