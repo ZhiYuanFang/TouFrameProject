@@ -11,7 +11,7 @@ import xyz.ttyz.mylibrary.protect.SharedPreferenceUtil;
 import xyz.ttyz.mylibrary.protect.StringUtil;
 
 public abstract class BaseObserver<T extends RfRxOHCBaseModule> implements Observer<T> {
-    boolean localObserver;
+    boolean isLocalObserver;
     LifecycleProvider lifeCycle;
 
     public BaseObserver(LifecycleProvider lifeCycle) {
@@ -23,7 +23,7 @@ public abstract class BaseObserver<T extends RfRxOHCBaseModule> implements Obser
     public abstract String initCacheKey();
 
     public void setLocalObserver(boolean localObserver) {
-        this.localObserver = localObserver;
+        this.isLocalObserver = localObserver;
     }
 
     @Override
@@ -35,7 +35,7 @@ public abstract class BaseObserver<T extends RfRxOHCBaseModule> implements Obser
     public void onNext(T t) {
         System.out.println("---------- onNext");
         //本地数据展示 不做缓存
-        if(!localObserver && !StringUtil.safeString(initCacheKey()).isEmpty()){
+        if(!isLocalObserver && !StringUtil.safeString(initCacheKey()).isEmpty()){
             //缓存请求的数据，便于网络异步请求刷新数据
             SharedPreferenceUtil.setCacheShareString(initContext(), initCacheKey(), StringUtil.object2String(t));
         }

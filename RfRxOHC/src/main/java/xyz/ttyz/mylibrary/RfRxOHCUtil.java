@@ -1,7 +1,12 @@
 package xyz.ttyz.mylibrary;
 
+import android.app.Activity;
 import android.app.Application;
+import android.os.Bundle;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.ihsanbal.logging.Level;
 import com.ihsanbal.logging.LoggingInterceptor;
@@ -18,6 +23,7 @@ import okhttp3.Response;
 import okhttp3.internal.platform.Platform;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+import xyz.ttyz.mylibrary.method.HttpDefaultUtils;
 import xyz.ttyz.mylibrary.protect.CustomGsonConverterFactory;
 import xyz.ttyz.mylibrary.protect.RfRxOHCIntercept;
 
@@ -101,7 +107,45 @@ public class RfRxOHCUtil {
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
                 .addConverterFactory(CustomGsonConverterFactory.create());
         touRRCDelegate.initApiService(retBuilder.build());
+        application.registerActivityLifecycleCallbacks(new Application.ActivityLifecycleCallbacks() {
+            @Override
+            public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
 
+            }
+
+            @Override
+            public void onActivityStarted(@NonNull Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityResumed(@NonNull Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityPaused(@NonNull Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityStopped(@NonNull Activity activity) {
+                //退到后台，所有请求关闭
+                HttpDefaultUtils.isRequestIng = false;
+                HttpDefaultUtils.getWaitUiSubscriber().clear();
+                System.out.println("app退到后台 ###############################");
+            }
+
+            @Override
+            public void onActivitySaveInstanceState(@NonNull Activity activity, @NonNull Bundle outState) {
+
+            }
+
+            @Override
+            public void onActivityDestroyed(@NonNull Activity activity) {
+
+            }
+        });
     }
 
     public interface TouRRCDelegate {

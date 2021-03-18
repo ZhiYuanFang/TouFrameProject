@@ -92,6 +92,14 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
 
     @Override
     protected void initServer() {
+        //同时调动两个接口，会先执行完第一个接口，再执行第二个接口，所以，虽然后一个接口需要第一个接口返回的token，但不需要在第一个接口的回调中再去执行第二个接口。
+        //这是因为RfRxOHC中，做了接口顺序执行的保护
+        //接口还是异步请求，但给它们做了一个执行队列。
+        login();
+        loadHistory();
+    }
+
+    private void login(){
         //登录
         Map map = new HashMap();
         map.put("mobile", "17758116193");
@@ -104,7 +112,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
                 if (data != null) {
                     toolBarViewModel.title.set(data.getName() + " 的浏览历史");
                     DefaultUtils.token = data.getAccessToken();
-                    loadHistory();
                 }
             }
 

@@ -34,7 +34,12 @@ public class RxOHCUtils<M extends RfRxOHCBaseModule> {
 
     @SuppressWarnings("unchecked")
     public void executeApi(Observable apiObservable,//touService.login()
-                           final BaseObserver uiSubscriber) {
+                           final BaseTouSubscriber uiSubscriber) {
+        uiSubscriber.setApiObservable(apiObservable);//綁定訂閲
+        HttpDefaultUtils.pushSubscriber(uiSubscriber);//進入請求隊列
+        if (HttpDefaultUtils.isRequestIng) {//保证请求排队进行
+            return;
+        } else HttpDefaultUtils.isRequestIng = true;
         //绑定网络被观察者和观察者
         if(NetworkUtil.isNetWorkConnected(ActivityManager.getInstance().getApplication())){
             Log.i(TAG, "executeApi: 请求接口");
