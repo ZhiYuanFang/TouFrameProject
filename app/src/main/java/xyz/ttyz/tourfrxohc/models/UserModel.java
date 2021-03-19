@@ -5,12 +5,12 @@ import androidx.databinding.BaseObservable;
 import java.io.Serializable;
 
 public class UserModel extends BaseObservable implements Serializable {
-    String name;
+    String nickname;
     String avatar;
     String accessToken;
 
-    public String getName() {
-        return name;
+    public String getNickname() {
+        return nickname;
     }
 
     public String getAvatar() {

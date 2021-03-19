@@ -3,6 +3,14 @@
 
 > 小型项目基本框架 网络请求+开发框架， 便于快速实现页面需求
 
+**项目拉下来后，需要在`local.properties`中配置ndk地址，才能运行**
+<font size=1>我的本地地址是这样的，你跟我的肯定不一样，不清楚的，可以另行搜索一下相关配置。</font>
+
+```
+sdk.dir=E\:\\Android\\settings\\sdk
+ndk.dir=E\:\\Android\\settings\\sdk\\ndk\\23.0.7196353
+```
+
 ## TouRfRxOHC【Retrofit+RxJava+OkHttpClient】
 
 > 网络集成框架 ：接口顺序执行，一个接口请求完成之后，才会执行下一个接口

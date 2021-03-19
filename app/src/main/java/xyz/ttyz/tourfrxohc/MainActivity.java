@@ -110,7 +110,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
             @Override
             public void success(UserModel data) {
                 if (data != null) {
-                    toolBarViewModel.title.set(data.getName() + " 的浏览历史");
+                    toolBarViewModel.title.set(data.getNickname() + " 的浏览历史");
                     DefaultUtils.token = data.getAccessToken();
                 }
             }
@@ -149,7 +149,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     public software software;
 
     static class hardware {
-        int type = MobileInfoUtil.isPad(ActivityManager.getInstance()) ? 6 : 7;//硬件分类：0跨平台 1Apple TV 2Mac desktop 3iPad 4iPhone 5android TV 6 android pad 7 android phone 8pc
+        int type = 7;//硬件分类：0跨平台 1Apple TV 2Mac desktop 3iPad 4iPhone 5 android TV 6 android pad 7 android phone 8 pc
         String uuid = MobileInfoUtil.getUUID(ActivityManager.getInstance());
         String model = MobileInfoUtil.getSystemModel();
         String system = MobileInfoUtil.getSystemVersion();
