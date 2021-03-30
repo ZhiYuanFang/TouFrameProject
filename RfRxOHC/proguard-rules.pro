@@ -19,3 +19,7 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+-keep class xyz.ttyz.mylibrary.encryption_decryption.*{*;}
+-keep class xyz.ttyz.mylibrary.method.*{*;}
+-keep class xyz.ttyz.mylibrary.protect.*{*;}

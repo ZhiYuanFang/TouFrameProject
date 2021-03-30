@@ -14,12 +14,6 @@ android {
 
     }
 
-    buildTypes {
-        release {
-        }
-        debug {
-        }
-    }
 
     dataBinding{
         enabled true

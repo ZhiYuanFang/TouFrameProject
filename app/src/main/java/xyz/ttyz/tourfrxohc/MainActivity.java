@@ -9,21 +9,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.HashMap;
 import java.util.Map;
 
-import xyz.ttyz.mylibrary.method.ActivityManager;
 import xyz.ttyz.mylibrary.method.RetrofitUtils;
 import xyz.ttyz.mylibrary.method.RxOHCUtils;
 import xyz.ttyz.toubasemvvm.adapter.OnClickAdapter;
 import xyz.ttyz.toubasemvvm.adapter.utils.BaseEmptyAdapterParent;
 import xyz.ttyz.toubasemvvm.adapter.utils.BaseRecyclerAdapter;
 import xyz.ttyz.toubasemvvm.utils.DialogUtils;
-import xyz.ttyz.toubasemvvm.utils.MobileInfoUtil;
 import xyz.ttyz.toubasemvvm.vm.ToolBarViewModel;
 import xyz.ttyz.tourfrxohc.activity.BaseActivity;
 import xyz.ttyz.tourfrxohc.databinding.ActivityMainBinding;
 import xyz.ttyz.tourfrxohc.fragment.MainFragment;
 import xyz.ttyz.tourfrxohc.http.BaseSubscriber;
+import xyz.ttyz.tourfrxohc.models.Hardware;
 import xyz.ttyz.tourfrxohc.models.MainModel;
 import xyz.ttyz.tourfrxohc.models.ResorceModel;
+import xyz.ttyz.tourfrxohc.models.Software;
 import xyz.ttyz.tourfrxohc.models.UserModel;
 import xyz.ttyz.tourfrxohc.viewholder.ResorceViewHolder;
 
@@ -49,8 +49,8 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     ToolBarViewModel toolBarViewModel;
     @Override
     protected void initData() {
-        hardware = new hardware();
-        software = new software();
+        hardware = new Hardware();
+        software = new Software();
         mBinding.setContext(this);
         toolBarViewModel = new ToolBarViewModel.Builder()
                 .rightTxt("图片")
@@ -145,20 +145,8 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     }
 
     //region 测试接口需要，不用管
-    public hardware hardware;
-    public software software;
-
-    static class hardware {
-        int type = 7;//硬件分类：0跨平台 1Apple TV 2Mac desktop 3iPad 4iPhone 5 android TV 6 android pad 7 android phone 8 pc
-        String uuid = MobileInfoUtil.getUUID(ActivityManager.getInstance());
-        String model = MobileInfoUtil.getSystemModel();
-        String system = MobileInfoUtil.getSystemVersion();
-    }
-
-    static class software {
-        int type = 1;//0跨类型 1多元幼教 2多元智能 3师享童年 100小程序 1000web etc…
-        int build = /*AppUtils.getVersionCode(ActivityManager.getInstance())*/504;
-    }
+    public Hardware hardware;
+    public Software software;
     //endregion
 }
 

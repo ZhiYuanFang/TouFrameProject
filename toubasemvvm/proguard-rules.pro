@@ -1,0 +1,11 @@
+
+-keep class jsbridge.*{*;}
+-keep class xyz.ttyz.tou_example.*{*;}
+-keep class xyz.ttyz.tou_example.init.*{*;}
+-keep class xyz.ttyz.toubasemvvm.adapter.*{*;}
+-keep class xyz.ttyz.toubasemvvm.event.*{*;}
+-keep class xyz.ttyz.toubasemvvm.transform.*{*;}
+-keep class xyz.ttyz.toubasemvvm.ui.*{*;}
+-keep class xyz.ttyz.toubasemvvm.utils.*{*;}
+-keep class xyz.ttyz.toubasemvvm.vm.*{*;}
+-keep class xyz.ttyz.toubasemvvm.weight.*{*;}
