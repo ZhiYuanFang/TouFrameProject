@@ -6,6 +6,7 @@ import com.ihsanbal.logging.LoggingInterceptor;
 
 import java.io.IOException;
 
+import io.rong.imlib.RongIMClient;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -90,5 +91,8 @@ public class BaseApplication extends Application {
                         apiService = retrofit.create(ApiService.class);
                     }
                 });
+        //初始化融云
+        RongIMClient.init(this, Constants.rmAppKey, false);//是否使用 VoIP 推送功能。false 代表不使用推送相关功能, SDK 里将不会携带推送相关文件
+
     }
 }

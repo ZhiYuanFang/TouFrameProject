@@ -1,22 +1,30 @@
 package xyz.ttyz.tourfrxohc;
 
 import android.Manifest;
+import android.content.Intent;
+import android.os.Handler;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.rong.imlib.model.Conversation;
+import xyz.ttyz.mylibrary.method.ActivityManager;
+import xyz.ttyz.mylibrary.method.ProgressUtil;
 import xyz.ttyz.mylibrary.method.RetrofitUtils;
 import xyz.ttyz.mylibrary.method.RxOHCUtils;
 import xyz.ttyz.toubasemvvm.adapter.OnClickAdapter;
 import xyz.ttyz.toubasemvvm.adapter.utils.BaseEmptyAdapterParent;
 import xyz.ttyz.toubasemvvm.adapter.utils.BaseRecyclerAdapter;
 import xyz.ttyz.toubasemvvm.utils.DialogUtils;
+import xyz.ttyz.toubasemvvm.utils.ToastUtil;
 import xyz.ttyz.toubasemvvm.vm.ToolBarViewModel;
 import xyz.ttyz.tourfrxohc.activity.BaseActivity;
+import xyz.ttyz.tourfrxohc.activity.GameActivity;
 import xyz.ttyz.tourfrxohc.databinding.ActivityMainBinding;
 import xyz.ttyz.tourfrxohc.fragment.MainFragment;
 import xyz.ttyz.tourfrxohc.http.BaseSubscriber;
@@ -25,9 +33,20 @@ import xyz.ttyz.tourfrxohc.models.MainModel;
 import xyz.ttyz.tourfrxohc.models.ResorceModel;
 import xyz.ttyz.tourfrxohc.models.Software;
 import xyz.ttyz.tourfrxohc.models.UserModel;
+import xyz.ttyz.tourfrxohc.utils.RMUtils;
+import xyz.ttyz.tourfrxohc.utils.UserUtils;
 import xyz.ttyz.tourfrxohc.viewholder.ResorceViewHolder;
 
 public class MainActivity extends BaseActivity<ActivityMainBinding> {
+
+    public static void show(){
+        if(!UserUtils.isLogin()){
+            return;
+        }
+        Intent intent = new Intent(ActivityManager.getInstance(), MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        ActivityManager.getInstance().startActivity(intent);
+    }
 
     @Override
     protected int initLayoutId() {
@@ -43,14 +62,11 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
                 Manifest.permission.READ_EXTERNAL_STORAGE};
     }
 
-    //recycler适配器
-    BaseEmptyAdapterParent historyAdapter;
     //标题栏
     ToolBarViewModel toolBarViewModel;
     @Override
     protected void initData() {
-        hardware = new Hardware();
-        software = new Software();
+        RMUtils.connectRM();
         mBinding.setContext(this);
         toolBarViewModel = new ToolBarViewModel.Builder()
                 .rightTxt("图片")
@@ -71,83 +87,37 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
                 })
                 .build();
         mBinding.setToolBarViewModel(toolBarViewModel);
-        historyAdapter = new BaseEmptyAdapterParent(this, new BaseRecyclerAdapter.NormalAdapterDelegate() {
-            @Override
-            public int getItemViewType(int position) {
-                return 0;
-            }
-
-            @Override
-            public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                return new ResorceViewHolder(MainActivity.this, parent);
-            }
-
-            @Override
-            public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-                ((ResorceViewHolder)holder).bindData((ResorceModel) historyAdapter.getItem(position));
-            }
-        });
-        mBinding.setAdapter(historyAdapter);
     }
 
     @Override
     protected void initServer() {
-        //同时调动两个接口，会先执行完第一个接口，再执行第二个接口，所以，虽然后一个接口需要第一个接口返回的token，但不需要在第一个接口的回调中再去执行第二个接口。
-        //这是因为RfRxOHC中，做了接口顺序执行的保护
-        //接口还是异步请求，但给它们做了一个执行队列。
-        login();
-        loadHistory();
+
     }
 
-    private void login(){
-        //登录
-        Map map = new HashMap();
-        map.put("mobile", "17758116193");
-        map.put("code", "339999");
-        map.put("hardware", hardware);
-        map.put("software", software);
-        new RxOHCUtils<>(this).executeApi(BaseApplication.apiService.login(RetrofitUtils.getNormalBody(map)), new BaseSubscriber<UserModel>(this) {
-            @Override
-            public void success(UserModel data) {
-                if (data != null) {
-                    toolBarViewModel.title.set(data.getNickname() + " 的浏览历史");
-                    DefaultUtils.token = data.getAccessToken();
-                }
-            }
+    public OnClickAdapter.onClickCommand startGameCommand = new OnClickAdapter.onClickCommand() {
+        @Override
+        public void click() {
+            if(RMUtils.connectSuccess){
+                // TODO: 2021/3/31 获取匹配房间
+                //匹配机制
+                //给后端传当前用户信息，要请求进入房间
+                //后端判断当前用户是否已经在房间
+                //后端生成房间id
+                //当前id下匹配人数达到9个
+                //返回匹配成功，并告知房间id
+                ProgressUtil.showCircleProgress(ActivityManager.getInstance());
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        String roomId = "room";
+                        GameActivity.show(roomId);
+                        ProgressUtil.missCircleProgress();
+                    }
+                }, 4300);
 
-            @Override
-            public String initCacheKey() {
-                return "getNormalBody";//如果该页面涉及隐私，则不传cacheKey，就不会产生缓存数据
-            }
-
-        });
-    }
-
-    private void loadHistory(){
-        //获取历史
-        Map<String, Object> map = new HashMap<>();
-        map.put("hardware", hardware);
-        map.put("software", software);
-        new RxOHCUtils<>(this).executeApi(BaseApplication.apiService.getHistory(map), new BaseSubscriber<MainModel>(this, loadEnd) {
-            @Override
-            public void success(MainModel data) {
-                if (data != null) {
-                    historyAdapter.setList(data.getReadHistory());
-                }
-            }
-
-            @Override
-            public String initCacheKey() {
-                return "getHistory";//如果该页面涉及隐私，则不传cacheKey，就不会产生缓存数据
-            }
-
-        });
-    }
-
-    //region 测试接口需要，不用管
-    public Hardware hardware;
-    public Software software;
-    //endregion
+            } else ToastUtil.showToast("服务器连接失败");
+        }
+    };
 }
 
 

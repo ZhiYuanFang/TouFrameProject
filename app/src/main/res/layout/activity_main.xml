@@ -7,9 +7,6 @@
             name="context"
             type="xyz.ttyz.tourfrxohc.MainActivity" />
 
-        <variable
-            name="adapter"
-            type="xyz.ttyz.toubasemvvm.adapter.utils.BaseEmptyAdapterParent" />
 
         <variable
             name="toolBarViewModel"
@@ -28,35 +25,12 @@
             layout="@layout/layout_toolbar"
             binding:toolBarViewModel="@{toolBarViewModel}" />
 
-        <RelativeLayout
-            android:id="@+id/container"
+
+        <Button
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <com.scwang.smartrefresh.layout.SmartRefreshLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                binding:enableLoadMore="@{false}"
-                binding:loadEnd="@{context.loadEnd}"
-                binding:refreshListener="@{context.refreshListener}">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:layout_marginStart="15dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        binding:verticalDis="@{8}"
-                        binding:adapter="@{adapter}"
-                        tools:itemCount="2"
-                        tools:listitem="@layout/viewholder_resorce" />
-                </LinearLayout>
-            </com.scwang.smartrefresh.layout.SmartRefreshLayout>
-
-        </RelativeLayout>
+            android:layout_height="match_parent"
+            binding:onClickCommand="@{context.startGameCommand}"
+            android:text="开始游戏"/>
     </LinearLayout>
 
 </layout>
