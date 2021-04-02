@@ -13,6 +13,7 @@ import com.ihsanbal.logging.LoggingInterceptor;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.schedulers.Schedulers;
@@ -26,6 +27,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import xyz.ttyz.mylibrary.method.HttpDefaultUtils;
 import xyz.ttyz.mylibrary.protect.CustomGsonConverterFactory;
 import xyz.ttyz.mylibrary.protect.RfRxOHCIntercept;
+import xyz.ttyz.mylibrary.socket.SocketUtils;
 
 /**
  * Created by tou on 2019/5/15.
@@ -35,8 +37,11 @@ import xyz.ttyz.mylibrary.protect.RfRxOHCIntercept;
 public class RfRxOHCUtil {
     private static final String TAG = "RfRxOHCUtil";
     public static int successCode = 0;
+    public static String socketUrl;//长连接地址
+    public static TouRRCDelegate touRRCDelegate;//总项目代理接口
     /**
      * @param baseUrl        后台端口地址：http://127.0.0.1:8080/
+     * @param socketUrl 长连接地址：ws://localhost:8080/tou3_war_exploded/devMessage
      * @param directoryCache 网络缓存文件名
      * @param maxCache       最大缓存
      * @param timeOut        超时时间, 秒
@@ -61,8 +66,9 @@ public class RfRxOHCUtil {
      *                       .sslSocketFactory(ct.sslSocketFactory, ct.trustManager)
      *                       .hostnameVerifier((s, sslSession) -> true);
      */
-    public static void initApiService(Application application,
+    public static void initApiService(final Application application,
                                       String baseUrl,
+                                      String socketUrl,
                                       String directoryCache,
                                       long maxCache,
                                       long timeOut,
@@ -72,8 +78,10 @@ public class RfRxOHCUtil {
                                       String flavor,
                                       String terminal,
                                       int successCode,
-                                      TouRRCDelegate touRRCDelegate) {
+                                      final TouRRCDelegate touRRCDelegate) {
+        RfRxOHCUtil.socketUrl = socketUrl;
         RfRxOHCUtil.successCode = successCode;
+        RfRxOHCUtil.touRRCDelegate = touRRCDelegate;
         Log.i(TAG, "initApiService: directoryCache --> " + directoryCache);
         OkHttpClient.Builder httpBuilder = new OkHttpClient.Builder();
         //创建OkHttpClient对象
@@ -115,7 +123,9 @@ public class RfRxOHCUtil {
 
             @Override
             public void onActivityStarted(@NonNull Activity activity) {
-
+                if(touRRCDelegate.isLogin()){
+                    SocketUtils.openMinaReceiver(application);
+                }
             }
 
             @Override
@@ -165,5 +175,45 @@ public class RfRxOHCUtil {
          * touService = retrofit.create(TouService.class);
          */
         void initApiService(Retrofit retrofit);
+
+        /**
+         *
+         * @return 长连接的头部信息
+         */
+        Map<String, Object> socketInitHeader();
+
+        /**
+         * 长连接超时处理，已经做好了超时后，关闭长连接
+         * 建议此处弹框提示超时，并提供重连机制
+         * Activity activity = ActivityManager.getInstance();
+         *                     if (activity != null) {
+         *                         activity.runOnUiThread(new Runnable() {
+         *                             public void run() {
+         *                                 DialogUtils.showDialog(activity, activity.getString(R.string.time_out), activity.getString(R.string.socket_time_out),
+         *                                         new DialogUtils.DialogButtonModule(activity.getString(R.string.re_login), new DialogUtils.DialogClickDelegate() {
+         *                                             public void click(DialogUtils.DialogButtonModule dialogButtonModule) {
+         *                                                 PersonUtils.outLoginAndGoToLoginActivity(false);
+         *                                             }
+         *                                         }), new DialogUtils.DialogButtonModule(activity.getString(R.string.retry), new DialogUtils.DialogClickDelegate() {
+         *                                             public void click(DialogUtils.DialogButtonModule dialogButtonModule) {
+         *                                                 SocketUtils.openMinaReceiver(application, isForce);
+         *                                             }
+         *                                         }), false);
+         *                             }
+         *                         });
+         *                     }
+         */
+        void socketConnectTimeOut();
+
+        /**
+         * 接收到长连接消息
+         */
+        void socketReceived(String message);
+
+        /**
+         * 是否已经登录
+         * 如果已经登录，APP打开后，连接socket
+         */
+        boolean isLogin();
     }
 }
