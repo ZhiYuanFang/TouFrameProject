@@ -1,10 +1,12 @@
 package xyz.ttyz.tourfrxohc;
 
 import android.app.Application;
+import android.util.Log;
 
 import com.ihsanbal.logging.LoggingInterceptor;
 
 import java.io.IOException;
+import java.util.Map;
 
 import io.rong.imlib.RongIMClient;
 import okhttp3.Interceptor;
@@ -21,6 +23,7 @@ import xyz.ttyz.tou_example.init.TouDelegate;
  */
 
 public class BaseApplication extends Application {
+    private static final String TAG = "BaseApplication";
     public static ApiService apiService;
 
     @Override
@@ -55,7 +58,7 @@ public class BaseApplication extends Application {
                 //捕获主线程异常，上传bugly
             }
         });
-        RfRxOHCUtil.initApiService(this, "http://api.x16.com/", getPackageName() + "-cache",
+        RfRxOHCUtil.initApiService(this, "http://api.x16.com/", "ws://192.168.1.201:8080/tou3_war_exploded/devMessage",getPackageName() + "-cache",
                 2 * 1024 * 1024, 30, BuildConfig.BUILD_TYPE.equals("release"), BuildConfig.DEBUG, BuildConfig.VERSION_NAME,
                 "huawei", "android", 0, new RfRxOHCUtil.TouRRCDelegate() {
                     @Override
@@ -89,6 +92,26 @@ public class BaseApplication extends Application {
                     @Override
                     public void initApiService(Retrofit retrofit) {
                         apiService = retrofit.create(ApiService.class);
+                    }
+
+                    @Override
+                    public Map<String, Object> socketInitHeader() {
+                        return null;
+                    }
+
+                    @Override
+                    public void socketConnectTimeOut() {
+
+                    }
+
+                    @Override
+                    public void socketReceived(String message) {
+
+                    }
+
+                    @Override
+                    public boolean isLogin() {
+                        return true;
                     }
                 });
         //初始化融云

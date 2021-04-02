@@ -42,7 +42,7 @@ implementation project(':RfRxOHC')
 > 主项目的Application中调用
 
 ```java
-RfRxOHCUtil.initApiService(this, "http://api.x16.com/", getPackageName() + "-cache",
+RfRxOHCUtil.initApiService(this, "http://api.x16.com/", "ws://192.168.1.201:8080/tou3_war_exploded/devMessage" , getPackageName() + "-cache",
                 2 * 1024 * 1024, 30, BuildConfig.BUILD_TYPE.equals("release"), BuildConfig.DEBUG, BuildConfig.VERSION_NAME,
                 "huawei", "android", 0, new RfRxOHCUtil.TouRRCDelegate() {
                     @Override
@@ -76,6 +76,21 @@ RfRxOHCUtil.initApiService(this, "http://api.x16.com/", getPackageName() + "-cac
                     @Override
                     public void initApiService(Retrofit retrofit) {
                         apiService = retrofit.create(ApiService.class);
+                    }
+
+                    @Override
+                    public Map<String, Object> socketInitHeader() {
+                        return null;
+                    }
+                    @Override
+                    public void socketConnectTimeOut() {
+                    }
+                    @Override
+                    public void socketReceived(String message) {
+                    }
+                    @Override
+                    public boolean isLogin() {
+                        return true;
                     }
                 });
 ```
