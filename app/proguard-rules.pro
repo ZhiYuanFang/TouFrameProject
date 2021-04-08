@@ -98,6 +98,7 @@
 #保留models下的所有类，作为gson映射，不可混淆
 -keep class xyz.ttyz.tourfrxohc.models.*{*;}
 -keep class * extends xyz.ttyz.tourfrxohc.activity.BaseActivity
+-keep class xyz.ttyz.tourfrxohc.utils.*{*;}
 #RfRxOHC
 -keep class xyz.ttyz.mylibrary.encryption_decryption.*{*;}
 -keep class xyz.ttyz.mylibrary.method.*{*;}

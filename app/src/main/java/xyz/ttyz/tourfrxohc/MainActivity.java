@@ -14,6 +14,7 @@ import java.util.Map;
 
 import io.rong.imlib.model.Conversation;
 import xyz.ttyz.mylibrary.method.ActivityManager;
+import xyz.ttyz.mylibrary.method.BaseModule;
 import xyz.ttyz.mylibrary.method.ProgressUtil;
 import xyz.ttyz.mylibrary.method.RetrofitUtils;
 import xyz.ttyz.mylibrary.method.RxOHCUtils;
@@ -33,6 +34,7 @@ import xyz.ttyz.tourfrxohc.models.MainModel;
 import xyz.ttyz.tourfrxohc.models.ResorceModel;
 import xyz.ttyz.tourfrxohc.models.Software;
 import xyz.ttyz.tourfrxohc.models.UserModel;
+import xyz.ttyz.tourfrxohc.models.game.HomeModel;
 import xyz.ttyz.tourfrxohc.utils.RMUtils;
 import xyz.ttyz.tourfrxohc.utils.UserUtils;
 import xyz.ttyz.tourfrxohc.viewholder.ResorceViewHolder;
@@ -98,24 +100,41 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         @Override
         public void click() {
             if(RMUtils.connectSuccess){
-                // TODO: 2021/3/31 获取匹配房间
+                // 获取匹配房间
                 //匹配机制
                 //给后端传当前用户信息，要请求进入房间
                 //后端判断当前用户是否已经在房间
                 //后端生成房间id
                 //当前id下匹配人数达到9个
                 //返回匹配成功，并告知房间id
-                ProgressUtil.showCircleProgress(ActivityManager.getInstance());
-                new Handler().postDelayed(new Runnable() {
+                ProgressUtil.showCircleProgress(ActivityManager.getInstance(), "正在匹配中...");
+                new RxOHCUtils<HomeModel>(MainActivity.this).executeApi(BaseApplication.apiService.join(UserUtils.getCurUserModel().getId()), new BaseSubscriber<HomeModel>(MainActivity.this) {
                     @Override
-                    public void run() {
-                        String roomId = "room";
-                        GameActivity.show(roomId);
+                    public void success(HomeModel data) {
+                        if(data.isInHome()){
+                            //我已经在房间里了
+                            ProgressUtil.missCircleProgress();
+                            GameActivity.show(data.getRoomId());
+                        } else {
+                            //我不在房间里，挂起
+                        }
+                    }
+
+                    @Override
+                    public String initCacheKey() {
+                        return null;
+                    }
+
+                    @Override
+                    protected void fail(BaseModule<HomeModel> baseModule) {
+                        super.fail(baseModule);
                         ProgressUtil.missCircleProgress();
                     }
-                }, 4300);
+                });
 
-            } else ToastUtil.showToast("服务器连接失败");
+            } else {
+                ToastUtil.showToast("服务器连接失败");
+            }
         }
     };
 }

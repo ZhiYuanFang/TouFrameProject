@@ -120,7 +120,7 @@ public abstract class BaseTouActivity<T extends ViewDataBinding> extends SwipeBa
 
     //region private
     protected void doInit(){
-        if(initPermission() != null){
+        if(initPermission() != null && initPermission().length > 0){
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 XXPermissions.with(this)
                         .permission(initPermission())
@@ -334,7 +334,7 @@ public abstract class BaseTouActivity<T extends ViewDataBinding> extends SwipeBa
                     if (v != null) {
                         imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                     }
-                    EventBus.getDefault().post(new InputHideEvent());
+//                    EventBus.getDefault().post(new InputHideEvent());//输入法关闭通知， 如果有地方需要，才能放开
                 }
             }
             return super.dispatchTouchEvent(ev);

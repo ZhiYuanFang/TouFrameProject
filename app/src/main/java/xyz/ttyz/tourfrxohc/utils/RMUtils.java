@@ -10,11 +10,11 @@ public class RMUtils {
     private static final String TAG = "RMUtils";
     public static boolean connectSuccess = false;
     public static void connectRM(){
-        //todo 判断用户已经登录
-        //todo 根据本地用户信息，请求接口获取token
-        String token = "PrQGvghn9GJGnXy0a9ZHlHO5NO2Ezznz@ev08.cn.rongnav.com;ev08.cn.rongcfg.com";
+        Log.i(TAG, "connectRM: ");
+        // 判断用户已经登录
+        if(!UserUtils.isLogin()) return;
         //连接融云服务器
-        RongIMClient.connect(token, new RongIMClient.ConnectCallback() {
+        RongIMClient.connect(UserUtils.getCurUserModel().getRmToken(), new RongIMClient.ConnectCallback() {
             @Override
             public void onSuccess(String userId) {
                 connectSuccess = true;
@@ -29,7 +29,7 @@ public class RMUtils {
 
             @Override
             public void onDatabaseOpened(RongIMClient.DatabaseOpenStatus databaseOpenStatus) {
-
+                Log.i(TAG, "onDatabaseOpened: " + databaseOpenStatus.getValue());
             }
         });
     }

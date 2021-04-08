@@ -24,7 +24,7 @@ import xyz.ttyz.mylibrary.protect.StringUtil;
  * 集成本地缓存
  */
 
-public class RxOHCUtils<M extends RfRxOHCBaseModule> {
+public class RxOHCUtils<M> {
     private static final String TAG = "RxOHCUtils";
     private Context c;
 
@@ -34,7 +34,7 @@ public class RxOHCUtils<M extends RfRxOHCBaseModule> {
 
     @SuppressWarnings("unchecked")
     public void executeApi(Observable apiObservable,//touService.login()
-                           final BaseTouSubscriber uiSubscriber) {
+                           final BaseTouSubscriber<M> uiSubscriber) {
         uiSubscriber.setApiObservable(apiObservable);//綁定訂閲
         HttpDefaultUtils.pushSubscriber(uiSubscriber);//進入請求隊列
         if (HttpDefaultUtils.isRequestIng) {//保证请求排队进行

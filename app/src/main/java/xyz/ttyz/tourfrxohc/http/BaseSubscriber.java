@@ -7,6 +7,7 @@ import com.trello.rxlifecycle2.LifecycleProvider;
 import xyz.ttyz.mylibrary.method.BaseModule;
 import xyz.ttyz.mylibrary.method.BaseTouSubscriber;
 import xyz.ttyz.mylibrary.method.HttpDefaultUtils;
+import xyz.ttyz.mylibrary.method.RfRxOHCBaseModule;
 import xyz.ttyz.toubasemvvm.adapter.OnClickAdapter;
 
 import static xyz.ttyz.mylibrary.method.HttpDefaultUtils.HTTPCODE;

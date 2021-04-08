@@ -20,14 +20,18 @@ import cn.rongcloud.rtc.base.RCRTCParamsType;
 import cn.rongcloud.rtc.base.RTCErrorCode;
 import io.rong.imlib.model.Conversation;
 import xyz.ttyz.mylibrary.method.ActivityManager;
+import xyz.ttyz.mylibrary.method.RxOHCUtils;
 import xyz.ttyz.mylibrary.protect.StringUtil;
 import xyz.ttyz.toubasemvvm.utils.DialogUtils;
 import xyz.ttyz.toubasemvvm.utils.ToastUtil;
+import xyz.ttyz.tourfrxohc.BaseApplication;
 import xyz.ttyz.tourfrxohc.MainActivity;
 import xyz.ttyz.tourfrxohc.R;
 import xyz.ttyz.tourfrxohc.databinding.ActivityGameBinding;
+import xyz.ttyz.tourfrxohc.http.BaseSubscriber;
 import xyz.ttyz.tourfrxohc.models.PlayStatus;
 import xyz.ttyz.tourfrxohc.models.UserModel;
+import xyz.ttyz.tourfrxohc.models.game.HomeModel;
 import xyz.ttyz.tourfrxohc.utils.UserUtils;
 
 /**
@@ -309,14 +313,19 @@ public class GameActivity extends BaseActivity<ActivityGameBinding> {
     @Override
     protected void initServer() {
         //根据roomId 请求接口，获取当前房间人员
-        userModelList = new ArrayList<>();
-        for (int i = 0; i < 9; i++) {
-            UserModel userModel = new UserModel();
-            userModel.setId(i + 1);
-            userModelList.add(userModel);
-        }
-        //获取到了本房间的所有用户信息，绘制页面
-        bindUser();
+        new RxOHCUtils<HomeModel>(this).executeApi(BaseApplication.apiService.roomInfo(roomId), new BaseSubscriber<HomeModel>(this) {
+            @Override
+            public void success(HomeModel data) {
+                userModelList = data.getHisMemberList();
+                //获取到了本房间的所有用户信息，绘制页面
+                bindUser();
+            }
+
+            @Override
+            public String initCacheKey() {
+                return null;
+            }
+        });
     }
 
     /**

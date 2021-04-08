@@ -36,7 +36,7 @@ import xyz.ttyz.mylibrary.socket.SocketUtils;
 
 public class RfRxOHCUtil {
     private static final String TAG = "RfRxOHCUtil";
-    public static int successCode = 0;
+    public static int successCode;
     public static String socketUrl;//长连接地址
     public static TouRRCDelegate touRRCDelegate;//总项目代理接口
     /**

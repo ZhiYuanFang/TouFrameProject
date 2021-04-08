@@ -44,7 +44,7 @@ public abstract class BaseTouSubscriber<D> extends BaseObserver<BaseModule<D>> {
         //执行剩余接口
         if (HttpDefaultUtils.getWaitUiSubscriber().size() > 0) {
             BaseTouSubscriber baseSubscriber = HttpDefaultUtils.getWaitUiSubscriber().get(0);
-            new RxOHCUtils<>(initContext()).executeApi(baseSubscriber.getApiObservable(), baseSubscriber);
+            new RxOHCUtils<D>(initContext()).executeApi(baseSubscriber.getApiObservable(), baseSubscriber);
         }
     }
 

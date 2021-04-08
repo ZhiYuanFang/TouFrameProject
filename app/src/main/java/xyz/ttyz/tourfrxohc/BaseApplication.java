@@ -3,6 +3,7 @@ package xyz.ttyz.tourfrxohc;
 import android.app.Application;
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.ihsanbal.logging.LoggingInterceptor;
 
 import java.io.IOException;
@@ -17,6 +18,11 @@ import retrofit2.Retrofit;
 import xyz.ttyz.mylibrary.RfRxOHCUtil;
 import xyz.ttyz.tou_example.init.ApplicationUtils;
 import xyz.ttyz.tou_example.init.TouDelegate;
+import xyz.ttyz.toubasemvvm.utils.DialogUtils;
+import xyz.ttyz.tourfrxohc.activity.GameActivity;
+import xyz.ttyz.tourfrxohc.activity.LoginActivity;
+import xyz.ttyz.tourfrxohc.models.SocketEventModule;
+import xyz.ttyz.tourfrxohc.utils.UserUtils;
 
 /**
  * Created by tou on 2019/5/20.
@@ -32,12 +38,13 @@ public class BaseApplication extends Application {
         ApplicationUtils.init(this, 750, 1334, new TouDelegate() {
             @Override
             public boolean isLogin() {
-                return DefaultUtils.token != null;//当前用户是否登录
+                return UserUtils.isLogin();
             }
 
             @Override
             public void gotoLoginActivity() {
                 //前往登录界面
+                LoginActivity.show();
             }
 
             @Override
@@ -58,9 +65,9 @@ public class BaseApplication extends Application {
                 //捕获主线程异常，上传bugly
             }
         });
-        RfRxOHCUtil.initApiService(this, "http://api.x16.com/", "ws://192.168.1.201:8080/tou3_war_exploded/devMessage",getPackageName() + "-cache",
+        RfRxOHCUtil.initApiService(this, "http://192.168.1.201:8080/tou3_war_exploded/", "ws://192.168.1.201:8080/tou3_war_exploded/devMessage",getPackageName() + "-cache",
                 2 * 1024 * 1024, 30, BuildConfig.BUILD_TYPE.equals("release"), BuildConfig.DEBUG, BuildConfig.VERSION_NAME,
-                "huawei", "android", 0, new RfRxOHCUtil.TouRRCDelegate() {
+                "huawei", "android", 1, new RfRxOHCUtil.TouRRCDelegate() {
                     @Override
                     public void addMoreForOkHttpClient(OkHttpClient.Builder httpBuilder) {
                         //动态值
@@ -101,17 +108,26 @@ public class BaseApplication extends Application {
 
                     @Override
                     public void socketConnectTimeOut() {
-
+                        DialogUtils.showSingleDialog("连接超时", "网络连接超时，无法正常使用，请尝试重新打开app", new DialogUtils.DialogButtonModule("确定退出", new DialogUtils.DialogClickDelegate() {
+                            @Override
+                            public void click(DialogUtils.DialogButtonModule dialogButtonModule) {
+                                System.exit(0);
+                            }
+                        }));
                     }
 
                     @Override
                     public void socketReceived(String message) {
-
+                        SocketEventModule socketEventModule = new Gson().fromJson(message, SocketEventModule.class);
+                        if(socketEventModule.getUserModels().contains(UserUtils.getCurUserModel())){
+                            //2021/4/8 我匹配成功了， 进入房间roomId
+                            GameActivity.show(socketEventModule.getRoomId());
+                        }
                     }
 
                     @Override
                     public boolean isLogin() {
-                        return true;
+                        return UserUtils.isLogin();
                     }
                 });
         //初始化融云

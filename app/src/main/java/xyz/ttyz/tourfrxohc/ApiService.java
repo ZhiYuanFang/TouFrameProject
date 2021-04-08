@@ -13,6 +13,7 @@ import retrofit2.http.QueryMap;
 import xyz.ttyz.mylibrary.method.BaseModule;
 import xyz.ttyz.tourfrxohc.models.MainModel;
 import xyz.ttyz.tourfrxohc.models.UserModel;
+import xyz.ttyz.tourfrxohc.models.game.HomeModel;
 
 /**
  * Created by tou on 2019/5/20.
@@ -20,11 +21,18 @@ import xyz.ttyz.tourfrxohc.models.UserModel;
  */
 
 public interface ApiService {
-    @POST("msu/v1/signin/code")
-    Observable<BaseModule<UserModel>> login(@Body RequestBody data);
+    @POST("user/register")
+    Observable<BaseModule> register(@Query("phone") String phone, @Query("password") String password, @Query("nickname") String nickname);
 
-    @GET("msr/v1/app/personal/index")
-    Observable<BaseModule<MainModel>> getHistory(@QueryMap Map<String, Object> map);
+    @POST("user/login")
+    Observable<BaseModule<UserModel>> login(@Query("phone") String phone, @Query("password") String password);
+
+    @POST("game/join")
+    Observable<BaseModule<HomeModel>> join(@Query("id") long id);
+
+
+    @GET("game/roomInfo")
+    Observable<BaseModule<HomeModel>> roomInfo(@Query("roomId") String roomId);
 
 
 //    @Headers("Content-type:text/x-plain-rsa-json")

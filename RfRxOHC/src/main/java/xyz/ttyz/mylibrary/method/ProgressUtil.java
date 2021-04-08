@@ -5,8 +5,11 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.TextView;
 
 import xyz.ttyz.mylibrary.R;
+import xyz.ttyz.mylibrary.protect.StringUtil;
 
 /**
  * Created by tou on 2018/8/1 0001.
@@ -52,7 +55,10 @@ public class ProgressUtil {
     }
 
     private static Dialog circleProgressDialog;
-    public static void showCircleProgress(final Context c){
+    public static void showCircleProgress(Context c){
+        showCircleProgress(c, "");
+    }
+    public static void showCircleProgress(final Context c, final String msg){
         if(null == c){
             return;
         }
@@ -70,7 +76,15 @@ public class ProgressUtil {
                         e.printStackTrace();
                     }
                 }
-                circleProgressDialog.setContentView(LayoutInflater.from(c).inflate(R.layout.layout_loadding, null));
+                View view = LayoutInflater.from(c).inflate(R.layout.layout_loadding, null);
+                TextView tvMsg = view.findViewById(R.id.tvMsg);
+                if(StringUtil.safeString(msg).isEmpty()){
+                    tvMsg.setVisibility(View.GONE);
+                } else {
+                    tvMsg.setVisibility(View.VISIBLE);
+                    tvMsg.setText(msg);
+                }
+                circleProgressDialog.setContentView(view);
             }
         });
     }

@@ -15,6 +15,30 @@ public class UserModel extends BaseObservable implements Serializable {
     PlayStatus playStatus;
     String nickname;
     String accessToken;
+    String password;
+    int level;
+    String rmToken;//融云token
+    String phone;
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public String getRmToken() {
+        return rmToken;
+    }
 
     @Bindable
     public PlayStatus getPlayStatus() {

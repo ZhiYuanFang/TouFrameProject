@@ -5,14 +5,15 @@
     <data>
         <variable
             name="context"
-            type="xyz.ttyz.tourfrxohc.activity.LoginActivity" />
+            type="xyz.ttyz.tourfrxohc.activity.RegisterActivity" />
     </data>
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center">
+        android:background="@color/white"
+        android:gravity="center"
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -28,11 +29,29 @@
                 android:layout_width="wrap_content"
                 android:minWidth="125dp"
                 android:padding="5dp"
-                android:text="@={context.phoneFiled}"
                 android:layout_height="wrap_content"
+                android:text="@={context.phoneFiled}"
                 android:background="@drawable/bg_edit"/>
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:gravity="end"
+                android:text="昵称: "/>
+            <EditText
+                android:layout_width="wrap_content"
+                android:minWidth="125dp"
+                android:padding="5dp"
+                android:layout_height="wrap_content"
+                android:text="@={context.nickNameFiled}"
+                android:background="@drawable/bg_edit"/>
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -48,32 +67,36 @@
                 android:layout_width="wrap_content"
                 android:minWidth="125dp"
                 android:padding="5dp"
-                android:layout_height="wrap_content"
-                android:inputType="textPassword"
                 android:text="@={context.pwdFiled}"
+                android:layout_height="wrap_content"
                 android:background="@drawable/bg_edit"/>
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
-            android:gravity="bottom"
             android:orientation="horizontal">
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                binding:noteJudgeLogin="@{true}"
-                binding:onClickCommand="@{context.clickLogin}"
-                android:text="登录"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:gravity="end"
+                android:text="确认密码: "/>
+            <EditText
+                android:layout_width="wrap_content"
+                android:minWidth="125dp"
                 android:padding="5dp"
-                android:layout_marginStart="15dp"
-                binding:noteJudgeLogin="@{true}"
-                binding:onClickCommand="@{context.clickRegister}"
-                android:text="注册"/>
+                android:text="@={context.confirmPwdFiled}"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_edit"/>
         </LinearLayout>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            binding:noteJudgeLogin="@{true}"
+            binding:onClickCommand="@{context.clickRegister}"
+            android:text="注册"/>
     </LinearLayout>
 </layout>

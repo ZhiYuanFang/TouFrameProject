@@ -4,15 +4,25 @@
     android:layout_height="match_parent"
     android:gravity="center">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:background="@drawable/progress_bg"
+        android:gravity="center_horizontal"
         android:padding="15dp">
 
         <ProgressBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:indeterminateTint="#477EC2"/>
-    </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tvMsg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:textColor="@android:color/white"
+            android:text="@string/app_name"/>
+    </LinearLayout>
 </LinearLayout>

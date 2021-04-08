@@ -1,12 +1,14 @@
 package xyz.ttyz.mylibrary.method;
 
+import retrofit2.http.POST;
+
 /**
  * Created by tou on 2019/5/20.
  */
 
 public class BaseModule<D> extends RfRxOHCBaseModule {
     int code;
-    String msg;
+    String message;
     D data;
 
     public int getCode() {
@@ -14,7 +16,7 @@ public class BaseModule<D> extends RfRxOHCBaseModule {
     }
 
     public String getMsg() {
-        return msg;
+        return message;
     }
 
     public D getData() {
