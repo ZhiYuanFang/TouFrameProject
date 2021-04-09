@@ -7,6 +7,7 @@ import android.widget.Toast;
 import com.trello.rxlifecycle2.LifecycleProvider;
 
 import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
 import xyz.ttyz.mylibrary.RfRxOHCUtil;
 import xyz.ttyz.mylibrary.method.BaseObserver;
 import xyz.ttyz.mylibrary.method.ProgressUtil;
@@ -29,6 +30,11 @@ public abstract class BaseTouSubscriber<D> extends BaseObserver<BaseModule<D>> {
         return ActivityManager.getInstance();
     }
 
+    @Override
+    public void onSubscribe(Disposable d) {
+        onStart();
+    }
+
     public void onStart() {
         if (!notShowProgress)
             ProgressUtil.showCircleProgress(ActivityManager.getInstance());
@@ -37,7 +43,8 @@ public abstract class BaseTouSubscriber<D> extends BaseObserver<BaseModule<D>> {
     //如果当前接口对应页面已经关闭，会直接走onComplete，不会执行接口请求
     @Override
     public void onComplete() {
-        ProgressUtil.missCircleProgress();
+        if (autoCloseCircleProgress())
+            ProgressUtil.missCircleProgress();
         HttpDefaultUtils.popSubscriber(this);
         HttpDefaultUtils.isRequestIng = false;//只要完成了，就行了
 
@@ -46,6 +53,10 @@ public abstract class BaseTouSubscriber<D> extends BaseObserver<BaseModule<D>> {
             BaseTouSubscriber baseSubscriber = HttpDefaultUtils.getWaitUiSubscriber().get(0);
             new RxOHCUtils<D>(initContext()).executeApi(baseSubscriber.getApiObservable(), baseSubscriber);
         }
+    }
+
+    protected boolean autoCloseCircleProgress() {
+        return true;
     }
 
     /**
@@ -60,7 +71,6 @@ public abstract class BaseTouSubscriber<D> extends BaseObserver<BaseModule<D>> {
 
     @Override
     public void onRfRxNext(BaseModule<D> baseModule) {
-        onStart();
         if (baseModule.getCode() == RfRxOHCUtil.successCode) {
             success((D) baseModule.getData());
         } else {
@@ -70,15 +80,17 @@ public abstract class BaseTouSubscriber<D> extends BaseObserver<BaseModule<D>> {
 
     /**
      * 网络请求成功，返回正常
+     *
      * @param data data里的内容
      */
     public abstract void success(D data);
 
     /**
      * 網絡請求成功，但是不是正常返回
+     *
      * @param baseModule int code 自定义
      */
-    protected void fail(BaseModule<D> baseModule){
+    protected void fail(BaseModule<D> baseModule) {
         Toast.makeText(ActivityManager.getInstance(), baseModule.getMsg(), Toast.LENGTH_LONG).show();
     }
 

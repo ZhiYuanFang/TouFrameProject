@@ -6,6 +6,7 @@ import xyz.ttyz.mylibrary.method.ActivityManager;
 import xyz.ttyz.mylibrary.protect.SharedPreferenceUtil;
 import xyz.ttyz.toubasemvvm.utils.ToastUtil;
 import xyz.ttyz.tourfrxohc.MainActivity;
+import xyz.ttyz.tourfrxohc.activity.LoginActivity;
 import xyz.ttyz.tourfrxohc.models.UserModel;
 
 public class UserUtils {
@@ -23,6 +24,11 @@ public class UserUtils {
         }
         SharedPreferenceUtil.setShareString(ActivityManager.getInstance(), "user", new Gson().toJson(userModel));
         MainActivity.show();
+    }
+
+    public static void logOut(){
+        SharedPreferenceUtil.setShareString(ActivityManager.getInstance(), "user", "");
+        LoginActivity.show();
     }
 
     public static UserModel getCurUserModel(){

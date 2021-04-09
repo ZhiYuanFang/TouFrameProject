@@ -112,6 +112,23 @@ public class WebSocketService extends Service implements SocketListener {
             mWebSocketThread.getHandler().sendMessage(message);
         }
     }
+    public void sendBytes(byte[] bytes){
+        if(mWebSocketThread == null){
+            return;
+        }
+        if (mWebSocketThread.getHandler() == null) {
+            ErrorResponse errorResponse = new ErrorResponse();
+            errorResponse.setErrorCode(3);
+            errorResponse.setCause(new Throwable("WebSocket does not initialization!"));
+            errorResponse.setRequestText(new String(bytes));
+            onSendMessageError(errorResponse);
+        } else {
+            Message message = mWebSocketThread.getHandler().obtainMessage();
+            message.obj = bytes;
+            message.what = MessageType.SEND_MESSAGE_BYTES;
+            mWebSocketThread.getHandler().sendMessage(message);
+        }
+    }
 
     /**
      * 添加一个 WebSocket 事件监听器

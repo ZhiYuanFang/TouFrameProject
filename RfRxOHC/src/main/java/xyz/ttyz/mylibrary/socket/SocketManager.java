@@ -73,6 +73,12 @@ public class SocketManager {
         }
     }
 
+    public static void sendBytes(byte[] bytes){
+        if(null != webSocketServiceConnectManager){
+            webSocketServiceConnectManager.sendBytes(bytes);
+        }
+    }
+
     public static void stopConnect(){
         if(null != webSocketServiceConnectManager){
             webSocketServiceConnectManager.onDestroy();

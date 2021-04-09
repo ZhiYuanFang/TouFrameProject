@@ -66,6 +66,9 @@ public class SocketUtils {
         SocketManager.sendStr(str);
     }
 
+    public static void sendMessage(byte[] bytes) {
+        SocketManager.sendBytes(bytes);
+    }
     /**
      * 关闭长连接
      */

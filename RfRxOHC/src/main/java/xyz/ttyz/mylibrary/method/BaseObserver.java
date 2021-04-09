@@ -27,11 +27,6 @@ public abstract class BaseObserver<T extends RfRxOHCBaseModule> implements Obser
     }
 
     @Override
-    public void onSubscribe(Disposable d) {
-
-    }
-
-    @Override
     public void onNext(T t) {
         //本地数据展示 不做缓存
         if(!isLocalObserver && !StringUtil.safeString(initCacheKey()).isEmpty()){

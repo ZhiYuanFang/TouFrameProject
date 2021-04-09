@@ -22,7 +22,7 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding>{
 
     public static void show(){
         Intent intent = new Intent(ActivityManager.getInstance(), LoginActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         ActivityManager.getInstance().startActivity(intent);
     }
 

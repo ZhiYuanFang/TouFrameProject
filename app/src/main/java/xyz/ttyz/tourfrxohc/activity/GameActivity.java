@@ -1,38 +1,31 @@
 package xyz.ttyz.tourfrxohc.activity;
 
+import android.Manifest;
 import android.content.Intent;
+import android.media.AudioFormat;
+import android.media.AudioRecord;
+import android.media.MediaRecorder;
 
-import java.util.ArrayList;
+import androidx.databinding.ObservableBoolean;
+
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
-import cn.rongcloud.rtc.api.RCRTCConfig;
-import cn.rongcloud.rtc.api.RCRTCEngine;
-import cn.rongcloud.rtc.api.RCRTCRemoteUser;
-import cn.rongcloud.rtc.api.RCRTCRoom;
-import cn.rongcloud.rtc.api.callback.IRCRTCResultCallback;
-import cn.rongcloud.rtc.api.callback.IRCRTCResultDataCallback;
-import cn.rongcloud.rtc.api.callback.IRCRTCRoomEventsListener;
-import cn.rongcloud.rtc.api.stream.RCRTCAudioStreamConfig;
-import cn.rongcloud.rtc.api.stream.RCRTCInputStream;
-import cn.rongcloud.rtc.api.stream.RCRTCVideoStreamConfig;
-import cn.rongcloud.rtc.api.stream.RCRTCVideoView;
-import cn.rongcloud.rtc.base.RCRTCParamsType;
-import cn.rongcloud.rtc.base.RTCErrorCode;
-import io.rong.imlib.model.Conversation;
+import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import xyz.ttyz.mylibrary.method.ActivityManager;
 import xyz.ttyz.mylibrary.method.RxOHCUtils;
 import xyz.ttyz.mylibrary.protect.StringUtil;
-import xyz.ttyz.toubasemvvm.utils.DialogUtils;
+import xyz.ttyz.mylibrary.socket.SocketUtils;
+import xyz.ttyz.toubasemvvm.adapter.OnClickAdapter;
 import xyz.ttyz.toubasemvvm.utils.ToastUtil;
 import xyz.ttyz.tourfrxohc.BaseApplication;
-import xyz.ttyz.tourfrxohc.MainActivity;
 import xyz.ttyz.tourfrxohc.R;
 import xyz.ttyz.tourfrxohc.databinding.ActivityGameBinding;
 import xyz.ttyz.tourfrxohc.http.BaseSubscriber;
-import xyz.ttyz.tourfrxohc.models.PlayStatus;
 import xyz.ttyz.tourfrxohc.models.UserModel;
 import xyz.ttyz.tourfrxohc.models.game.HomeModel;
-import xyz.ttyz.tourfrxohc.utils.UserUtils;
 
 /**
  * https://docs.rongcloud.cn/v4/views/rtc/meeting/guide/advanced/usermanage/serverapi.html
@@ -105,210 +98,23 @@ public class GameActivity extends BaseActivity<ActivityGameBinding> {
 
     @Override
     protected String[] initPermission() {
-        return new String[0];
+        return new String[]{
+                Manifest.permission.RECORD_AUDIO
+        };
     }
 
     @Override
     protected void initData() {
+        mBinding.setContext(this);
         roomId = getIntent().getStringExtra("roomId");
         if (StringUtil.safeString(roomId).isEmpty()) {
             ToastUtil.showToast("房间不存在");
             GameActivity.this.finish();
             return;
         }
-        joinRoom();
 
     }
 
-    //region 麦克风控制
-    //通过长连接通知，轮到发言打开麦克风
-    private void openMicrophone() {
-        RCRTCEngine.getInstance().getDefaultAudioStream().setMicrophoneDisable(true);
-
-        for (UserModel userModel : userModelList) {
-            userModel.setSpeaking(UserUtils.getCurUserModel().equals(userModel));//非当前用户为不发言状态
-        }
-    }
-
-    //发言完毕，关闭麦克风
-    private void closeMicrophone() {
-        RCRTCEngine.getInstance().getDefaultAudioStream().setMicrophoneDisable(false);
-        // TODO: 2021/3/31 关闭麦克风，长连接通知，当前用户结束发言
-        UserModel selfUserModel = UserUtils.getCurUserModel();
-        userModelList.get(userModelList.indexOf(selfUserModel)).setSpeaking(false);//当前用户为不发言状态
-    }
-    //endregion
-
-    //加入房间语音
-    private void joinRoom() {
-        RCRTCConfig config = RCRTCConfig.Builder.create()
-                .enableMicrophone(true)//是否启用麦克风，默认：true 不启用麦克风则不创建 AudioRecoder 实例，RTCLib 加入房间 或 CallLib 开始通话 后无法再操作麦克风
-                .setAudioBitrate(30)//设置音频码率，默认 30 kbps
-                .setAudioSampleRate(16000)//设置音频采样率，支持的音频采样率有：8000，16000， 32000， 44100， 48000。 默认为 48000
-                .build();
-        RCRTCEngine.getInstance().init(getApplicationContext(), config);
-        //噪声抑制
-        RCRTCAudioStreamConfig audioStreamConfig = RCRTCAudioStreamConfig.Builder.create()
-                .setNoiseSuppression(RCRTCParamsType.NSMode.NS_MODE2)//设置回声消除模式，默认为 AECMode#AEC_MODE2 (使用AEC)
-                .setPreAmplifierLevel(1.0f)//设置采集音频信号放大级别， 默认 1.0f
-                .enablePreAmplifier(true)//采集音频信号放大开关，默认 true
-                .enableAGCControl(true)//设置增益控制开关，默认 true
-                .enableEchoFilter(true)//设置回声扩展滤波器是否可用，默认 false
-                .build();
-        RCRTCEngine.getInstance().getDefaultAudioStream().setAudioConfig(audioStreamConfig);
-        //默认关闭麦克风
-        closeMicrophone();
-        //默认打开扬声器
-        RCRTCEngine.getInstance().enableSpeaker(true);
-        //mRoomId：长度 64 个字符，可包含：`A-Z`、`a-z`、`0-9`、`+`、`=`、`-`、`_`
-        RCRTCEngine.getInstance().joinRoom(roomId, new IRCRTCResultDataCallback<RCRTCRoom>() {
-            @Override
-            public void onSuccess(RCRTCRoom rcrtcRoom) {
-                //注册房间事件回调
-                rcrtcRoom.registerRoomListener(new IRCRTCRoomEventsListener() {
-                    /**
-                     * 房间内用户发布资源
-                     *
-                     * @param rcrtcRemoteUser 远端用户
-                     * @param list    发布的资源
-                     */
-                    @Override
-                    public void onRemoteUserPublishResource(RCRTCRemoteUser rcrtcRemoteUser, List<RCRTCInputStream> list) {
-                        //按需在此订阅远端用户发布的资源
-                        rcrtcRoom.getLocalUser().subscribeStreams(list, new IRCRTCResultCallback() {
-                            @Override
-                            public void onSuccess() {
-                            }
-
-                            @Override
-                            public void onFailed(RTCErrorCode rtcErrorCode) {
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onRemoteUserMuteAudio(RCRTCRemoteUser rcrtcRemoteUser, RCRTCInputStream rcrtcInputStream, boolean b) {
-
-                    }
-
-                    @Override
-                    public void onRemoteUserMuteVideo(RCRTCRemoteUser rcrtcRemoteUser, RCRTCInputStream rcrtcInputStream, boolean b) {
-
-                    }
-
-                    @Override
-                    public void onRemoteUserUnpublishResource(RCRTCRemoteUser rcrtcRemoteUser, List<RCRTCInputStream> list) {
-
-                    }
-
-                    /**
-                     * 用户加入房间
-                     *
-                     * @param rcrtcRemoteUser 远端用户
-                     */
-                    @Override
-                    public void onUserJoined(RCRTCRemoteUser rcrtcRemoteUser) {
-                        //获取这个用户的id
-                        long userId = Long.parseLong(rcrtcRemoteUser.getUserId());
-                        //根据id得到对应的userModel
-                        UserModel userModel = getUserModel(userId);
-                        //修改userModel下用户是否离开状态
-                        userModel.setPlayStatus(PlayStatus.IN);
-                    }
-
-                    /**
-                     * 用户离开房间
-                     *
-                     * @param rcrtcRemoteUser 远端用户
-                     */
-                    @Override
-                    public void onUserLeft(RCRTCRemoteUser rcrtcRemoteUser) {
-                        //获取这个用户的id
-                        long userId = Long.parseLong(rcrtcRemoteUser.getUserId());
-                        //根据id得到对应的userModel
-                        UserModel userModel = getUserModel(userId);
-                        //修改userModel下用户是否离开状态
-                        userModel.setPlayStatus(PlayStatus.LEAVE);
-                    }
-
-                    @Override
-                    public void onUserOffline(RCRTCRemoteUser rcrtcRemoteUser) {
-                        //获取这个用户的id
-                        long userId = Long.parseLong(rcrtcRemoteUser.getUserId());
-                        //根据id得到对应的userModel
-                        UserModel userModel = getUserModel(userId);
-                        //修改userModel下用户是否离开状态
-                        userModel.setPlayStatus(PlayStatus.OffLine);
-                    }
-
-                    /**
-                     * 自己退出房间。 例如断网退出等
-                     * @param i 状态码
-                     */
-                    @Override
-                    public void onLeaveRoom(int i) {
-                        // TODO: 2021/3/31 判断当前房间是否已经关闭
-                        boolean roomIsClose = false;
-                        if (roomIsClose) {
-                            GameActivity.this.finish();
-                        } else {
-                            //当前房间未关闭
-                            DialogUtils.showSingleDialog("网络异常退出房间", new DialogUtils.DialogButtonModule("重新连接", new DialogUtils.DialogClickDelegate() {
-                                @Override
-                                public void click(DialogUtils.DialogButtonModule dialogButtonModule) {
-                                    joinRoom();
-                                }
-                            }));
-                        }
-                    }
-                });
-                //加入房间成功后，发布默认音视频流
-                rcrtcRoom.getLocalUser().publishDefaultStreams(new IRCRTCResultCallback() {
-                    @Override
-                    public void onSuccess() {
-
-                    }
-
-                    @Override
-                    public void onFailed(RTCErrorCode rtcErrorCode) {
-                        DialogUtils.showSingleDialog("麦克风无法正常使用", new DialogUtils.DialogButtonModule("确定"));
-                    }
-                });
-                //加入房间成功后，如果房间中已存在用户且发布了音、视频流，就订阅远端用户发布的音视频流.
-                if (rcrtcRoom == null || rcrtcRoom.getRemoteUsers() == null) {
-                    return;
-                }
-                List<RCRTCInputStream> inputStreams = new ArrayList<>();
-                for (RCRTCRemoteUser remoteUser : rcrtcRoom.getRemoteUsers()) {
-                    if (remoteUser.getStreams().size() == 0) {
-                        continue;
-                    }
-                    inputStreams.addAll(remoteUser.getStreams());
-                }
-                rcrtcRoom.getLocalUser().subscribeStreams(inputStreams, new IRCRTCResultCallback() {
-                    @Override
-                    public void onSuccess() {
-
-                    }
-
-                    @Override
-                    public void onFailed(RTCErrorCode errorCode) {
-                        DialogUtils.showSingleDialog("订阅其他人音频失败", new DialogUtils.DialogButtonModule("确定"));
-                    }
-                });
-            }
-
-            @Override
-            public void onFailed(RTCErrorCode rtcErrorCode) {
-                DialogUtils.showSingleDialog("加入房间失败", new DialogUtils.DialogButtonModule("确定", new DialogUtils.DialogClickDelegate() {
-                    @Override
-                    public void click(DialogUtils.DialogButtonModule dialogButtonModule) {
-                        GameActivity.this.finish();
-                    }
-                }));
-            }
-        });
-    }
 
     @Override
     protected void initServer() {
@@ -341,20 +147,77 @@ public class GameActivity extends BaseActivity<ActivityGameBinding> {
         return null;
     }
 
+    public OnClickAdapter.onClickCommand endSpeakCommand = new OnClickAdapter.onClickCommand() {
+        @Override
+        public void click() {
+            endSpeak();
+
+        }
+    };
+
+    public OnClickAdapter.onClickCommand startSpeakCommand = new OnClickAdapter.onClickCommand() {
+        @Override
+        public void click() {
+            startSpeak();
+        }
+    };
+
+    //region 音频
+    public ObservableBoolean isSpeakingFiled = new ObservableBoolean(false);
+    //指定音频源 这个和MediaRecorder是相同的 MediaRecorder.AudioSource.MIC指的是麦克风
+    private static final int mAudioSource = MediaRecorder.AudioSource.MIC;
+    //指定采样率 （MediaRecoder 的采样率通常是8000Hz AAC的通常是44100Hz。 设置采样率为44100，目前为常用的采样率，官方文档表示这个值可以兼容所有的设置）
+    private static final int mSampleRateInHz = 44100;
+    //指定捕获音频的声道数目。在AudioFormat类中指定用于此的常量
+    private static final int mChannelConfig = AudioFormat.CHANNEL_CONFIGURATION_MONO; //单声道
+    //指定音频量化位数 ,在AudioFormaat类中指定了以下各种可能的常量。通常我们选择ENCODING_PCM_16BIT和ENCODING_PCM_8BIT PCM代表的是脉冲编码调制，它实际上是原始音频样本。
+    //因此可以设置每个样本的分辨率为16位或者8位，16位将占用更多的空间和处理能力,表示的音频也更加接近真实。
+    private static final int mAudioFormat = AudioFormat.ENCODING_PCM_16BIT;
+    //指定缓冲区大小。调用AudioRecord类的getMinBufferSize方法可以获得。
+    private final int mBufferSizeInBytes = AudioRecord.getMinBufferSize(mSampleRateInHz, mChannelConfig, mAudioFormat);//计算最小缓冲区
+    AudioRecord audioRecord;
+    Disposable upDisposable;
+
+    protected void startSpeak() {
+        if (audioRecord == null) {
+            //创建AudioRecord。AudioRecord类实际上不会保存捕获的音频，因此需要手动创建文件并保存下载。
+            audioRecord = new AudioRecord(mAudioSource, mSampleRateInHz, mChannelConfig,
+                    mAudioFormat, mBufferSizeInBytes);//创建AudioRecorder对象
+        }
+        audioRecord.startRecording();
+        isSpeakingFiled.set(true);
+        if (upDisposable == null) {
+            upDisposable = Observable.interval(100, 100, TimeUnit.MILLISECONDS)
+                    .subscribe(new Consumer<Long>() {
+                        @Override
+                        public void accept(Long aLong) throws Exception {
+                            // 上传音频流
+                            byte[] recordData = new byte[mBufferSizeInBytes];
+                            audioRecord.read(recordData, 0, mBufferSizeInBytes);
+                            SocketUtils.sendMessage(recordData);
+                        }
+                    });
+        }
+    }
+
+    protected void endSpeak() {
+        if (null != upDisposable) {
+            upDisposable.dispose();
+            upDisposable = null;
+        }
+
+        if (audioRecord != null) {
+            audioRecord.stop();
+            audioRecord.release();
+            audioRecord = null;
+        }
+        isSpeakingFiled.set(false);
+    }
+    //endregion
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         //离开音视频房间时，SDK 内部会自动取消发布本端资源和取消订阅远端用户资源，必须在成功或失败回调完成之后再开始新的音视频通话逻辑
-        RCRTCEngine.getInstance().leaveRoom(new IRCRTCResultCallback() {
-            @Override
-            public void onSuccess() {
-
-            }
-
-            @Override
-            public void onFailed(RTCErrorCode rtcErrorCode) {
-
-            }
-        });
     }
 }

@@ -2,42 +2,23 @@ package xyz.ttyz.tourfrxohc;
 
 import android.Manifest;
 import android.content.Intent;
-import android.os.Handler;
-import android.view.ViewGroup;
 
 import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
-import io.rong.imlib.model.Conversation;
 import xyz.ttyz.mylibrary.method.ActivityManager;
 import xyz.ttyz.mylibrary.method.BaseModule;
 import xyz.ttyz.mylibrary.method.ProgressUtil;
-import xyz.ttyz.mylibrary.method.RetrofitUtils;
 import xyz.ttyz.mylibrary.method.RxOHCUtils;
 import xyz.ttyz.toubasemvvm.adapter.OnClickAdapter;
-import xyz.ttyz.toubasemvvm.adapter.utils.BaseEmptyAdapterParent;
-import xyz.ttyz.toubasemvvm.adapter.utils.BaseRecyclerAdapter;
 import xyz.ttyz.toubasemvvm.utils.DialogUtils;
-import xyz.ttyz.toubasemvvm.utils.ToastUtil;
 import xyz.ttyz.toubasemvvm.vm.ToolBarViewModel;
 import xyz.ttyz.tourfrxohc.activity.BaseActivity;
 import xyz.ttyz.tourfrxohc.activity.GameActivity;
 import xyz.ttyz.tourfrxohc.databinding.ActivityMainBinding;
 import xyz.ttyz.tourfrxohc.fragment.MainFragment;
 import xyz.ttyz.tourfrxohc.http.BaseSubscriber;
-import xyz.ttyz.tourfrxohc.models.Hardware;
-import xyz.ttyz.tourfrxohc.models.MainModel;
-import xyz.ttyz.tourfrxohc.models.ResorceModel;
-import xyz.ttyz.tourfrxohc.models.Software;
-import xyz.ttyz.tourfrxohc.models.UserModel;
 import xyz.ttyz.tourfrxohc.models.game.HomeModel;
-import xyz.ttyz.tourfrxohc.utils.RMUtils;
 import xyz.ttyz.tourfrxohc.utils.UserUtils;
-import xyz.ttyz.tourfrxohc.viewholder.ResorceViewHolder;
 
 public class MainActivity extends BaseActivity<ActivityMainBinding> {
 
@@ -68,21 +49,22 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     ToolBarViewModel toolBarViewModel;
     @Override
     protected void initData() {
-        RMUtils.connectRM();
         mBinding.setContext(this);
         toolBarViewModel = new ToolBarViewModel.Builder()
-                .rightTxt("图片")
+                .rightTxt("退出")
                 .rightClick(new OnClickAdapter.onClickCommand() {
                     @Override
                     public void click() {
-                        DialogUtils.showDialog("点击返回按钮可以关闭图片", new DialogUtils.DialogButtonModule("显示图片", new DialogUtils.DialogClickDelegate() {
+                        DialogUtils.showDialog("确定要退出登录吗", new DialogUtils.DialogButtonModule("确定", new DialogUtils.DialogClickDelegate() {
                             @Override
                             public void click(DialogUtils.DialogButtonModule dialogButtonModule) {
-                                MainFragment mainFragment = new MainFragment();
-                                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                                fragmentTransaction.add(R.id.container, mainFragment);
-                                fragmentTransaction.commitAllowingStateLoss();
-                                fragmentTransaction.addToBackStack("");
+//                                MainFragment mainFragment = new MainFragment();
+//                                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+//                                fragmentTransaction.add(R.id.container, mainFragment);
+//                                fragmentTransaction.commitAllowingStateLoss();
+//                                fragmentTransaction.addToBackStack("");
+
+                                UserUtils.logOut();
                             }
                         }));
                     }
@@ -99,7 +81,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     public OnClickAdapter.onClickCommand startGameCommand = new OnClickAdapter.onClickCommand() {
         @Override
         public void click() {
-            if(RMUtils.connectSuccess){
+//            if(RMUtils.connectSuccess){
                 // 获取匹配房间
                 //匹配机制
                 //给后端传当前用户信息，要请求进入房间
@@ -107,17 +89,22 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
                 //后端生成房间id
                 //当前id下匹配人数达到9个
                 //返回匹配成功，并告知房间id
-                ProgressUtil.showCircleProgress(ActivityManager.getInstance(), "正在匹配中...");
+            ProgressUtil.showCircleProgress(ActivityManager.getInstance(), "正在匹配中...");
                 new RxOHCUtils<HomeModel>(MainActivity.this).executeApi(BaseApplication.apiService.join(UserUtils.getCurUserModel().getId()), new BaseSubscriber<HomeModel>(MainActivity.this) {
                     @Override
                     public void success(HomeModel data) {
-                        if(data.isInHome()){
+                        if(data.isInHome() && data.getHisMemberList().size() >= 9){//我在房间里， 且人数>9
                             //我已经在房间里了
                             ProgressUtil.missCircleProgress();
                             GameActivity.show(data.getRoomId());
                         } else {
                             //我不在房间里，挂起
                         }
+                    }
+
+                    @Override
+                    protected boolean autoCloseCircleProgress() {
+                        return false;
                     }
 
                     @Override
@@ -130,11 +117,11 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
                         super.fail(baseModule);
                         ProgressUtil.missCircleProgress();
                     }
-                });
+                }.notShowProgress());
 
-            } else {
-                ToastUtil.showToast("服务器连接失败");
-            }
+//            } else {
+//                ToastUtil.showToast("服务器连接失败");
+//            }
         }
     };
 }

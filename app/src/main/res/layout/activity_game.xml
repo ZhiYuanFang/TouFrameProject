@@ -5,6 +5,9 @@
 
     <data>
         <variable
+            name="context"
+            type="xyz.ttyz.tourfrxohc.activity.GameActivity" />
+        <variable
             name="user1"
             type="xyz.ttyz.tourfrxohc.models.UserModel" />
 
@@ -43,135 +46,157 @@
     </data>
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:weightSum="5">
+        android:orientation="vertical">
+
         <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:weightSum="2"
-            android:orientation="horizontal">
+            android:weightSum="5">
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
                 android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                tools:ignore="NestedWeights">
-                <include layout="@layout/layout_game_left"
-                    binding:user="@{user1}"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
+                android:weightSum="2"
                 android:orientation="horizontal">
-                <include layout="@layout/layout_game_right"
-                    binding:user="@{user6}"/>
-            </LinearLayout>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:weightSum="2"
-            android:orientation="horizontal">
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                tools:ignore="NestedWeights">
-                <include layout="@layout/layout_game_left"
-                    binding:user="@{user2}"/>
-            </LinearLayout>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    tools:ignore="NestedWeights">
+                    <include layout="@layout/layout_game_left"
+                        binding:user="@{user1}"/>
+                </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+                    <include layout="@layout/layout_game_right"
+                        binding:user="@{user6}"/>
+                </LinearLayout>
+            </LinearLayout>
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
                 android:layout_weight="1"
-                android:gravity="center_vertical"
+                android:weightSum="2"
                 android:orientation="horizontal">
-                <include layout="@layout/layout_game_right"
-                    binding:user="@{user7}"/>
-            </LinearLayout>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:weightSum="2"
-            android:orientation="horizontal">
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                tools:ignore="NestedWeights">
-                <include layout="@layout/layout_game_left"
-                    binding:user="@{user3}"/>
-            </LinearLayout>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    tools:ignore="NestedWeights">
+                    <include layout="@layout/layout_game_left"
+                        binding:user="@{user2}"/>
+                </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+                    <include layout="@layout/layout_game_right"
+                        binding:user="@{user7}"/>
+                </LinearLayout>
+            </LinearLayout>
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
                 android:layout_weight="1"
-                android:gravity="center_vertical"
+                android:weightSum="2"
                 android:orientation="horizontal">
-                <include layout="@layout/layout_game_right"
-                    binding:user="@{user8}"/>
-            </LinearLayout>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:weightSum="2"
-            android:orientation="horizontal">
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                tools:ignore="NestedWeights">
-                <include layout="@layout/layout_game_left"
-                    binding:user="@{user4}"/>
-            </LinearLayout>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    tools:ignore="NestedWeights">
+                    <include layout="@layout/layout_game_left"
+                        binding:user="@{user3}"/>
+                </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+                    <include layout="@layout/layout_game_right"
+                        binding:user="@{user8}"/>
+                </LinearLayout>
+            </LinearLayout>
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
                 android:layout_weight="1"
-                android:gravity="center_vertical"
+                android:weightSum="2"
                 android:orientation="horizontal">
-                <include layout="@layout/layout_game_right"
-                    binding:user="@{user9}"/>
-            </LinearLayout>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:weightSum="2"
-            android:orientation="horizontal">
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                tools:ignore="NestedWeights">
-                <include layout="@layout/layout_game_left"
-                    binding:user="@{user5}"/>
-            </LinearLayout>
-        </LinearLayout>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    tools:ignore="NestedWeights">
+                    <include layout="@layout/layout_game_left"
+                        binding:user="@{user4}"/>
+                </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+                    <include layout="@layout/layout_game_right"
+                        binding:user="@{user9}"/>
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:weightSum="2"
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    tools:ignore="NestedWeights">
+                    <include layout="@layout/layout_game_left"
+                        binding:user="@{user5}"/>
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text='@{context.isSpeakingFiled ? "speaking..." : "startSpeak"}'/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="结束"
+            binding:onClickCommand="@{context.endSpeakCommand}"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="开始"
+            binding:onClickCommand="@{context.startSpeakCommand}"/>
     </LinearLayout>
 </layout>

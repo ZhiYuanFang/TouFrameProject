@@ -9,13 +9,13 @@ import com.ihsanbal.logging.LoggingInterceptor;
 import java.io.IOException;
 import java.util.Map;
 
-import io.rong.imlib.RongIMClient;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import retrofit2.Retrofit;
 import xyz.ttyz.mylibrary.RfRxOHCUtil;
+import xyz.ttyz.mylibrary.method.ProgressUtil;
 import xyz.ttyz.tou_example.init.ApplicationUtils;
 import xyz.ttyz.tou_example.init.TouDelegate;
 import xyz.ttyz.toubasemvvm.utils.DialogUtils;
@@ -121,6 +121,7 @@ public class BaseApplication extends Application {
                         SocketEventModule socketEventModule = new Gson().fromJson(message, SocketEventModule.class);
                         if(socketEventModule.getUserModels().contains(UserUtils.getCurUserModel())){
                             //2021/4/8 我匹配成功了， 进入房间roomId
+                            ProgressUtil.missCircleProgress();
                             GameActivity.show(socketEventModule.getRoomId());
                         }
                     }
@@ -130,8 +131,5 @@ public class BaseApplication extends Application {
                         return UserUtils.isLogin();
                     }
                 });
-        //初始化融云
-        RongIMClient.init(this, Constants.rmAppKey, false);//是否使用 VoIP 推送功能。false 代表不使用推送相关功能, SDK 里将不会携带推送相关文件
-
     }
 }

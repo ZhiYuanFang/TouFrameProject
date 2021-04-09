@@ -17,7 +17,6 @@ public class UserModel extends BaseObservable implements Serializable {
     String accessToken;
     String password;
     int level;
-    String rmToken;//融云token
     String phone;
 
     public String getPhone() {
@@ -36,9 +35,6 @@ public class UserModel extends BaseObservable implements Serializable {
         return level;
     }
 
-    public String getRmToken() {
-        return rmToken;
-    }
 
     @Bindable
     public PlayStatus getPlayStatus() {

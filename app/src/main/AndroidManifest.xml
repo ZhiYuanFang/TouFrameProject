@@ -3,18 +3,14 @@
     package="xyz.ttyz.tourfrxohc">
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-<!--region    融云权限-->
     <!-- 音视频需要网络权限 和 监听网络状态权限 -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <!-- 摄像头采集需要 -->
-    <uses-permission android:name="android.permission.CAMERA" />
     <!-- 音频采集需要 -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
-<!--endregion -->
     <application
         android:name=".BaseApplication"
         android:allowBackup="true"

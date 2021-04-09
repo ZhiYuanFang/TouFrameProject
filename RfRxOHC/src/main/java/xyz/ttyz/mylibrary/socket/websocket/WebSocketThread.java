@@ -132,6 +132,21 @@ public class WebSocketThread extends Thread {
                         }
                     }
                     break;
+                case MessageType.SEND_MESSAGE_BYTES:
+                    if (msg.obj instanceof Byte[]) {
+                        byte[] message = (byte[]) msg.obj;
+                        if (mWebSocket != null && connectStatus == 2) {
+                            send(message);
+                        } else if (mSocketListener != null) {
+                            ErrorResponse errorResponse = new ErrorResponse();
+                            errorResponse.setErrorCode(1);
+                            errorResponse.setCause(new Throwable("WebSocket does not connect or closed!"));
+                            errorResponse.setRequestText(new String(message));
+                            mSocketListener.onSendMessageError(errorResponse);
+                            mReconnectManager.performReconnect();
+                        }
+                    }
+                    break;
             }
         }
 
@@ -244,7 +259,27 @@ public class WebSocketThread extends Thread {
                 }
             }
         }
+        private void send(byte[] text) {
+            if (mWebSocket != null && connectStatus == 2) {
+                try {
+                    mWebSocket.send(text);
+                    LogUtils.showWebSocketLog("数据发送成功：" + text);
+                } catch (WebsocketNotConnectedException e) {
+                    connectStatus = 0;
+                    LogUtils.showWebSocketLog("连接已断开，数据发送失败：" + text);
+                    if (mSocketListener != null) {
+                        mSocketListener.onDisconnected();
 
+                        ErrorResponse errorResponse = new ErrorResponse();
+                        errorResponse.setErrorCode(1);
+                        errorResponse.setCause(new Throwable("WebSocket does not connected or closed!"));
+                        errorResponse.setRequestText(new String(text));
+                        mSocketListener.onSendMessageError(errorResponse);
+                    }
+                    mReconnectManager.performReconnect();
+                }
+            }
+        }
         /**
          * 结束此线程并销毁资源
          */
