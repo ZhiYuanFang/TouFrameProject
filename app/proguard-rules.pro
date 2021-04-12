@@ -88,23 +88,6 @@
     <init>(java.lang.Throwable);
 }
 
-#融云
--keepattributes Exceptions,InnerClasses
--keepattributes Signature
-#RongRTCLib
--keep public class cn.rongcloud.*{*;}
-#RongIMLib
--keep class io.rong.*{*;}
--keep class cn.rongcloud.*{*;}
--keep class * implements io.rong.imlib.model.MessageContent {*;}
--dontwarn io.rong.push.**
--dontnote com.xiaomi.**
--dontnote com.google.android.gms.gcm.**
--dontnote io.rong.**
--ignorewarnings
-
-
-
 # 保留继承的
 #保留models下的所有类，作为gson映射，不可混淆
 -keep class xyz.ttyz.tourfrxohc.models.*{*;}
