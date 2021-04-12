@@ -76,6 +76,17 @@
 -keep public class * extends android.preference.Preference
 -keep public class * extends android.view.View
 #----------------------------------------------------
+#eventBus
+-keepattributes *Annotation*
+-keepclassmembers class * {
+    @org.greenrobot.eventbus.Subscribe <methods>;
+}
+-keep enum org.greenrobot.eventbus.ThreadMode { *; }
+
+# And if you use AsyncExecutor:
+-keepclassmembers class * extends org.greenrobot.eventbus.util.ThrowableFailureEvent {
+    <init>(java.lang.Throwable);
+}
 
 # 保留继承的
 #保留models下的所有类，作为gson映射，不可混淆

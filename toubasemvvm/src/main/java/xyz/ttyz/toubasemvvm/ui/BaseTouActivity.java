@@ -120,7 +120,7 @@ public abstract class BaseTouActivity<T extends ViewDataBinding> extends SwipeBa
 
     //region private
     protected void doInit(){
-        if(initPermission() != null){
+        if(initPermission() != null && initPermission().length > 0){
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 XXPermissions.with(this)
                         .permission(initPermission())
