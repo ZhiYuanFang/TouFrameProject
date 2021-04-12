@@ -76,21 +76,17 @@
 -keep public class * extends android.preference.Preference
 -keep public class * extends android.view.View
 #----------------------------------------------------
+#EventBUs
+-keepattributes *Annotation*
+-keepclassmembers class * {
+    @org.greenrobot.eventbus.Subscribe <methods>;
+}
+-keep enum org.greenrobot.eventbus.ThreadMode { *; }
 
-#融云
--keepattributes Exceptions,InnerClasses
--keepattributes Signature
-#RongRTCLib
--keep public class cn.rongcloud.*{*;}
-#RongIMLib
--keep class io.rong.*{*;}
--keep class cn.rongcloud.*{*;}
--keep class * implements io.rong.imlib.model.MessageContent {*;}
--dontwarn io.rong.push.**
--dontnote com.xiaomi.**
--dontnote com.google.android.gms.gcm.**
--dontnote io.rong.**
--ignorewarnings
+# And if you use AsyncExecutor:
+-keepclassmembers class * extends org.greenrobot.eventbus.util.ThrowableFailureEvent {
+    <init>(java.lang.Throwable);
+}
 
 
 
