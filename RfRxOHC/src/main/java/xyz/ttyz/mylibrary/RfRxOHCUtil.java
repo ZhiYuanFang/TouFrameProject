@@ -124,7 +124,22 @@ public class RfRxOHCUtil {
             @Override
             public void onActivityStarted(@NonNull Activity activity) {
                 if(touRRCDelegate.isLogin()){
-                    SocketUtils.openMinaReceiver(application);
+                    SocketUtils.openMinaReceiver(application, new SocketUtils.SocketDelegate() {
+                        @Override
+                        public void connectSuccess() {
+
+                        }
+
+                        @Override
+                        public long roomId() {
+                            return 0;
+                        }
+
+                        @Override
+                        public long userId() {
+                            return touRRCDelegate.userId();
+                        }
+                    });
                 }
             }
 
@@ -209,6 +224,11 @@ public class RfRxOHCUtil {
          * 接收到长连接消息
          */
         void socketReceived(String message);
+
+        void socketReceived(byte[] bytes);
+
+        //用户id，连接socket需要
+        long userId();
 
         /**
          * 是否已经登录

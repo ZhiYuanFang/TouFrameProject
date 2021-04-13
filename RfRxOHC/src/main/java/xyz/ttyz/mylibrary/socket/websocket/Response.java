@@ -6,6 +6,7 @@ package xyz.ttyz.mylibrary.socket.websocket;
  */
 public interface Response<T> {
 
+    byte[] getResponseBytes();
     /**
      * 获取响应的文本数据
      */

@@ -13,8 +13,10 @@ import org.java_websocket.handshake.ServerHandshake;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.ByteBuffer;
 import java.util.Map;
 
+import xyz.ttyz.mylibrary.protect.StringUtil;
 import xyz.ttyz.mylibrary.socket.LogUtils;
 
 /**
@@ -113,6 +115,9 @@ public class WebSocketThread extends Thread {
                     quit();
                     break;
                 case MessageType.RECEIVE_MESSAGE:
+                    if (mSocketListener != null && msg.obj instanceof byte[]) {
+                        mSocketListener.onMessageResponse(new ByteResponse((byte[]) msg.obj));
+                    }
                     if (mSocketListener != null && msg.obj instanceof String) {
                         mSocketListener.onMessageResponse(new TextResponse((String) msg.obj));
                     }
@@ -133,7 +138,7 @@ public class WebSocketThread extends Thread {
                     }
                     break;
                 case MessageType.SEND_MESSAGE_BYTES:
-                    if (msg.obj instanceof Byte[]) {
+                    if (msg.obj instanceof byte[]) {
                         byte[] message = (byte[]) msg.obj;
                         if (mWebSocket != null && connectStatus == 2) {
                             send(message);
@@ -171,17 +176,23 @@ public class WebSocketThread extends Thread {
                             }
 
                             @Override
+                            public void onMessage(ByteBuffer byteBuffer) {
+                                super.onMessage(byteBuffer);
+                                byte[] bytes = StringUtil.decodeValue(byteBuffer);
+                                connectStatus = 2;
+                                Message msg = mHandler.obtainMessage();
+                                msg.what = MessageType.RECEIVE_MESSAGE;
+                                msg.obj = bytes;
+                                mHandler.sendMessage(msg);
+                            }
+
+                            @Override
                             public void onMessage(String message) {
                                 connectStatus = 2;
-                                LogUtils.showWebSocketLog("接收到消息：" + message);
                                 Message msg = mHandler.obtainMessage();
                                 msg.what = MessageType.RECEIVE_MESSAGE;
                                 msg.obj = message;
-                                try {
-                                    mHandler.sendMessage(msg);
-                                } catch (Exception e) {
-                                    e.getMessage();
-                                }
+                                mHandler.sendMessage(msg);
                             }
 
                             @Override

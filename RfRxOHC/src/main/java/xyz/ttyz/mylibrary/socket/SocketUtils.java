@@ -7,12 +7,15 @@ import android.content.IntentFilter;
 import android.net.Uri;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
 import xyz.ttyz.mylibrary.RfRxOHCUtil;
 import xyz.ttyz.mylibrary.method.ActivityManager;
+import xyz.ttyz.mylibrary.socket.websocket.ResponseDelivery;
 import xyz.ttyz.mylibrary.socket.websocket.WebSocketService;
 import xyz.ttyz.mylibrary.socket.websocket.WebSocketSetting;
 import xyz.ttyz.mylibrary.socket.websocket.WebSocketThread;
@@ -25,10 +28,19 @@ public class SocketUtils {
     private static Intent intentWebSocketService;
     private static final String TAG = "SocketUtils";
 
+    public interface SocketDelegate{
+        void connectSuccess();
+
+        long roomId();
+
+        long userId();
+    }
+
+
     /**
      * 开启长连接
      */
-    public static void openMinaReceiver(final Application application) {
+    public static void openMinaReceiver(final Application application,@NonNull final SocketDelegate socketDelegate) {
         if (null == socketBroadCastReceiver) {
             socketBroadCastReceiver = new SocketBroadCastReceiver();
         }
@@ -39,14 +51,20 @@ public class SocketUtils {
         //启动 WebSocket 服务
         //先关后开
         if (null == intentWebSocketService) {
-            //配置 WebSocket，必须在 WebSocket 服务启动前设置
-            String socketStr = RfRxOHCUtil.socketUrl;
+            //配置 WebSocket，必须在 WebSocket 服务启动前设置 ws://192.168.1.201:8080/tou3_war_exploded/devMessage/1/1
+            String socketStr = RfRxOHCUtil.socketUrl + "/" + socketDelegate.userId() + "/" + socketDelegate.roomId();
             LogUtils.showWebSocketLog("socketUrl ==============> " + socketStr);
             WebSocketSetting.setConnectUrl(socketStr);
             Map<String, Object> header = RfRxOHCUtil.touRRCDelegate.socketInitHeader();
             LogUtils.showWebSocketLog("socket header ==============> " + header);
             WebSocketSetting.setHeaders(header);
-            WebSocketSetting.setResponseProcessDelivery(new AppResponseDispatcher(application));
+            WebSocketSetting.setResponseProcessDelivery(new AppResponseDispatcher(application){
+                @Override
+                public void onConnected(ResponseDelivery delivery) {
+                    super.onConnected(delivery);
+                    socketDelegate.connectSuccess();
+                }
+            });
             WebSocketSetting.setReconnectWithNetworkChanged(true);
             WebSocketSetting.setSocketDelegate(new WebSocketThread.SocketDelegate() {
                 @Override
@@ -54,6 +72,7 @@ public class SocketUtils {
                     closeMinaReceiver(application);
                     RfRxOHCUtil.touRRCDelegate.socketConnectTimeOut();
                 }
+
             });
             intentWebSocketService = new Intent(application, WebSocketService.class);
             application.startService(intentWebSocketService);

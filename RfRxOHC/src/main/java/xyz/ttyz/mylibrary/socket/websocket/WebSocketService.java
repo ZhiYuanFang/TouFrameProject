@@ -8,6 +8,7 @@ import android.net.ConnectivityManager;
 import android.os.Binder;
 import android.os.IBinder;
 import android.os.Message;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -19,6 +20,7 @@ import xyz.ttyz.mylibrary.socket.SocketUtils;
  * Created by ZhangKe on 2018/6/13.
  */
 public class WebSocketService extends Service implements SocketListener {
+    private static final String TAG = "WebSocketService";
 
     private WebSocketThread mWebSocketThread;
 

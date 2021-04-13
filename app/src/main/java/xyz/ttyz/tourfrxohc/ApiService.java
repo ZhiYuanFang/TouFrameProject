@@ -32,7 +32,7 @@ public interface ApiService {
 
 
     @GET("game/roomInfo")
-    Observable<BaseModule<HomeModel>> roomInfo(@Query("roomId") String roomId);
+    Observable<BaseModule<HomeModel>> roomInfo(@Query("roomId") long roomId);
 
 
 //    @Headers("Content-type:text/x-plain-rsa-json")

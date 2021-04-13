@@ -72,8 +72,6 @@ public abstract class BaseTouActivity<T extends ViewDataBinding> extends SwipeBa
         super.onCreate(savedInstanceState);
         ActivityManager.popActivity(this);
         lifecycleSubject.onNext(ActivityEvent.CREATE);
-        if (!EventBus.getDefault().isRegistered(this))
-            EventBus.getDefault().register(this);
         if (Build.VERSION.SDK_INT == Build.VERSION_CODES.O) {
             setTheme(R.style.MimeTheme);//设置全屏， 防止api 26闪退
         } else setTheme(R.style.TouTheme);//使用swipeBack 需要设置主题，否则会显示titlebar
@@ -87,6 +85,8 @@ public abstract class BaseTouActivity<T extends ViewDataBinding> extends SwipeBa
             StatusBarUtil.setStatusBarColor(this, 0x55000000);
         }
         mBinding = DataBindingUtil.setContentView(this, initLayoutId());
+        if (!EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().register(this);
         //页面基础渲染之后，延迟300毫秒做逻辑渲染，防止逻辑渲染卡顿
         Observable.timer(300, TimeUnit.MILLISECONDS)
                 .subscribe(new Observer<Long>() {

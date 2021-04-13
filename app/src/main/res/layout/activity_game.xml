@@ -187,16 +187,31 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:text='@{context.isSpeakingFiled ? "speaking..." : "startSpeak"}'/>
+            android:text='@{context.isSpeakingFiled ? "speaking..." : "noSpeak"}'/>
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="结束"
+            android:text="结束发言"
             binding:onClickCommand="@{context.endSpeakCommand}"/>
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="开始"
+            android:text="开始发言"
             binding:onClickCommand="@{context.startSpeakCommand}"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text='@{context.playAudioFiled ? "play..." : "none"}'/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="停止播放"
+            android:onClick="@{()->context.stopAudio()}"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="testEvent"
+            android:onClick="@{()->context.testEvent()}"/>
     </LinearLayout>
 </layout>

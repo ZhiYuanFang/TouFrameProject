@@ -14,6 +14,7 @@ import xyz.ttyz.mylibrary.socket.websocket.ResponseDelivery;
 
 import static xyz.ttyz.mylibrary.socket.SocketManager.BROADCAST_ACTION;
 import static xyz.ttyz.mylibrary.socket.SocketManager.MESSAGE;
+import static xyz.ttyz.mylibrary.socket.SocketManager.MESSAGE_bytes;
 
 
 /**
@@ -49,15 +50,26 @@ public class AppResponseDispatcher implements IResponseDispatcher {
     @Override
     public void onMessageResponse(Response message, ResponseDelivery delivery) {
         String str = message.getResponseText();
-        if (application != null && str != null) {
-            LogUtils.showWebSocketLog("接收到服务器端消息：" + str);
+        if(str == null){
+            byte[] bytes = message.getResponseBytes();
+            LogUtils.showWebSocketLog("接收到服务器端消息：" + bytes);
 
             Intent intent = new Intent(BROADCAST_ACTION);
 
-            intent.putExtra(MESSAGE, str);
+            intent.putExtra(MESSAGE_bytes, bytes);
 
             application.sendBroadcast(intent);
+        } else {
+            if (application != null) {
+                LogUtils.showWebSocketLog("接收到服务器端消息：" + str);
 
+                Intent intent = new Intent(BROADCAST_ACTION);
+
+                intent.putExtra(MESSAGE, str);
+
+                application.sendBroadcast(intent);
+
+            }
         }
     }
 

@@ -13,6 +13,11 @@ public class TextResponse implements Response<String> {
         this.responseText = responseText;
     }
 
+    @Override
+    public byte[] getResponseBytes() {
+        return new byte[0];
+    }
+
     public String getResponseText() {
         return responseText;
     }

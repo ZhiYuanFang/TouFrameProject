@@ -16,6 +16,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.nio.ByteBuffer;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +39,12 @@ public class StringUtil {
         return String.valueOf(obj);
     }
 
+    public static byte[] decodeValue(ByteBuffer bytes) {
+        int len = bytes.limit() - bytes.position();
+        byte[] bytes1 = new byte[len];
+        bytes.get(bytes1);
+        return bytes1;
+    }
     /**
      * 对象转换成string
      */

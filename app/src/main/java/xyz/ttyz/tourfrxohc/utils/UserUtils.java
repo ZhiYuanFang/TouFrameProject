@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 
 import xyz.ttyz.mylibrary.method.ActivityManager;
 import xyz.ttyz.mylibrary.protect.SharedPreferenceUtil;
+import xyz.ttyz.mylibrary.socket.SocketUtils;
 import xyz.ttyz.toubasemvvm.utils.ToastUtil;
 import xyz.ttyz.tourfrxohc.MainActivity;
 import xyz.ttyz.tourfrxohc.activity.LoginActivity;
@@ -28,6 +29,7 @@ public class UserUtils {
 
     public static void logOut(){
         SharedPreferenceUtil.setShareString(ActivityManager.getInstance(), "user", "");
+        SocketUtils.closeMinaReceiver(ActivityManager.getInstance().getApplication());
         LoginActivity.show();
     }
 

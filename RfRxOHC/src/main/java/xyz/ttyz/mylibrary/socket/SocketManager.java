@@ -13,6 +13,7 @@ public class SocketManager {
     static final String BROADCAST_ACTION = "SocketReceiver";
 
     static final String MESSAGE = "message";
+    static final String MESSAGE_bytes = "message_bytes";
 
     @SuppressLint("StaticFieldLeak")
     private static WebSocketServiceConnectManager webSocketServiceConnectManager;

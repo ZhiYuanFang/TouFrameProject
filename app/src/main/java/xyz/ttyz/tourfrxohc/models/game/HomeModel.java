@@ -7,28 +7,22 @@ import java.util.List;
 import xyz.ttyz.tourfrxohc.models.UserModel;
 
 public class HomeModel implements Serializable {
-    String roomId;//房间id
-    boolean isInHome;//我是否在这个房间
-    List<UserModel> hisMemberList;//历史房间人员
+    int limitNumber;
+    long roomId;//房间id
+    List<UserModel> roomUserList;//历史房间人员
 
     public HomeModel() {
     }
 
-    public HomeModel(String roomId, boolean isInHome, List<UserModel> hisMemberList) {
-        this.roomId = roomId;
-        this.isInHome = isInHome;
-        this.hisMemberList = hisMemberList;
+    public int getLimitNumber() {
+        return limitNumber;
     }
 
-    public String getRoomId() {
+    public long getRoomId() {
         return roomId;
     }
 
-    public boolean isInHome() {
-        return isInHome;
-    }
-
-    public List<UserModel> getHisMemberList() {
-        return hisMemberList;
+    public List<UserModel> getRoomUserList() {
+        return roomUserList;
     }
 }

@@ -4,9 +4,13 @@ import android.app.Application;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.ihsanbal.logging.LoggingInterceptor;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 import okhttp3.Interceptor;
@@ -15,12 +19,16 @@ import okhttp3.Request;
 import okhttp3.Response;
 import retrofit2.Retrofit;
 import xyz.ttyz.mylibrary.RfRxOHCUtil;
+import xyz.ttyz.mylibrary.method.ActivityManager;
 import xyz.ttyz.mylibrary.method.ProgressUtil;
+import xyz.ttyz.mylibrary.socket.LogUtils;
+import xyz.ttyz.mylibrary.socket.SocketUtils;
 import xyz.ttyz.tou_example.init.ApplicationUtils;
 import xyz.ttyz.tou_example.init.TouDelegate;
 import xyz.ttyz.toubasemvvm.utils.DialogUtils;
 import xyz.ttyz.tourfrxohc.activity.GameActivity;
 import xyz.ttyz.tourfrxohc.activity.LoginActivity;
+import xyz.ttyz.tourfrxohc.event.VoiceEvent;
 import xyz.ttyz.tourfrxohc.models.SocketEventModule;
 import xyz.ttyz.tourfrxohc.utils.UserUtils;
 
@@ -118,12 +126,27 @@ public class BaseApplication extends Application {
 
                     @Override
                     public void socketReceived(String message) {
-                        SocketEventModule socketEventModule = new Gson().fromJson(message, SocketEventModule.class);
-                        if(socketEventModule.getUserModels().contains(UserUtils.getCurUserModel())){
+                        SocketEventModule socketEventModule = null;
+                        try {
+                            socketEventModule = new Gson().fromJson(message, SocketEventModule.class);
+                        } catch (JsonSyntaxException e) {
+                            LogUtils.showWebSocketLog("消息格式不能转JSON");
+                        }
+                        if(socketEventModule != null && socketEventModule.getUserModels().contains(UserUtils.getCurUserModel())){
                             //2021/4/8 我匹配成功了， 进入房间roomId
                             ProgressUtil.missCircleProgress();
                             GameActivity.show(socketEventModule.getRoomId());
                         }
+                    }
+
+                    @Override
+                    public void socketReceived(byte[] bytes) {
+                        EventBus.getDefault().post(new VoiceEvent(bytes));
+                    }
+
+                    @Override
+                    public long userId() {
+                        return UserUtils.getCurUserModel() == null ? 0 : UserUtils.getCurUserModel().getId();
                     }
 
                     @Override
