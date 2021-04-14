@@ -26,10 +26,14 @@ import xyz.ttyz.mylibrary.socket.SocketUtils;
 import xyz.ttyz.tou_example.init.ApplicationUtils;
 import xyz.ttyz.tou_example.init.TouDelegate;
 import xyz.ttyz.toubasemvvm.utils.DialogUtils;
+import xyz.ttyz.tourfrxohc.activity.EndChatActivity;
 import xyz.ttyz.tourfrxohc.activity.GameActivity;
+import xyz.ttyz.tourfrxohc.activity.KeyActivity;
 import xyz.ttyz.tourfrxohc.activity.LoginActivity;
 import xyz.ttyz.tourfrxohc.event.VoiceEvent;
 import xyz.ttyz.tourfrxohc.models.SocketEventModule;
+import xyz.ttyz.tourfrxohc.models.UserModel;
+import xyz.ttyz.tourfrxohc.models.game.HomeModel;
 import xyz.ttyz.tourfrxohc.utils.UserUtils;
 
 /**
@@ -132,10 +136,43 @@ public class BaseApplication extends Application {
                         } catch (JsonSyntaxException e) {
                             LogUtils.showWebSocketLog("消息格式不能转JSON");
                         }
-                        if(socketEventModule != null && socketEventModule.getUserModels().contains(UserUtils.getCurUserModel())){
-                            //2021/4/8 我匹配成功了， 进入房间roomId
+                        if(socketEventModule != null){
                             ProgressUtil.missCircleProgress();
-                            GameActivity.show(socketEventModule.getRoomId());
+                            switch (socketEventModule.getActionType()){
+                                case 0://人员变化0 针对已在房间，人员离开因素
+                                    UserModel changeUser = socketEventModule.getChangeUser();
+                                    if(UserUtils.getCurUserModel().equals(changeUser)){
+                                        //如果是我
+                                        //网络异常导致离开
+                                        //自主选择离开
+
+                                    } else {
+                                        //是别人
+
+                                    }
+                                    break;
+                                case 1://语音变化1
+                                    EventBus.getDefault().post(socketEventModule.getVoiceModel());
+                                    break;
+                                case 2://房间变化2
+                                    HomeModel homeModel = socketEventModule.getRoomModel();
+                                    switch (homeModel.getType()){
+                                        case 0://语音房
+                                            //我匹配成功了， 进入房间roomId
+                                            //环节到了进语音房的时候
+                                            GameActivity.show(homeModel.getRoomId());
+                                            break;
+                                        case 1://钥匙房
+                                            KeyActivity.show(homeModel.getRoomId());
+                                            break;
+                                        case 2://结束后的聊嗨房
+                                            EndChatActivity.show(homeModel.getRoomId());
+                                            break;
+                                        default:
+                                    }
+                                    break;
+                                default:
+                            }
                         }
                     }
 

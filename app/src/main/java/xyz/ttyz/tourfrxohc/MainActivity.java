@@ -91,17 +91,17 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
                     SocketUtils.openMinaReceiver(getApplication(), new SocketUtils.SocketDelegate() {
                         @Override
                         public void connectSuccess() {
-                            if(data.getRoomUserList().size() == data.getLimitNumber()){//我在房间里， 且人数==getLimitNumber
-                                //我已经在房间里了
-                                ProgressUtil.missCircleProgress();
-                                GameActivity.show(data.getRoomId());
-                            } else {
-                                if(data.getRoomUserList().size() > data.getLimitNumber()){
-                                    DialogUtils.showSingleDialog("房间人数超出预期", new DialogUtils.DialogButtonModule("确定"));
-                                } else {
-                                    //正在匹配中
-                                }
-                            }
+//                            if(data.getRoomUserList().size() == data.getLimitNumber()){//我在房间里， 且人数==getLimitNumber
+//                                //我已经在房间里了
+//                                ProgressUtil.missCircleProgress();
+//                                GameActivity.show(data.getRoomId());
+//                            } else {
+//                                if(data.getRoomUserList().size() > data.getLimitNumber()){
+//                                    DialogUtils.showSingleDialog("房间人数超出预期", new DialogUtils.DialogButtonModule("确定"));
+//                                } else {
+//                                    //正在匹配中
+//                                }
+//                            }
                         }
 
                         @Override

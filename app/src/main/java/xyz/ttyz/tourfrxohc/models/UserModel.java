@@ -16,8 +16,13 @@ public class UserModel extends BaseObservable implements Serializable {
     String nickname;
     String accessToken;
     String password;
-    int level;
+    int level;//0 离开 1 进入
     String phone;
+    byte[] voiceBytes;//语音流
+
+    public byte[] getVoiceBytes() {
+        return voiceBytes;
+    }
 
     public String getPhone() {
         return phone;
