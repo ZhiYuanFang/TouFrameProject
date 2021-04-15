@@ -3,100 +3,142 @@
     xmlns:binding="http://schemas.android.com/apk/res-auto">
 
     <data>
+
+        <import type="xyz.ttyz.toubasemvvm.utils.StringUtil"/>
         <variable
             name="context"
             type="xyz.ttyz.tourfrxohc.activity.RegisterActivity" />
     </data>
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:background="@color/white"
-        android:gravity="center"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/bc"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="60dp"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:gravity="end"
-                android:text="手机号: "/>
-            <EditText
-                android:layout_width="wrap_content"
-                android:minWidth="125dp"
-                android:padding="5dp"
-                android:layout_height="wrap_content"
-                android:text="@={context.phoneFiled}"
-                android:background="@drawable/bg_edit"/>
-        </LinearLayout>
+            android:layout_marginStart="38dp"
+            android:layout_marginTop="68dp"
+            android:text="@string/welcome"
+            android:textColor="@color/black"
+            android:textSize="38sp"
+            binding:typeFace='@{"YouSheBiaoTiHei-2.ttf"}' />
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="60dp"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:gravity="end"
-                android:text="昵称: "/>
-            <EditText
-                android:layout_width="wrap_content"
-                android:minWidth="125dp"
-                android:padding="5dp"
-                android:layout_height="wrap_content"
-                android:text="@={context.nickNameFiled}"
-                android:background="@drawable/bg_edit"/>
-        </LinearLayout>
+            android:layout_marginStart="78dp"
+            android:layout_marginTop="58dp"
+            android:divider="@drawable/divider_register"
+            android:showDividers="middle"
+            android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="60dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:gravity="end"
-                android:text="密码: "/>
-            <EditText
-                android:layout_width="wrap_content"
-                android:minWidth="125dp"
-                android:padding="5dp"
-                android:text="@={context.pwdFiled}"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_edit"/>
-        </LinearLayout>
+                android:orientation="horizontal">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="wrap_content"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:theme="@style/registerInfoType"
+                    binding:typeFace='@{"YouSheBiaoTiHei-2.ttf"}'
+                    android:text="@string/phone" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:theme="@style/registerEditType"
+                    android:inputType="phone"
+                    android:hint="@string/account_hint"
+                    binding:typeFace='@{"YouSheBiaoTiHei-2.ttf"}'
+                    android:background="@drawable/bg_edit"
+                    android:text="@={context.phoneFiled}" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:gravity="end"
-                android:text="确认密码: "/>
-            <EditText
-                android:layout_width="wrap_content"
-                android:minWidth="125dp"
-                android:padding="5dp"
-                android:text="@={context.confirmPwdFiled}"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:theme="@style/registerInfoType"
+                    binding:typeFace='@{"YouSheBiaoTiHei-2.ttf"}'
+                    android:text="@string/nick_name" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:theme="@style/registerEditType"
+                    android:hint="@string/pwd_hint"
+                    binding:typeFace='@{"YouSheBiaoTiHei-2.ttf"}'
+                    android:background="@drawable/bg_edit"
+                    android:text="@={context.nickNameFiled}" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_edit"/>
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:theme="@style/registerInfoType"
+                    binding:typeFace='@{"YouSheBiaoTiHei-2.ttf"}'
+                    android:text="@string/pwd" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:theme="@style/registerEditType"
+                    binding:typeFace='@{"YouSheBiaoTiHei-2.ttf"}'
+                    android:hint="@string/nick_name_hint"
+                    android:inputType="textPassword"
+                    android:background="@drawable/bg_edit"
+                    android:text="@={context.pwdFiled}" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:theme="@style/registerInfoType"
+                    binding:typeFace='@{"YouSheBiaoTiHei-2.ttf"}'
+                    android:text="@string/confirm_pwd" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:theme="@style/registerEditType"
+                    binding:typeFace='@{"YouSheBiaoTiHei-2.ttf"}'
+                    android:hint="@string/pwd_hint"
+                    android:inputType="textPassword"
+                    android:background="@drawable/bg_edit"
+                    android:text="@={context.confirmPwdFiled}" />
+            </LinearLayout>
         </LinearLayout>
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="218dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="45dp"
+            binding:typeFace='@{"YouSheBiaoTiHei-2.ttf"}'
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:background="@drawable/bg_login"
+            android:foreground="?selectableItemBackgroundBorderless"
+            android:clickable="false"
+            binding:activated="@{!StringUtil.safeString(context.phoneFiled).empty &amp;&amp; !StringUtil.safeString(context.nickNameFiled).empty &amp;&amp; !StringUtil.safeString(context.pwdFiled).empty &amp;&amp; !StringUtil.safeString(context.confirmPwdFiled).empty}"
             binding:noteJudgeLogin="@{true}"
             binding:onClickCommand="@{context.clickRegister}"
-            android:text="注册"/>
+            android:text="@string/register"/>
     </LinearLayout>
 </layout>

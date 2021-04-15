@@ -125,6 +125,12 @@ public class ViewAdapter {
         });
     }
 
+    @BindingAdapter("activated")
+    public static void c(View view, final boolean activated){
+        view.setActivated(activated);
+        view.setClickable(activated);
+    }
+
     @BindingAdapter("layoutHeight")
     public static void h(View view, int height) {
         ViewGroup.LayoutParams params = view.getLayoutParams();

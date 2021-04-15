@@ -6,10 +6,9 @@
             <solid android:color="@color/divider"/>
         </shape>
     </item>
-    <item
-        android:bottom="1sp">
+    <item>
         <shape android:shape="rectangle">
-            <solid android:color="@color/white"/>
+            <solid android:color="@color/bc"/>
         </shape>
     </item>
 </layer-list>

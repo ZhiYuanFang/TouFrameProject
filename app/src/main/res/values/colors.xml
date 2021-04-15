@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
+<!--    导航栏颜色-->
+    <color name="colorPrimary">#4b8eff</color>
+<!--    通知栏颜色-->
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+<!--    控件选中后颜色-->
+    <color name="colorAccent">#f5c05f</color>
+
+<!--    背景色-->
+    <color name="bc">#F5F5DC</color>
 </resources>

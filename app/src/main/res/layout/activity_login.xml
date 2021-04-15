@@ -3,6 +3,7 @@
     xmlns:binding="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <import type="xyz.ttyz.toubasemvvm.utils.StringUtil"/>
         <variable
             name="context"
             type="xyz.ttyz.tourfrxohc.activity.LoginActivity" />
@@ -12,68 +13,115 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center">
+        android:background="@color/bc">
 
-        <LinearLayout
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="60dp"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:gravity="end"
-                android:text="手机号: "/>
-            <EditText
+            binding:typeFace='@{"YouSheBiaoTiHei-2.ttf"}'
+            android:text="@string/welcome"
+            android:textColor="@color/black"
+            android:textSize="38sp"
+            android:layout_marginStart="38dp"
+            android:layout_marginTop="68dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="58dp"
+            android:layout_marginStart="78dp"
+            android:orientation="vertical">
+
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:minWidth="125dp"
-                android:padding="5dp"
-                android:text="@={context.phoneFiled}"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_edit"/>
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="23sp"
+                    binding:typeFace='@{"YouSheBiaoTiHei-2.ttf"}'
+                    android:gravity="end"
+                    android:text="@string/account"/>
+                <EditText
+                    android:layout_width="match_parent"
+                    android:minWidth="225dp"
+                    android:textSize="12sp"
+                    android:inputType="phone"
+                    android:maxLines="11"
+                    android:hint="@string/account_hint"
+                    binding:typeFace='@{"YouSheBiaoTiHei-2.ttf"}'
+                    android:padding="5dp"
+                    android:text="@={context.phoneFiled}"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_edit"/>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_marginTop="45dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="23sp"
+                    binding:typeFace='@{"YouSheBiaoTiHei-2.ttf"}'
+                    android:gravity="end"
+                    android:text="@string/pwd"/>
+                <EditText
+                    android:layout_width="match_parent"
+                    android:padding="5dp"
+                    android:textSize="12sp"
+                    android:hint="@string/pwd_hint"
+                    binding:typeFace='@{"YouSheBiaoTiHei-2.ttf"}'
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword"
+                    android:text="@={context.pwdFiled}"
+                    android:background="@drawable/bg_edit"/>
+            </LinearLayout>
         </LinearLayout>
 
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="60dp"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:gravity="end"
-                android:text="密码: "/>
-            <EditText
-                android:layout_width="wrap_content"
-                android:minWidth="125dp"
-                android:padding="5dp"
-                android:layout_height="wrap_content"
-                android:inputType="textPassword"
-                android:text="@={context.pwdFiled}"
-                android:background="@drawable/bg_edit"/>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
-            android:gravity="bottom"
-            android:orientation="horizontal">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_marginTop="45dp"
+            android:layout_height="55dp">
 
             <Button
-                android:layout_width="wrap_content"
+                android:id="@+id/btn_login"
+                android:layout_width="218dp"
                 android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_alignParentBottom="true"
+                binding:typeFace='@{"YouSheBiaoTiHei-2.ttf"}'
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:background="@drawable/bg_login"
+                android:foreground="?selectableItemBackgroundBorderless"
+                android:clickable="false"
+                binding:activated="@{!StringUtil.safeString(context.phoneFiled).empty &amp;&amp; !StringUtil.safeString(context.pwdFiled).empty}"
                 binding:noteJudgeLogin="@{true}"
                 binding:onClickCommand="@{context.clickLogin}"
-                android:text="登录"/>
+                android:text="@string/login"/>
+
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
                 android:layout_marginStart="15dp"
+                android:layout_toEndOf="@id/btn_login"
+                android:layout_alignParentBottom="true"
                 binding:noteJudgeLogin="@{true}"
+                binding:typeFace='@{"YouSheBiaoTiHei-2.ttf"}'
+                android:textSize="10sp"
                 binding:onClickCommand="@{context.clickRegister}"
-                android:text="注册"/>
-        </LinearLayout>
+                android:background="@drawable/bg_edit"
+                android:text="@string/register"/>
+        </RelativeLayout>
     </LinearLayout>
 </layout>

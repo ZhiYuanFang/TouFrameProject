@@ -1,6 +1,7 @@
 package xyz.ttyz.tourfrxohc.activity;
 
 import android.content.Intent;
+import android.os.Handler;
 
 import androidx.databinding.ObservableField;
 
@@ -26,8 +27,8 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding>{
         ActivityManager.getInstance().startActivity(intent);
     }
 
-    public ObservableField<String> phoneFiled = new ObservableField<>("17758116193");
-    public ObservableField<String> pwdFiled = new ObservableField<>("123");
+    public ObservableField<String> phoneFiled = new ObservableField<>("");
+    public ObservableField<String> pwdFiled = new ObservableField<>("");
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void userChange(UserChangeEvent changeEvent){
@@ -46,6 +47,7 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding>{
     @Override
     protected void initData() {
         mBinding.setContext(this);
+        phoneFiled.set(UserUtils.getHisPhone());
     }
 
     @Override
@@ -74,7 +76,7 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding>{
     public OnClickAdapter.onClickCommand clickRegister = new OnClickAdapter.onClickCommand() {
         @Override
         public void click() {
-            RegisterActivity.show();
+            RegisterActivity.show(phoneFiled.get());
         }
     };
 }

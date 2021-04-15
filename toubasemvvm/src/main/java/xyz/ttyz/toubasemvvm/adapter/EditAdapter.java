@@ -1,6 +1,7 @@
 package xyz.ttyz.toubasemvvm.adapter;
 
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -30,9 +31,11 @@ public class EditAdapter {
 
 
     @BindingAdapter("focus")
-    public static void autoFocus(EditText editText, boolean focus){
+    public static void autoFocus(View view, boolean focus){
         if(focus){
-            editText.requestFocus();
+            view.requestFocus();
+        } else {
+            view.clearFocus();
         }
     }
 }

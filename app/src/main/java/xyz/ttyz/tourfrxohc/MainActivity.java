@@ -83,55 +83,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         @Override
         public void click() {
             ProgressUtil.showCircleProgress(ActivityManager.getInstance(), "正在匹配中...");
-            new RxOHCUtils<HomeModel>(MainActivity.this).executeApi(BaseApplication.apiService.join(UserUtils.getCurUserModel().getId()), new BaseSubscriber<HomeModel>(MainActivity.this) {
-                @Override
-                public void success(HomeModel data) {
-                    SocketUtils.closeMinaReceiver(getApplication());
-                    //为了让socket附带房间信息
-                    SocketUtils.openMinaReceiver(getApplication(), new SocketUtils.SocketDelegate() {
-                        @Override
-                        public void connectSuccess() {
-//                            if(data.getRoomUserList().size() == data.getLimitNumber()){//我在房间里， 且人数==getLimitNumber
-//                                //我已经在房间里了
-//                                ProgressUtil.missCircleProgress();
-//                                GameActivity.show(data.getRoomId());
-//                            } else {
-//                                if(data.getRoomUserList().size() > data.getLimitNumber()){
-//                                    DialogUtils.showSingleDialog("房间人数超出预期", new DialogUtils.DialogButtonModule("确定"));
-//                                } else {
-//                                    //正在匹配中
-//                                }
-//                            }
-                        }
 
-                        @Override
-                        public long roomId() {
-                            return data.getRoomId();
-                        }
-
-                        @Override
-                        public long userId() {
-                            return UserUtils.getCurUserModel().getId();
-                        }
-                    });
-                }
-
-                @Override
-                protected boolean autoCloseCircleProgress() {
-                    return false;
-                }
-
-                @Override
-                public String initCacheKey() {
-                    return null;
-                }
-
-                @Override
-                protected void fail(BaseModule<HomeModel> baseModule) {
-                    super.fail(baseModule);
-                    ProgressUtil.missCircleProgress();
-                }
-            }.notShowProgress());
         }
     };
 }

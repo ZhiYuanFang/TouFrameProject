@@ -30,10 +30,12 @@ import xyz.ttyz.tourfrxohc.activity.EndChatActivity;
 import xyz.ttyz.tourfrxohc.activity.GameActivity;
 import xyz.ttyz.tourfrxohc.activity.KeyActivity;
 import xyz.ttyz.tourfrxohc.activity.LoginActivity;
+import xyz.ttyz.tourfrxohc.event.UserChangeEvent;
 import xyz.ttyz.tourfrxohc.event.VoiceEvent;
 import xyz.ttyz.tourfrxohc.models.SocketEventModule;
 import xyz.ttyz.tourfrxohc.models.UserModel;
 import xyz.ttyz.tourfrxohc.models.game.HomeModel;
+import xyz.ttyz.tourfrxohc.utils.HomeUtils;
 import xyz.ttyz.tourfrxohc.utils.UserUtils;
 
 /**
@@ -120,10 +122,31 @@ public class BaseApplication extends Application {
 
                     @Override
                     public void socketConnectTimeOut() {
-                        DialogUtils.showSingleDialog("连接超时", "网络连接超时，无法正常使用，请尝试重新打开app", new DialogUtils.DialogButtonModule("确定退出", new DialogUtils.DialogClickDelegate() {
+                        //长连接断开， 发送通知， 告知大家， 我离线了
+                        SocketEventModule socketEventModule = new SocketEventModule();
+                        socketEventModule.setRoomId(GameActivity.roomId);
+                        socketEventModule.setActionType(0);
+                        socketEventModule.setChangeUser(UserUtils.getCurUserModel());
+                        SocketUtils.sendMessage(new Gson().toJson(socketEventModule));
+                        DialogUtils.showSingleDialog("连接超时", "网络连接超时，无法正常使用", new DialogUtils.DialogButtonModule("重新连接", new DialogUtils.DialogClickDelegate() {
                             @Override
                             public void click(DialogUtils.DialogButtonModule dialogButtonModule) {
-                                System.exit(0);
+                                SocketUtils.openMinaReceiver(BaseApplication.this, new SocketUtils.SocketDelegate() {
+                                    @Override
+                                    public void connectSuccess() {
+
+                                    }
+
+                                    @Override
+                                    public long roomId() {
+                                        return GameActivity.roomId;
+                                    }
+
+                                    @Override
+                                    public long userId() {
+                                        return UserUtils.getCurUserModel().getId();
+                                    }
+                                });
                             }
                         }));
                     }
@@ -143,12 +166,21 @@ public class BaseApplication extends Application {
                                     UserModel changeUser = socketEventModule.getChangeUser();
                                     if(UserUtils.getCurUserModel().equals(changeUser)){
                                         //如果是我
-                                        //网络异常导致离开
-                                        //自主选择离开
-
+                                        if(changeUser.getComeInType() == 1){
+                                            //我进入
+                                            GameActivity.show(socketEventModule.getRoomId());
+                                        } else {
+                                            //我离开
+                                            if(GameActivity.confirmLeave){
+                                                //自主选择离开
+                                            } else {
+                                                //网络异常导致离开
+                                                HomeUtils.joinHome();
+                                            }
+                                        }
                                     } else {
-                                        //是别人
-
+                                        //是别人,通知页面更新
+                                        EventBus.getDefault().post(new UserChangeEvent(changeUser));
                                     }
                                     break;
                                 case 1://语音变化1
@@ -158,7 +190,6 @@ public class BaseApplication extends Application {
                                     HomeModel homeModel = socketEventModule.getRoomModel();
                                     switch (homeModel.getType()){
                                         case 0://语音房
-                                            //我匹配成功了， 进入房间roomId
                                             //环节到了进语音房的时候
                                             GameActivity.show(homeModel.getRoomId());
                                             break;
@@ -178,7 +209,7 @@ public class BaseApplication extends Application {
 
                     @Override
                     public void socketReceived(byte[] bytes) {
-                        EventBus.getDefault().post(new VoiceEvent(bytes));
+//                        EventBus.getDefault().post(new VoiceEvent(bytes));
                     }
 
                     @Override

@@ -45,4 +45,24 @@ public class SocketEventModule {
     public HomeModel getRoomModel() {
         return roomModel;
     }
+
+    public void setRoomId(long roomId) {
+        this.roomId = roomId;
+    }
+
+    public void setActionType(int actionType) {
+        this.actionType = actionType;
+    }
+
+    public void setChangeUser(UserModel changeUser) {
+        this.changeUser = changeUser;
+    }
+
+    public void setVoiceModel(VoiceModel voiceModel) {
+        this.voiceModel = voiceModel;
+    }
+
+    public void setRoomModel(HomeModel roomModel) {
+        this.roomModel = roomModel;
+    }
 }

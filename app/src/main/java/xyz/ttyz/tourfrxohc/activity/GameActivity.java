@@ -45,6 +45,7 @@ import xyz.ttyz.tourfrxohc.event.VoiceEvent;
 import xyz.ttyz.tourfrxohc.http.BaseSubscriber;
 import xyz.ttyz.tourfrxohc.models.UserModel;
 import xyz.ttyz.tourfrxohc.models.game.HomeModel;
+import xyz.ttyz.tourfrxohc.models.game.VoiceModel;
 import xyz.ttyz.tourfrxohc.utils.PcmToWavUtil;
 
 /**
@@ -52,6 +53,8 @@ import xyz.ttyz.tourfrxohc.utils.PcmToWavUtil;
  */
 public class GameActivity extends BaseActivity<ActivityGameBinding> {
     private static final String TAG = "GameActivity";
+    public static boolean confirmLeave = false;
+    public static long roomId;
 
     /**
      * 凑齐9个人才能进入该页面
@@ -62,18 +65,28 @@ public class GameActivity extends BaseActivity<ActivityGameBinding> {
         if (StringUtil.safeString(roomId).isEmpty()) {
             return;
         }
+        confirmLeave = false;
         Intent intent = new Intent(ActivityManager.getInstance(), GameActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        intent.putExtra("roomId", roomId);
+        GameActivity.roomId = roomId;
         ActivityManager.getInstance().startActivity(intent);
     }
 
-    long roomId;
     List<UserModel> userModelList;//9个人的用户信息
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void comingVoice(VoiceEvent voiceEvent) {
-        playAudio(voiceEvent.getVoices());
+    public void comingVoice(VoiceModel voiceModel) {
+        if(voiceModel.getSys() != null){
+            //系统播报
+            playAudio(voiceModel.getSys().getVoiceBytes());
+        } else {
+            //播放玩家语音
+            playAudio(voiceModel.getUser().getVoiceBytes());
+            //界面绘制
+            for(UserModel user : userModelList){
+                user.setSpeaking(voiceModel.getUser().equals(user));
+            }
+        }
     }
 
     //region 播放音频
@@ -91,7 +104,12 @@ public class GameActivity extends BaseActivity<ActivityGameBinding> {
             audioTrack.play();
             playAudioFiled.set(true);
         }
-        audioTrack.write(bytes, 0, bytes.length);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                audioTrack.write(bytes, 0, bytes.length);
+            }
+        }).start();
     }
 
     public void stopAudio() {
@@ -141,9 +159,6 @@ public class GameActivity extends BaseActivity<ActivityGameBinding> {
                     break;
                 default:
             }
-        }
-        for (UserModel userModel : userModelList) {
-
         }
     }
 

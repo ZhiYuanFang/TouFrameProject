@@ -5,14 +5,16 @@ import android.app.Activity;
 import java.util.ArrayList;
 import java.util.List;
 
+import xyz.ttyz.toubasemvvm.ui.BaseTouActivity;
+
 /**
  * Created by tou on 2019/5/21.
  */
 
 public class ActivityManager {
-    private static List<Activity> activityList = new ArrayList<>();
+    private static List<BaseTouActivity> activityList = new ArrayList<>();
 
-    public static List<Activity> getActivityList() {
+    public static List<BaseTouActivity> getActivityList() {
         return activityList;
     }
 
@@ -29,13 +31,13 @@ public class ActivityManager {
         return topActivityList;
     }
 
-    public static void popActivity(Activity activity){
+    public static void popActivity(BaseTouActivity activity){
         if(!activityList.contains(activity)){
             activityList.add(activity);
         }
     }
 
-    public static void exitActivity(Activity activity){
+    public static void exitActivity(BaseTouActivity activity){
         if(activityList.contains(activity)){
             activityList.remove(activity);
             if(!activity.isFinishing()){
@@ -46,19 +48,19 @@ public class ActivityManager {
 
     public static void popOtherActivity(Class cla){
         if(activityList.size() > 1){
-            List<Activity> exitActivityList = new ArrayList<>();
-            for(Activity ac : activityList){
+            List<BaseTouActivity> exitActivityList = new ArrayList<>();
+            for(BaseTouActivity ac : activityList){
                 if(!ac.getClass().getSimpleName().equals(cla.getSimpleName())){
                     exitActivityList.add(ac);
                 }
             }
-            for(Activity ac : exitActivityList){
+            for(BaseTouActivity ac : exitActivityList){
                 exitActivity(ac);
             }
         }
     }
 
-    public static Activity getInstance(){
+    public static BaseTouActivity getInstance(){
         if(activityList.size() > 0){
             return activityList.get(activityList.size() - 1);
         } else return null;

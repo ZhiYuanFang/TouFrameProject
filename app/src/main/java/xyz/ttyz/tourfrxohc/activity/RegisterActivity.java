@@ -18,8 +18,9 @@ import xyz.ttyz.tourfrxohc.http.BaseSubscriber;
 import xyz.ttyz.tourfrxohc.models.UserModel;
 
 public class RegisterActivity extends BaseActivity<ActivityRegisterBinding> {
-    public static void show(){
+    public static void show(String phone){
         Intent intent = new Intent(ActivityManager.getInstance(), RegisterActivity.class);
+        intent.putExtra("phone", phone);
         ActivityManager.getInstance().startActivity(intent);
     }
     public ObservableField<String> phoneFiled = new ObservableField<>("");
@@ -41,6 +42,7 @@ public class RegisterActivity extends BaseActivity<ActivityRegisterBinding> {
     @Override
     protected void initData() {
         mBinding.setContext(this);
+        phoneFiled.set(getIntent().getStringExtra("phone"));
     }
 
     @Override
