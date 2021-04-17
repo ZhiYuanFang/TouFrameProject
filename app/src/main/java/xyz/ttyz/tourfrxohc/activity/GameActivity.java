@@ -10,6 +10,8 @@ import android.media.MediaRecorder;
 import android.os.Environment;
 import android.util.Log;
 
+import com.google.gson.Gson;
+
 import androidx.databinding.ObservableBoolean;
 
 import org.greenrobot.eventbus.EventBus;
@@ -41,12 +43,15 @@ import xyz.ttyz.toubasemvvm.utils.ToastUtil;
 import xyz.ttyz.tourfrxohc.BaseApplication;
 import xyz.ttyz.tourfrxohc.R;
 import xyz.ttyz.tourfrxohc.databinding.ActivityGameBinding;
+import xyz.ttyz.tourfrxohc.event.UserChangeEvent;
 import xyz.ttyz.tourfrxohc.event.VoiceEvent;
 import xyz.ttyz.tourfrxohc.http.BaseSubscriber;
+import xyz.ttyz.tourfrxohc.models.SocketEventModule;
 import xyz.ttyz.tourfrxohc.models.UserModel;
 import xyz.ttyz.tourfrxohc.models.game.HomeModel;
 import xyz.ttyz.tourfrxohc.models.game.VoiceModel;
 import xyz.ttyz.tourfrxohc.utils.PcmToWavUtil;
+import xyz.ttyz.tourfrxohc.utils.UserUtils;
 
 /**
  * https://docs.rongcloud.cn/v4/views/rtc/meeting/guide/advanced/usermanage/serverapi.html
@@ -54,7 +59,7 @@ import xyz.ttyz.tourfrxohc.utils.PcmToWavUtil;
 public class GameActivity extends BaseActivity<ActivityGameBinding> {
     private static final String TAG = "GameActivity";
     public static boolean confirmLeave = false;
-    public static long roomId;
+    private long roomId;
 
     /**
      * 凑齐9个人才能进入该页面
@@ -68,7 +73,7 @@ public class GameActivity extends BaseActivity<ActivityGameBinding> {
         confirmLeave = false;
         Intent intent = new Intent(ActivityManager.getInstance(), GameActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        GameActivity.roomId = roomId;
+        intent.putExtra("roomId", roomId);
         ActivityManager.getInstance().startActivity(intent);
     }
 
@@ -76,17 +81,24 @@ public class GameActivity extends BaseActivity<ActivityGameBinding> {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void comingVoice(VoiceModel voiceModel) {
-        if(voiceModel.getSys() != null){
+        if (voiceModel.getSys() != null) {
             //系统播报
             playAudio(voiceModel.getSys().getVoiceBytes());
         } else {
             //播放玩家语音
             playAudio(voiceModel.getUser().getVoiceBytes());
             //界面绘制
-            for(UserModel user : userModelList){
+            for (UserModel user : userModelList) {
                 user.setSpeaking(voiceModel.getUser().equals(user));
             }
         }
+    }
+
+    //人员离线 返回
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void userChange(UserChangeEvent userChangeEvent) {
+        UserModel userModel = userChangeEvent.getUserModel();
+        userModelList.get(userModelList.indexOf(userModel)).setComeInType(userModel.getComeInType());
     }
 
     //region 播放音频
@@ -177,7 +189,7 @@ public class GameActivity extends BaseActivity<ActivityGameBinding> {
     @Override
     protected void initData() {
         mBinding.setContext(this);
-        roomId = getIntent().getIntExtra("roomId", 0);
+        roomId = getIntent().getLongExtra("roomId", 0);
         if (StringUtil.safeString(roomId).isEmpty()) {
             ToastUtil.showToast("房间不存在");
             GameActivity.this.finish();
@@ -261,11 +273,18 @@ public class GameActivity extends BaseActivity<ActivityGameBinding> {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                while (isSpeakingFiled.get()){
+                while (isSpeakingFiled.get()) {
                     // 上传音频流
                     byte[] recordData = new byte[mBufferSizeInBytes];
                     audioRecord.read(recordData, 0, mBufferSizeInBytes);
-                    SocketUtils.sendMessage(recordData);
+
+                    SocketEventModule socketEventModule = new SocketEventModule();
+                    socketEventModule.setRoomId(roomId);
+                    socketEventModule.setActionType(1);
+                    UserModel userModel = UserUtils.getCurUserModel();
+                    userModel.setVoiceBytes(recordData);
+                    socketEventModule.setVoiceModel(new VoiceModel(userModel));
+                    SocketUtils.sendMessage(new Gson().toJson(socketEventModule));
                 }
             }
         }).start();
@@ -289,5 +308,7 @@ public class GameActivity extends BaseActivity<ActivityGameBinding> {
     protected void onDestroy() {
         super.onDestroy();
         //离开音视频房间时，SDK 内部会自动取消发布本端资源和取消订阅远端用户资源，必须在成功或失败回调完成之后再开始新的音视频通话逻辑
+        //退出游戏环节， 退出长连接
+        SocketUtils.closeMinaReceiver(getApplication());
     }
 }

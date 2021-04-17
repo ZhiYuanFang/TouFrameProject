@@ -19,6 +19,7 @@ import xyz.ttyz.tourfrxohc.databinding.ActivityMainBinding;
 import xyz.ttyz.tourfrxohc.fragment.MainFragment;
 import xyz.ttyz.tourfrxohc.http.BaseSubscriber;
 import xyz.ttyz.tourfrxohc.models.game.HomeModel;
+import xyz.ttyz.tourfrxohc.utils.HomeUtils;
 import xyz.ttyz.tourfrxohc.utils.UserUtils;
 
 public class MainActivity extends BaseActivity<ActivityMainBinding> {
@@ -82,8 +83,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     public OnClickAdapter.onClickCommand startGameCommand = new OnClickAdapter.onClickCommand() {
         @Override
         public void click() {
-            ProgressUtil.showCircleProgress(ActivityManager.getInstance(), "正在匹配中...");
-
+            HomeUtils.joinHome();
         }
     };
 }

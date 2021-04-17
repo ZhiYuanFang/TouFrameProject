@@ -7,11 +7,13 @@ import xyz.ttyz.mylibrary.socket.SocketUtils;
 import xyz.ttyz.tou_example.ActivityManager;
 import xyz.ttyz.tourfrxohc.BaseApplication;
 import xyz.ttyz.tourfrxohc.MainActivity;
+import xyz.ttyz.tourfrxohc.activity.GameActivity;
 import xyz.ttyz.tourfrxohc.http.BaseSubscriber;
 import xyz.ttyz.tourfrxohc.models.game.HomeModel;
 
 public class HomeUtils {
     public static void joinHome(){
+        ProgressUtil.showCircleProgress(xyz.ttyz.mylibrary.method.ActivityManager.getInstance(), "正在匹配中...");
         new RxOHCUtils<HomeModel>(ActivityManager.getInstance()).executeApi(BaseApplication.apiService.join(UserUtils.getCurUserModel().getId()), new BaseSubscriber<HomeModel>(ActivityManager.getInstance()) {
             @Override
             public void success(HomeModel data) {
@@ -20,6 +22,10 @@ public class HomeUtils {
                 SocketUtils.openMinaReceiver(ActivityManager.getInstance().getApplication(), new SocketUtils.SocketDelegate() {
                     @Override
                     public void connectSuccess() {
+                        if(data.getRoomUserList().size() == data.getLimitNumber()){
+                            //直接进入房间
+                            GameActivity.show(data.getRoomId());
+                        }
                     }
 
                     @Override

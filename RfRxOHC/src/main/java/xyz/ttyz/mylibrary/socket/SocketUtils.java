@@ -84,10 +84,6 @@ public class SocketUtils {
     public static void sendMessage(String str) {
         SocketManager.sendStr(str);
     }
-
-    public static void sendMessage(byte[] bytes) {
-        SocketManager.sendBytes(bytes);
-    }
     /**
      * 关闭长连接
      */

@@ -21,6 +21,16 @@ public class UserModel extends BaseObservable implements Serializable {
     String phone;
     byte[] voiceBytes;//语音流
 
+    public void setVoiceBytes(byte[] bytes){
+        voiceBytes = bytes;
+    }
+
+
+    public void setComeInType(int comeInType){
+        this.comeInType = comeInType;
+        notifyPropertyChanged(BR.comeInType);
+    }
+    @Bindable
     public int getComeInType() {
         return comeInType;
     }

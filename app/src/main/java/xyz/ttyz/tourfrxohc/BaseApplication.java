@@ -58,6 +58,7 @@ public class BaseApplication extends Application {
             @Override
             public void gotoLoginActivity() {
                 //前往登录界面
+                System.out.println("=============== > 3");
                 LoginActivity.show();
             }
 
@@ -79,7 +80,7 @@ public class BaseApplication extends Application {
                 //捕获主线程异常，上传bugly
             }
         });
-        RfRxOHCUtil.initApiService(this, "http://192.168.1.201:8080/tou3_war_exploded/", "ws://192.168.1.201:8080/tou3_war_exploded/devMessage",getPackageName() + "-cache",
+        RfRxOHCUtil.initApiService(this, "http://192.168.0.110:8080/tou3_war_exploded/", "ws://192.168.0.110:8080/tou3_war_exploded/devMessage",getPackageName() + "-cache",
                 2 * 1024 * 1024, 30, BuildConfig.BUILD_TYPE.equals("release"), BuildConfig.DEBUG, BuildConfig.VERSION_NAME,
                 "huawei", "android", 1, new RfRxOHCUtil.TouRRCDelegate() {
                     @Override
@@ -122,31 +123,11 @@ public class BaseApplication extends Application {
 
                     @Override
                     public void socketConnectTimeOut() {
-                        //长连接断开， 发送通知， 告知大家， 我离线了
-                        SocketEventModule socketEventModule = new SocketEventModule();
-                        socketEventModule.setRoomId(GameActivity.roomId);
-                        socketEventModule.setActionType(0);
-                        socketEventModule.setChangeUser(UserUtils.getCurUserModel());
-                        SocketUtils.sendMessage(new Gson().toJson(socketEventModule));
+                        //长连接断开
                         DialogUtils.showSingleDialog("连接超时", "网络连接超时，无法正常使用", new DialogUtils.DialogButtonModule("重新连接", new DialogUtils.DialogClickDelegate() {
                             @Override
                             public void click(DialogUtils.DialogButtonModule dialogButtonModule) {
-                                SocketUtils.openMinaReceiver(BaseApplication.this, new SocketUtils.SocketDelegate() {
-                                    @Override
-                                    public void connectSuccess() {
-
-                                    }
-
-                                    @Override
-                                    public long roomId() {
-                                        return GameActivity.roomId;
-                                    }
-
-                                    @Override
-                                    public long userId() {
-                                        return UserUtils.getCurUserModel().getId();
-                                    }
-                                });
+                                HomeUtils.joinHome();
                             }
                         }));
                     }

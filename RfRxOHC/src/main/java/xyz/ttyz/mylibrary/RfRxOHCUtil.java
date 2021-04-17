@@ -123,24 +123,24 @@ public class RfRxOHCUtil {
 
             @Override
             public void onActivityStarted(@NonNull Activity activity) {
-                if(touRRCDelegate.isLogin()){
-                    SocketUtils.openMinaReceiver(application, new SocketUtils.SocketDelegate() {
-                        @Override
-                        public void connectSuccess() {
-
-                        }
-
-                        @Override
-                        public long roomId() {
-                            return 0;
-                        }
-
-                        @Override
-                        public long userId() {
-                            return touRRCDelegate.userId();
-                        }
-                    });
-                }
+//                if(touRRCDelegate.isLogin()){
+//                    SocketUtils.openMinaReceiver(application, new SocketUtils.SocketDelegate() {
+//                        @Override
+//                        public void connectSuccess() {
+//
+//                        }
+//
+//                        @Override
+//                        public long roomId() {
+//                            return 0;
+//                        }
+//
+//                        @Override
+//                        public long userId() {
+//                            return touRRCDelegate.userId();
+//                        }
+//                    });
+//                }
             }
 
             @Override

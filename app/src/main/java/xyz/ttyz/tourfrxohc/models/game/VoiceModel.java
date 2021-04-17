@@ -6,6 +6,10 @@ public class VoiceModel {
     SysVoiceModel sys;
     UserModel user;
 
+    public VoiceModel(UserModel userModel){
+        user = userModel;
+    }
+
     public SysVoiceModel getSys() {
         return sys;
     }
