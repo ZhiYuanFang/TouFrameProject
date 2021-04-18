@@ -86,10 +86,14 @@ public class GameActivity extends BaseActivity<ActivityGameBinding> {
             playAudio(voiceModel.getSys().getVoiceBytes());
         } else {
             //播放玩家语音
-            playAudio(voiceModel.getUser().getVoiceBytes());
+            if(voiceModel.getUser().getVoiceBytes() != null && voiceModel.getUser().getVoiceBytes().length > 0){
+                playAudio(voiceModel.getUser().getVoiceBytes());
+            }
             //界面绘制
-            for (UserModel user : userModelList) {
-                user.setSpeaking(voiceModel.getUser().equals(user));
+            if(voiceModel.getUser().getId() != 0){
+                for (UserModel user : userModelList) {
+                    user.setSpeaking(voiceModel.getUser().equals(user));
+                }
             }
         }
     }
@@ -279,12 +283,12 @@ public class GameActivity extends BaseActivity<ActivityGameBinding> {
                     audioRecord.read(recordData, 0, mBufferSizeInBytes);
 
                     SocketEventModule socketEventModule = new SocketEventModule();
-                    socketEventModule.setRoomId(roomId);
                     socketEventModule.setActionType(1);
-                    UserModel userModel = UserUtils.getCurUserModel();
-                    userModel.setVoiceBytes(recordData);
-                    socketEventModule.setVoiceModel(new VoiceModel(userModel));
-                    SocketUtils.sendMessage(new Gson().toJson(socketEventModule));
+                    VoiceModel voiceModel = new VoiceModel(UserUtils.getCurUserModel());
+                    socketEventModule.setVoiceModel(voiceModel);
+
+//                    SocketUtils.sendMessage(new Gson().toJson(socketEventModule));//发送告知，谁在说话
+                    SocketUtils.sendMessage(recordData);//发送语音
                 }
             }
         }).start();

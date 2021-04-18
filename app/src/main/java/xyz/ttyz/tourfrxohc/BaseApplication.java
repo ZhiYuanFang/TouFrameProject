@@ -35,6 +35,7 @@ import xyz.ttyz.tourfrxohc.event.VoiceEvent;
 import xyz.ttyz.tourfrxohc.models.SocketEventModule;
 import xyz.ttyz.tourfrxohc.models.UserModel;
 import xyz.ttyz.tourfrxohc.models.game.HomeModel;
+import xyz.ttyz.tourfrxohc.models.game.VoiceModel;
 import xyz.ttyz.tourfrxohc.utils.HomeUtils;
 import xyz.ttyz.tourfrxohc.utils.UserUtils;
 
@@ -190,7 +191,10 @@ public class BaseApplication extends Application {
 
                     @Override
                     public void socketReceived(byte[] bytes) {
-//                        EventBus.getDefault().post(new VoiceEvent(bytes));
+                        UserModel userModel = new UserModel();
+                        userModel.setVoiceBytes(bytes);
+                        VoiceModel voiceModel = new VoiceModel(userModel);
+                        EventBus.getDefault().post(voiceModel);
                     }
 
                     @Override
