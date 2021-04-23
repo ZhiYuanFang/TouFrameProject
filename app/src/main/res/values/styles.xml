@@ -10,6 +10,18 @@
         <item name="android:windowBackground">@color/bc</item>
     </style>
 
+<!--    region dialog-->
+    <style name="Theme.AppTheme.TranslucentStatusBar" parent="Base.Theme.AppCompat.Light.DarkActionBar" />
+    <style name="DialogFragment" parent="Theme.AppTheme.TranslucentStatusBar">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowNoTitle">false</item>
+        <item name="android:windowIsFloating">true</item> <!-- 是否浮现在activity之上 -->
+        <item name="android:windowIsTranslucent">false</item> <!-- 半透明 -->
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+<!--    endregion-->
+
 <!--    注册-->
     <style name="registerInfoType">
         <item name="android:gravity">end</item>

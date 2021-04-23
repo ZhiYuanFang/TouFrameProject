@@ -17,7 +17,6 @@ import xyz.ttyz.tourfrxohc.models.game.HomeModel;
 
 /**
  * Created by tou on 2019/5/20.
- *
  */
 
 public interface ApiService {
@@ -30,9 +29,17 @@ public interface ApiService {
     @POST("game/join")
     Observable<BaseModule<HomeModel>> join(@Query("id") long id);
 
+    @POST("game/leave")
+    Observable<BaseModule> leave(@Query("roomId") long roomId, @Query("userId") long userId);
 
     @GET("game/roomInfo")
     Observable<BaseModule<HomeModel>> roomInfo(@Query("roomId") long roomId);
+
+    @POST("game/confirmStartGame")
+    Observable<BaseModule<Object>> confirmStartGame(@Query("roomId") long roomId, @Query("userId") long userId);
+
+    @POST("game/confirmRoleType")
+    Observable<BaseModule<Object>> confirmRoleType(@Query("roomId") long roomId, @Query("userId") long userId);
 
 
 //    @Headers("Content-type:text/x-plain-rsa-json")

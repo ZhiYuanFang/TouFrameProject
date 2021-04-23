@@ -1,5 +1,7 @@
 package xyz.ttyz.tourfrxohc.models;
 
+import java.util.List;
+
 import xyz.ttyz.tourfrxohc.models.game.HomeModel;
 import xyz.ttyz.tourfrxohc.models.game.VoiceModel;
 
@@ -21,10 +23,13 @@ import xyz.ttyz.tourfrxohc.models.game.VoiceModel;
 public class SocketEventModule {
 
     long roomId;
+    /**
+     * {@link ActionType}
+     */
     int actionType;
     UserModel changeUser;
-    VoiceModel voiceModel;
     HomeModel roomModel;
+    List<UserModel> userModelList;//进入钥匙房的人
 
     public long getRoomId() {
         return roomId;
@@ -38,31 +43,11 @@ public class SocketEventModule {
         return changeUser;
     }
 
-    public VoiceModel getVoiceModel() {
-        return voiceModel;
-    }
-
     public HomeModel getRoomModel() {
         return roomModel;
     }
 
-    public void setRoomId(long roomId) {
-        this.roomId = roomId;
-    }
-
-    public void setActionType(int actionType) {
-        this.actionType = actionType;
-    }
-
-    public void setChangeUser(UserModel changeUser) {
-        this.changeUser = changeUser;
-    }
-
-    public void setVoiceModel(VoiceModel voiceModel) {
-        this.voiceModel = voiceModel;
-    }
-
-    public void setRoomModel(HomeModel roomModel) {
-        this.roomModel = roomModel;
+    public List<UserModel> getUserModelList() {
+        return userModelList;
     }
 }

@@ -60,7 +60,7 @@ public class RegisterActivity extends BaseActivity<ActivityRegisterBinding> {
                     RegisterActivity.this.finish();
                     UserModel cur = new UserModel();
                     cur.setPhone(phoneFiled.get());
-                    EventBus.getDefault().post(new UserChangeEvent(cur));
+                    EventBus.getDefault().post(new UserChangeEvent(cur, true));
                 }
 
                 @Override

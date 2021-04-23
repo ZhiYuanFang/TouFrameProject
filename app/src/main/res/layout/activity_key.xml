@@ -1,19 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <variable
+            name="context"
+            type="xyz.ttyz.tourfrxohc.activity.KeyActivity" />
     </data>
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal">
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="钥匙"/>
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:padding="15dp"
+            android:text="    选择钥匙孔投放钥匙或者查看，若选择投放则不能查看，选择查看则不能投放，
+            \n    投放的钥匙口中如果有钥匙，则会清空当前钥匙孔
+\n    您只有10秒的时间做出选择"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="38sp"
+            android:text='@{context.intervalTimeFiled + ""}'
+            tools:text="10"/>
     </LinearLayout>
 </layout>

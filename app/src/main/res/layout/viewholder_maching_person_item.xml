@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:binding="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="userModel"
+            type="xyz.ttyz.tourfrxohc.models.UserModel" />
+    </data>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical">
+        <xyz.ttyz.toubasemvvm.weight.CardImageView
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            binding:isCircle="@{true}"
+            binding:imageUrl="@{userModel.avatar}"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:layout_marginStart="7dp"
+            android:textSize="12sp"
+            android:text="@{userModel.nickname}"
+            binding:typeFace='@{"YouSheBiaoTiHei-2.ttf"}'
+            tools:text="@string/picture_cancel"/>
+    </LinearLayout>
+</layout>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:binding="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="adapter"
+            type="xyz.ttyz.toubasemvvm.adapter.utils.BaseEmptyAdapterParent" />
+        <variable
+            name="context"
+            type="xyz.ttyz.tourfrxohc.dialog.WaitDialogFragment" />
+    </data>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@drawable/divider_8"
+        android:showDividers="beginning|middle|end"
+        android:gravity="center_horizontal|bottom"
+        android:background="@color/bc">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="匹配中..."
+            binding:typeFace='@{"YouSheBiaoTiHei-2.ttf"}'
+            android:textColor="@color/black"
+            android:textSize="18sp"/>
+        <androidx.recyclerview.widget.RecyclerView
+            binding:visible="@{!adapter.data.empty}"
+            android:layout_marginStart="45dp"
+            android:layout_marginEnd="45dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            binding:adapter="@{adapter}"
+            tools:listitem="@layout/viewholder_maching_person_item" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            binding:activated="@{true}"
+            android:foreground="?selectableItemBackgroundBorderless"
+            binding:onClickCommand="@{context.clickCancelMatchCommand}"
+            android:background="@drawable/bg_login"
+            android:text="@string/cancel_match"/>
+    </LinearLayout>
+</layout>

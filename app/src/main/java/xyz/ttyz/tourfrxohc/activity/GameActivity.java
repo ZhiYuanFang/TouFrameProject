@@ -7,12 +7,16 @@ import android.media.AudioManager;
 import android.media.AudioRecord;
 import android.media.AudioTrack;
 import android.media.MediaRecorder;
+import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.util.Log;
 
 import com.google.gson.Gson;
 
+import androidx.annotation.Nullable;
 import androidx.databinding.ObservableBoolean;
+import androidx.fragment.app.FragmentTransaction;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -32,6 +36,7 @@ import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import xyz.ttyz.mylibrary.method.ActivityManager;
+import xyz.ttyz.mylibrary.method.BaseTouSubscriber;
 import xyz.ttyz.mylibrary.method.RxOHCUtils;
 import xyz.ttyz.mylibrary.protect.StringUtil;
 import xyz.ttyz.mylibrary.socket.SocketUtils;
@@ -43,13 +48,15 @@ import xyz.ttyz.toubasemvvm.utils.ToastUtil;
 import xyz.ttyz.tourfrxohc.BaseApplication;
 import xyz.ttyz.tourfrxohc.R;
 import xyz.ttyz.tourfrxohc.databinding.ActivityGameBinding;
+import xyz.ttyz.tourfrxohc.event.GoKeyRoomEvent;
+import xyz.ttyz.tourfrxohc.event.RoleTypeConfirm;
 import xyz.ttyz.tourfrxohc.event.UserChangeEvent;
-import xyz.ttyz.tourfrxohc.event.VoiceEvent;
+import xyz.ttyz.tourfrxohc.fragment.RoleFragment;
+import xyz.ttyz.tourfrxohc.fragment.WaitKeyRoomOperatorFragment;
 import xyz.ttyz.tourfrxohc.http.BaseSubscriber;
 import xyz.ttyz.tourfrxohc.models.SocketEventModule;
 import xyz.ttyz.tourfrxohc.models.UserModel;
 import xyz.ttyz.tourfrxohc.models.game.HomeModel;
-import xyz.ttyz.tourfrxohc.models.game.VoiceModel;
 import xyz.ttyz.tourfrxohc.utils.PcmToWavUtil;
 import xyz.ttyz.tourfrxohc.utils.UserUtils;
 
@@ -60,6 +67,13 @@ public class GameActivity extends BaseActivity<ActivityGameBinding> {
     private static final String TAG = "GameActivity";
     public static boolean confirmLeave = false;
     private long roomId;
+    List<UserModel> userModelList;//9个人的用户信息
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setSwipeBackEnable(false);
+    }
 
     /**
      * 凑齐9个人才能进入该页面
@@ -77,32 +91,53 @@ public class GameActivity extends BaseActivity<ActivityGameBinding> {
         ActivityManager.getInstance().startActivity(intent);
     }
 
-    List<UserModel> userModelList;//9个人的用户信息
-
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void comingVoice(VoiceModel voiceModel) {
-        if (voiceModel.getSys() != null) {
-            //系统播报
-            playAudio(voiceModel.getSys().getVoiceBytes());
-        } else {
-            //播放玩家语音
-            if(voiceModel.getUser().getVoiceBytes() != null && voiceModel.getUser().getVoiceBytes().length > 0){
-                playAudio(voiceModel.getUser().getVoiceBytes());
-            }
-            //界面绘制
-            if(voiceModel.getUser().getId() != 0){
-                for (UserModel user : userModelList) {
-                    user.setSpeaking(voiceModel.getUser().equals(user));
-                }
-            }
-        }
+    public void comingVoice(byte[] bytes) {
+        playAudio(bytes);//仅仅负责播放音频
     }
 
     //人员离线 返回
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void userChange(UserChangeEvent userChangeEvent) {
         UserModel userModel = userChangeEvent.getUserModel();
-        userModelList.get(userModelList.indexOf(userModel)).setComeInType(userModel.getComeInType());
+        userModelList.get(userModelList.indexOf(userModel)).setInHome(userChangeEvent.isComeIn());
+    }
+
+    //所有成员角色分配完毕
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void roleTypeGive(RoleTypeConfirm roleTypeConfirm) {
+        //显示角色给用户 提供确认
+        showRoleType(roleTypeConfirm.getSelfUserModel().getRoleType());
+        //自动3秒后，关闭角色确认画面，并告知后台 已经确认角色
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                missRoleType();
+                new RxOHCUtils<Object>(GameActivity.this).executeApi(BaseApplication.apiService.confirmRoleType(roomId, UserUtils.getCurUserModel().getId()), new BaseTouSubscriber<Object>(GameActivity.this) {
+                    @Override
+                    public void success(Object data) {
+
+                    }
+
+                    @Override
+                    public String initCacheKey() {
+                        return null;
+                    }
+                });
+            }
+        }, 3000);
+    }
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void goToKeyRoom(GoKeyRoomEvent goKeyRoomEvent){
+        //判断我需不需要进入钥匙房间
+        if(goKeyRoomEvent.getGoKeyUserList().contains(UserUtils.getCurUserModel())){
+            KeyActivity.show(goKeyRoomEvent.getRoomId());
+        } else {
+            //我不需要进入
+            showWaitKeyRoom();
+        }
     }
 
     //region 播放音频
@@ -199,7 +234,6 @@ public class GameActivity extends BaseActivity<ActivityGameBinding> {
             GameActivity.this.finish();
             return;
         }
-
     }
 
 
@@ -212,6 +246,8 @@ public class GameActivity extends BaseActivity<ActivityGameBinding> {
                 userModelList = data.getRoomUserList();
                 //获取到了本房间的所有用户信息，绘制页面
                 bindUser();
+
+                confirmStartGame();
             }
 
             @Override
@@ -234,20 +270,6 @@ public class GameActivity extends BaseActivity<ActivityGameBinding> {
         return null;
     }
 
-    public OnClickAdapter.onClickCommand endSpeakCommand = new OnClickAdapter.onClickCommand() {
-        @Override
-        public void click() {
-            endSpeak();
-
-        }
-    };
-
-    public OnClickAdapter.onClickCommand startSpeakCommand = new OnClickAdapter.onClickCommand() {
-        @Override
-        public void click() {
-            startSpeak();
-        }
-    };
 
     //region 音频
     public ObservableBoolean isSpeakingFiled = new ObservableBoolean(false);
@@ -282,10 +304,6 @@ public class GameActivity extends BaseActivity<ActivityGameBinding> {
                     byte[] recordData = new byte[mBufferSizeInBytes];
                     audioRecord.read(recordData, 0, mBufferSizeInBytes);
 
-                    SocketEventModule socketEventModule = new SocketEventModule();
-                    socketEventModule.setActionType(1);
-                    VoiceModel voiceModel = new VoiceModel(UserUtils.getCurUserModel());
-                    socketEventModule.setVoiceModel(voiceModel);
 
 //                    SocketUtils.sendMessage(new Gson().toJson(socketEventModule));//发送告知，谁在说话
                     SocketUtils.sendMessage(recordData);//发送语音
@@ -304,10 +322,6 @@ public class GameActivity extends BaseActivity<ActivityGameBinding> {
     }
     //endregion
 
-    public void testEvent() {
-        EventBus.getDefault().post(new VoiceEvent(new byte[]{}));
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -315,4 +329,93 @@ public class GameActivity extends BaseActivity<ActivityGameBinding> {
         //退出游戏环节， 退出长连接
         SocketUtils.closeMinaReceiver(getApplication());
     }
+
+    @Override
+    public void onBackPressed() {
+        //不支持常规退出
+    }
+
+    //region server
+    private void confirmStartGame() {
+        new RxOHCUtils<Object>(this).executeApi(BaseApplication.apiService.confirmStartGame(roomId, UserUtils.getCurUserModel().getId()), new BaseSubscriber<Object>(this) {
+            @Override
+            public void success(Object data) {
+
+            }
+
+            @Override
+            public String initCacheKey() {
+                return null;
+            }
+        });
+    }
+    //endregion
+
+    //region action
+    public OnClickAdapter.onClickCommand exitGameCommand = new OnClickAdapter.onClickCommand() {
+        @Override
+        public void click() {
+            DialogUtils.showDialog("确定要退出游戏嘛？", new DialogUtils.DialogButtonModule("确定", new DialogUtils.DialogClickDelegate() {
+                @Override
+                public void click(DialogUtils.DialogButtonModule dialogButtonModule) {
+                    new RxOHCUtils<Object>(GameActivity.this).executeApi(BaseApplication.apiService.leave(roomId, UserUtils.getCurUserModel().getId()), new BaseSubscriber<Object>(GameActivity.this) {
+                        @Override
+                        public void success(Object data) {
+                            GameActivity.this.finish();
+                        }
+
+                        @Override
+                        public String initCacheKey() {
+                            return null;
+                        }
+                    });
+                }
+            }));
+        }
+    };
+
+
+    public OnClickAdapter.onClickCommand endSpeakCommand = new OnClickAdapter.onClickCommand() {
+        @Override
+        public void click() {
+            endSpeak();
+
+        }
+    };
+    //endregion
+
+    //region public
+    RoleFragment mainFragment;
+
+    public void showRoleType(int roleType) {
+        mainFragment = new RoleFragment(roleType);
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.add(R.id.container, mainFragment);
+        fragmentTransaction.commitAllowingStateLoss();
+        fragmentTransaction.addToBackStack("");
+    }
+
+    public void missRoleType() {
+        if (mainFragment != null) {
+            mainFragment.onDestroy();
+            mainFragment = null;
+        }
+    }
+
+    WaitKeyRoomOperatorFragment waitKeyRoomOperatorFragment;
+    public void showWaitKeyRoom(){
+        waitKeyRoomOperatorFragment = new WaitKeyRoomOperatorFragment();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.add(R.id.container, waitKeyRoomOperatorFragment);
+        fragmentTransaction.commitAllowingStateLoss();
+        fragmentTransaction.addToBackStack("");
+    }
+
+    public void missWaitKeyRoom(){
+        if(null != waitKeyRoomOperatorFragment){
+            waitKeyRoomOperatorFragment.onDestroy();
+            waitKeyRoomOperatorFragment = null;
+        }
+    }
+    //endregion
 }

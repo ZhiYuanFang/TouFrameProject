@@ -8,6 +8,7 @@ import xyz.ttyz.tou_example.ActivityManager;
 import xyz.ttyz.tourfrxohc.BaseApplication;
 import xyz.ttyz.tourfrxohc.MainActivity;
 import xyz.ttyz.tourfrxohc.activity.GameActivity;
+import xyz.ttyz.tourfrxohc.dialog.WaitDialogFragment;
 import xyz.ttyz.tourfrxohc.http.BaseSubscriber;
 import xyz.ttyz.tourfrxohc.models.game.HomeModel;
 
@@ -25,6 +26,11 @@ public class HomeUtils {
                         if(data.getRoomUserList().size() == data.getLimitNumber()){
                             //直接进入房间
                             GameActivity.show(data.getRoomId());
+                        } else {
+                            WaitDialogFragment waitDialogFragment = WaitDialogFragment.getInstance(data.getRoomId());
+                            waitDialogFragment.refreshList(data.getRoomUserList());
+                            waitDialogFragment.show(ActivityManager.getInstance().getSupportFragmentManager());
+
                         }
                     }
 

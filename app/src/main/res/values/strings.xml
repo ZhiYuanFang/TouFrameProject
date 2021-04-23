@@ -12,4 +12,6 @@
     <string name="nick_name">昵称: </string>
     <string name="nick_name_hint">请输入昵称</string>
     <string name="confirm_pwd">确认密码: </string>
+
+    <string name="cancel_match">取消匹配</string>
 </resources>

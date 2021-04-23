@@ -18,12 +18,27 @@
         android:paddingStart="35dp"
         tools:ignore="UseCompoundDrawables">
 
-        <ImageView
+        <RelativeLayout
             android:layout_width="68dp"
-            android:layout_height="68dp"
-            tools:src="@drawable/testpic"
-            binding:isCircle="@{true}"
-            binding:imageUrl="@{user.avatar}" />
+            android:layout_height="68dp">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:src="@drawable/testpic"
+                binding:isCircle="@{true}"
+                binding:imageUrl="@{user.avatar}" />
+
+            <TextView
+                binding:visible="@{!user.inHome}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:background="@drawable/bg_login"
+                android:padding="5dp"
+                binding:typeFace='@{"YouSheBiaoTiHei-2.ttf"}'
+                android:text="离开"/>
+        </RelativeLayout>
 
         <TextView
             binding:visible="@{user.speaking}"
@@ -31,6 +46,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
             android:textColor="@color/colorAccent"
+            binding:typeFace='@{"YouSheBiaoTiHei-2.ttf"}'
             android:text="发言中..." />
     </LinearLayout>
 </layout>
