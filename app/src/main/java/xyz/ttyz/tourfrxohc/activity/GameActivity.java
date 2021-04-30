@@ -8,31 +8,23 @@ import android.media.AudioRecord;
 import android.media.AudioTrack;
 import android.media.MediaRecorder;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
-
-import com.google.gson.Gson;
+import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.databinding.ObservableBoolean;
+import androidx.databinding.ObservableInt;
 import androidx.fragment.app.FragmentTransaction;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import xyz.ttyz.mylibrary.method.ActivityManager;
@@ -41,38 +33,47 @@ import xyz.ttyz.mylibrary.method.RxOHCUtils;
 import xyz.ttyz.mylibrary.protect.StringUtil;
 import xyz.ttyz.mylibrary.socket.SocketUtils;
 import xyz.ttyz.toubasemvvm.adapter.OnClickAdapter;
-import xyz.ttyz.toubasemvvm.event.NetEvent;
 import xyz.ttyz.toubasemvvm.utils.DialogUtils;
-import xyz.ttyz.toubasemvvm.utils.FileUtil;
 import xyz.ttyz.toubasemvvm.utils.ToastUtil;
 import xyz.ttyz.tourfrxohc.BaseApplication;
 import xyz.ttyz.tourfrxohc.R;
 import xyz.ttyz.tourfrxohc.databinding.ActivityGameBinding;
+import xyz.ttyz.tourfrxohc.dialog.WaitDialogFragment;
+import xyz.ttyz.tourfrxohc.event.GameEndEvent;
 import xyz.ttyz.tourfrxohc.event.GoKeyRoomEvent;
+import xyz.ttyz.tourfrxohc.event.RebackVoiceRoomEvent;
 import xyz.ttyz.tourfrxohc.event.RoleTypeConfirm;
+import xyz.ttyz.tourfrxohc.event.SpeakRoundEvent;
+import xyz.ttyz.tourfrxohc.event.StartVoteEvent;
 import xyz.ttyz.tourfrxohc.event.UserChangeEvent;
+import xyz.ttyz.tourfrxohc.event.VoteEndEvent;
 import xyz.ttyz.tourfrxohc.fragment.RoleFragment;
 import xyz.ttyz.tourfrxohc.fragment.WaitKeyRoomOperatorFragment;
 import xyz.ttyz.tourfrxohc.http.BaseSubscriber;
-import xyz.ttyz.tourfrxohc.models.SocketEventModule;
+import xyz.ttyz.tourfrxohc.models.RoleType;
 import xyz.ttyz.tourfrxohc.models.UserModel;
 import xyz.ttyz.tourfrxohc.models.game.HomeModel;
-import xyz.ttyz.tourfrxohc.utils.PcmToWavUtil;
 import xyz.ttyz.tourfrxohc.utils.UserUtils;
 
 /**
  * https://docs.rongcloud.cn/v4/views/rtc/meeting/guide/advanced/usermanage/serverapi.html
  */
 public class GameActivity extends BaseActivity<ActivityGameBinding> {
+    private static final int SpeakLongTime = 60;//秒
+    private static final int VoteLongTime = 10;//秒
     private static final String TAG = "GameActivity";
     public static boolean confirmLeave = false;
     private long roomId;
     List<UserModel> userModelList;//9个人的用户信息
+    public ObservableInt timeCountDownFiled = new ObservableInt(0);
+    public ObservableBoolean isVoteRoundFiled = new ObservableBoolean(false);
+    private HomeModel homeModel;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setSwipeBackEnable(false);
+        WaitDialogFragment.getInstance(roomId).dismiss();
     }
 
     /**
@@ -100,12 +101,14 @@ public class GameActivity extends BaseActivity<ActivityGameBinding> {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void userChange(UserChangeEvent userChangeEvent) {
         UserModel userModel = userChangeEvent.getUserModel();
-        userModelList.get(userModelList.indexOf(userModel)).setInHome(userChangeEvent.isComeIn());
+
+            userModelList.get(userModelList.indexOf(userModel)).setInHome(userChangeEvent.isComeIn());
     }
 
     //所有成员角色分配完毕
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void roleTypeGive(RoleTypeConfirm roleTypeConfirm) {
+        mBinding.viewWait.setVisibility(View.GONE);
         //显示角色给用户 提供确认
         showRoleType(roleTypeConfirm.getSelfUserModel().getRoleType());
         //自动3秒后，关闭角色确认画面，并告知后台 已经确认角色
@@ -130,15 +133,204 @@ public class GameActivity extends BaseActivity<ActivityGameBinding> {
 
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void goToKeyRoom(GoKeyRoomEvent goKeyRoomEvent){
+    public void goToKeyRoom(GoKeyRoomEvent goKeyRoomEvent) {
         //判断我需不需要进入钥匙房间
-        if(goKeyRoomEvent.getGoKeyUserList().contains(UserUtils.getCurUserModel())){
+        showWaitKeyRoom();
+        if (goKeyRoomEvent.getGoKeyUserList().contains(UserUtils.getCurUserModel())) {
             KeyActivity.show(goKeyRoomEvent.getRoomId());
         } else {
             //我不需要进入
-            showWaitKeyRoom();
+
         }
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void backVoice(RebackVoiceRoomEvent rebackVoiceRoomEvent) {
+        //所有人钥匙投放结束，回到语音房间，进入发言环节
+        //获取发言对象， 判断是否我发言
+        if (rebackVoiceRoomEvent.getLastKeyUserList() == null || rebackVoiceRoomEvent.getLastKeyUserList().isEmpty()){
+            showWaitKeyRoom();
+            return;
+        }
+        missWaitKeyRoom();
+        UserModel speakUserModel = rebackVoiceRoomEvent.getLastKeyUserList().get(0);
+
+            for (UserModel cur : userModelList) {
+                cur.setSpeaking(speakUserModel.equals(cur));
+            }
+
+        if (UserUtils.getCurUserModel().equals(speakUserModel)) {
+            //是我要发言，自己在说话的时候， 会显示发言时长的
+            startSpeak();
+        } else {
+            //别人发言，显示别人发言时长
+            startCountDown();
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void voiceRound(SpeakRoundEvent speakRoundEvent) {
+        //获取发言对象， 判断是否我发言
+        UserModel speakUserModel = speakRoundEvent.getSpeakUser();
+
+            for (UserModel cur : userModelList) {
+                cur.setSpeaking(speakUserModel.equals(cur));
+            }
+
+        if (UserUtils.getCurUserModel().equals(speakUserModel)) {
+            //是我要发言，自己在说话的时候， 会显示发言时长的
+            startSpeak();
+        } else {
+            //别人发言，显示别人发言时长
+            startCountDown();
+        }
+    }
+
+    //投票环节
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void voteRound(StartVoteEvent startVoteEvent) {
+        homeModel = startVoteEvent.getHomeModel();
+        //重置所有人的状态
+        List<UserModel> pkList = homeModel.getPkMemberList();
+        boolean isPk = pkList != null && !pkList.isEmpty();
+
+
+            for (UserModel cur : userModelList) {
+                cur.setSpeaking(false);
+                cur.setVoted(false);
+                cur.setCanBeVoted(!isPk || pkList.contains(cur));
+            }
+
+        //开始投票
+        startVote();
+    }
+
+    /**
+     * 投票结束
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void voteEnd(VoteEndEvent voteEndEvent) {
+        //投票结束，轮次判断判断
+        HomeModel homeModel = voteEndEvent.getHomeModel();
+        if (homeModel != null) {
+            if (voteEndEvent.getPkList() != null && !voteEndEvent.getPkList().isEmpty()) {
+                //是平票
+                //重置所有人的状态
+                List<UserModel> pkList = voteEndEvent.getPkList();
+
+
+                    for (UserModel cur : userModelList) {
+                        cur.setSpeaking(false);
+                        cur.setVoted(false);
+                        cur.setCanBeVoted(pkList.contains(cur));
+                    }
+
+                //平票者开始发言
+                //判断我是不是平票者的第一个人
+                if (pkList.get(0).equals(UserUtils.getCurUserModel())) {
+                    //我是
+                    startSpeak();
+                } else {
+                    //我此时不需要发言，只需要安静等待
+                }
+            } else {
+                //不是平票，有人被选举
+                //刷新所有人状态
+                userModelList = homeModel.getRoomUserList();
+                bindUser();
+            }
+
+        }
+    }
+
+
+    /**
+     * 游戏结束
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void gameEnd(GameEndEvent gameEndEvent) {
+        EndChatActivity.show(gameEndEvent.getHomeModel().getRoomId());
+        finish();
+    }
+
+    //region 投票
+    Disposable voteDisposable;
+
+    private void startVote() {
+        isVoteRoundFiled.set(true);
+        timeCountDownFiled.set(VoteLongTime);
+        voteDisposable = Observable.interval(0, 1, TimeUnit.SECONDS, AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Long>() {
+                    @Override
+                    public void accept(Long aLong) throws Exception {
+                        timeCountDownFiled.set(timeCountDownFiled.get() - 1);
+                        if (timeCountDownFiled.get() < 0) {
+                            endVote(null);
+                        }
+                    }
+                });
+    }
+
+    /**
+     * 确认投票对象
+     *
+     * @param voteUser 被投票者
+     */
+    private void endVote(UserModel voteUser) {
+        isVoteRoundFiled.set(false);
+        if (voteDisposable != null && !voteDisposable.isDisposed()) {
+            voteDisposable.dispose();
+            voteDisposable = null;
+        }
+
+
+        new RxOHCUtils<Object>(GameActivity.this).executeApi(BaseApplication.apiService.voteEnd(roomId, UserUtils.getCurUserModel().getId(), voteUser != null ? voteUser.getId() : 0), new BaseSubscriber<Object>(this) {
+            @Override
+            public void success(Object data) {
+                //成功投票， UI变化
+                if (voteUser != null) {
+                    for (UserModel cur : userModelList) {
+                        cur.setVoted(cur.equals(voteUser));
+                    }
+                }
+            }
+
+            @Override
+            public String initCacheKey() {
+                return null;
+            }
+        });
+    }
+
+
+    //点击用户头像
+    public void clickBody(UserModel user) {
+        if (homeModel != null && isVoteRoundFiled.get()) {
+            //获取当前房间可以被投票的集合，可能出现平票导致的二次投票
+            //推送过来是有房间信息的
+            //如果是投票阶段
+            UserModel userModel = homeModel.getRoomUserList().get(homeModel.getRoomUserList().indexOf(user));
+            //获取投票对象集合
+            List<UserModel> voteList;
+            if (homeModel.getPkMemberList() != null) {
+                voteList = homeModel.getPkMemberList();
+            } else {
+                voteList = homeModel.getRoomUserList();
+            }
+            if (!voteList.contains(userModel)) {
+                //当前对象不在投票列表中
+                //不可对它投票
+            } else {
+                //当前对象投票生效
+                endVote(user);
+            }
+        } else {
+            //查看用户信息
+            ToastUtil.showToast(user.getNickname());
+        }
+
+    }
+    //endregion
 
     //region 播放音频
     AudioTrack audioTrack;
@@ -232,13 +424,13 @@ public class GameActivity extends BaseActivity<ActivityGameBinding> {
         if (StringUtil.safeString(roomId).isEmpty()) {
             ToastUtil.showToast("房间不存在");
             GameActivity.this.finish();
-            return;
         }
     }
 
 
     @Override
     protected void initServer() {
+
         //根据roomId 请求接口，获取当前房间人员
         new RxOHCUtils<HomeModel>(this).executeApi(BaseApplication.apiService.roomInfo(roomId), new BaseSubscriber<HomeModel>(this) {
             @Override
@@ -295,7 +487,7 @@ public class GameActivity extends BaseActivity<ActivityGameBinding> {
         }
         audioRecord.startRecording();
         isSpeakingFiled.set(true);
-
+        startCountDown();
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -319,6 +511,43 @@ public class GameActivity extends BaseActivity<ActivityGameBinding> {
             audioRecord = null;
         }
         isSpeakingFiled.set(false);
+        stopCountDown();
+        //告知后台， 我发言完毕，后台自行切换人员并做出发言通知和轮次判断
+        new RxOHCUtils<Object>(this).executeApi(BaseApplication.apiService.speakEnd(roomId, UserUtils.getCurUserModel().getId()), new BaseSubscriber<Object>(this) {
+            @Override
+            public void success(Object data) {
+
+            }
+
+            @Override
+            public String initCacheKey() {
+                return null;
+            }
+        });
+    }
+
+
+    Disposable countDownDisposable;
+
+    private void startCountDown() {
+        timeCountDownFiled.set(SpeakLongTime);
+        countDownDisposable = Observable.interval(0, 1, TimeUnit.SECONDS, AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Long>() {
+                    @Override
+                    public void accept(Long aLong) throws Exception {
+                        timeCountDownFiled.set(timeCountDownFiled.get() - 1);
+                        if (timeCountDownFiled.get() < 0) {
+                            endSpeak();
+                        }
+                    }
+                });
+    }
+
+    private void stopCountDown() {
+        if (countDownDisposable != null && !countDownDisposable.isDisposed()) {
+            countDownDisposable.dispose();
+            countDownDisposable = null;
+        }
     }
     //endregion
 
@@ -397,23 +626,30 @@ public class GameActivity extends BaseActivity<ActivityGameBinding> {
 
     public void missRoleType() {
         if (mainFragment != null) {
-            mainFragment.onDestroy();
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.remove(mainFragment);
+            fragmentTransaction.commit();
             mainFragment = null;
         }
     }
 
     WaitKeyRoomOperatorFragment waitKeyRoomOperatorFragment;
-    public void showWaitKeyRoom(){
-        waitKeyRoomOperatorFragment = new WaitKeyRoomOperatorFragment();
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.container, waitKeyRoomOperatorFragment);
-        fragmentTransaction.commitAllowingStateLoss();
-        fragmentTransaction.addToBackStack("");
+
+    public void showWaitKeyRoom() {
+        if(waitKeyRoomOperatorFragment == null){
+            waitKeyRoomOperatorFragment = new WaitKeyRoomOperatorFragment();
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.add(R.id.container, waitKeyRoomOperatorFragment);
+            fragmentTransaction.commit();
+            fragmentTransaction.addToBackStack("");
+        }
     }
 
-    public void missWaitKeyRoom(){
-        if(null != waitKeyRoomOperatorFragment){
-            waitKeyRoomOperatorFragment.onDestroy();
+    public void missWaitKeyRoom() {
+        if (null != waitKeyRoomOperatorFragment) {
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.remove(waitKeyRoomOperatorFragment);
+            fragmentTransaction.commit();
             waitKeyRoomOperatorFragment = null;
         }
     }

@@ -22,7 +22,7 @@
     </style>
 <!--    endregion-->
 
-<!--    注册-->
+<!-- region   注册-->
     <style name="registerInfoType">
         <item name="android:gravity">end</item>
         <item name="android:textSize">23sp</item>
@@ -36,4 +36,15 @@
         <item name="android:layout_marginStart">5dp</item>
         <item name="android:padding">5dp</item>
     </style>
+<!--    endregion-->
+
+<!--region 钥匙框   -->
+    <style name="keyPutStyle">
+        <item name="android:background">@drawable/bg_key_put</item>
+        <item name="android:textSize">28sp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center</item>
+    </style>
+<!--    endregion-->
 </resources>

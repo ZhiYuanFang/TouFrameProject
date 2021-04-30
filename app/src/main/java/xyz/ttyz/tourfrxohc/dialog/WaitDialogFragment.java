@@ -1,5 +1,6 @@
 package xyz.ttyz.tourfrxohc.dialog;
 
+import android.annotation.SuppressLint;
 import android.view.ViewGroup;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,11 +20,13 @@ import xyz.ttyz.tourfrxohc.models.UserModel;
 import xyz.ttyz.tourfrxohc.utils.UserUtils;
 import xyz.ttyz.tourfrxohc.viewholder.MatchItemViewHolder;
 
-public class WaitDialogFragment extends BaseDialogFragment<FragmentWaitDialogBinding>{
+public class WaitDialogFragment extends BaseDialogFragment<FragmentWaitDialogBinding> {
 
-    public static WaitDialogFragment waitDialogFragment;
-    public static WaitDialogFragment getInstance(long roomId){
-        if(waitDialogFragment == null){
+    @SuppressLint("StaticFieldLeak")
+    private static WaitDialogFragment waitDialogFragment;
+    List<UserModel> userModelList;
+    public static WaitDialogFragment getInstance(long roomId) {
+        if (waitDialogFragment == null) {
             waitDialogFragment = new WaitDialogFragment(roomId);
         }
         return waitDialogFragment;
@@ -41,9 +44,11 @@ public class WaitDialogFragment extends BaseDialogFragment<FragmentWaitDialogBin
     }
 
     BaseEmptyAdapterParent adapter;
+
     @Override
     protected void initViriable(FragmentWaitDialogBinding mBinding) {
         mBinding.setContext(this);
+
         adapter = new BaseEmptyAdapterParent(getContext(), new BaseRecyclerAdapter.NormalAdapterDelegate() {
             @Override
             public int getItemViewType(int position) {
@@ -57,14 +62,20 @@ public class WaitDialogFragment extends BaseDialogFragment<FragmentWaitDialogBin
 
             @Override
             public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-                ((MatchItemViewHolder)holder).bindData((UserModel) adapter.getItem(position));
+                ((MatchItemViewHolder) holder).bindData((UserModel) adapter.getItem(position));
             }
         });
         mBinding.setAdapter(adapter);
+        if(userModelList != null){
+            adapter.setList(userModelList);
+        }
+
     }
 
-    public void refreshList(List<UserModel> list){
-        adapter.setList(list);
+    public void refreshList(List<UserModel> list) {
+        this.userModelList = list;
+        if (adapter != null)
+            adapter.setList(list);
     }
 
     @Override
@@ -75,7 +86,7 @@ public class WaitDialogFragment extends BaseDialogFragment<FragmentWaitDialogBin
     public OnClickAdapter.onClickCommand clickCancelMatchCommand = new OnClickAdapter.onClickCommand() {
         @Override
         public void click() {
-            new RxOHCUtils<Object>(getActivity()).executeApi(BaseApplication.apiService.leave(roomId, UserUtils.getCurUserModel().getId()), new BaseSubscriber<Object>((BaseTouActivity)getActivity()) {
+            new RxOHCUtils<Object>(getActivity()).executeApi(BaseApplication.apiService.leave(roomId, UserUtils.getCurUserModel().getId()), new BaseSubscriber<Object>((BaseTouActivity) getActivity()) {
                 @Override
                 public void success(Object data) {
                     //取消匹配成功

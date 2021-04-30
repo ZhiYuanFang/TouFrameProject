@@ -60,19 +60,15 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
                         DialogUtils.showDialog("确定要退出登录吗", new DialogUtils.DialogButtonModule("确定", new DialogUtils.DialogClickDelegate() {
                             @Override
                             public void click(DialogUtils.DialogButtonModule dialogButtonModule) {
-//                                MainFragment mainFragment = new MainFragment();
-//                                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-//                                fragmentTransaction.add(R.id.container, mainFragment);
-//                                fragmentTransaction.commitAllowingStateLoss();
-//                                fragmentTransaction.addToBackStack("");
-
                                 UserUtils.logOut();
                             }
                         }));
                     }
                 })
                 .build();
-        mBinding.setToolBarViewModel(toolBarViewModel);
+        toolBarViewModel.backClick = null;
+
+        mBinding.setUser(UserUtils.getCurUserModel());
     }
 
     @Override

@@ -8,6 +8,7 @@ import java.util.Objects;
 
 import xyz.ttyz.tourfrxohc.BR;
 
+
 public class UserModel extends BaseObservable implements Serializable {
     private long id;
     private String avatar;
@@ -34,7 +35,54 @@ public class UserModel extends BaseObservable implements Serializable {
     long voteUserId;//投票对象的id
     int votedNumber;//被投票数量
 
+    int putNumber;//动作对象 1，2，3
+    boolean put;//动作类型， false 看看  true 投放
+    boolean isPutObjectHasKey;//选择的框框里结果是有还是没有钥匙
+
+    //region local
     boolean isSpeaking;
+    boolean isVoted;//他是否被我投票
+    boolean canBeVoted;//是否可以被投票
+
+    public void setPutNumber(int putNumber) {
+        this.putNumber = putNumber;
+    }
+
+    public void setPut(boolean put) {
+        this.put = put;
+    }
+
+    public void setPutObjectHasKey(boolean putObjectHasKey) {
+        isPutObjectHasKey = putObjectHasKey;
+    }
+
+    public boolean isCanBeVoted() {
+        return canBeVoted;
+    }
+
+    public void setCanBeVoted(boolean canBeVoted) {
+        this.canBeVoted = canBeVoted;
+    }
+
+    public boolean isVoted() {
+        return isVoted;
+    }
+
+    public void setVoted(boolean voted) {
+        isVoted = voted;
+    }
+
+    public int getPutNumber() {
+        return putNumber;
+    }
+
+    public boolean isPut() {
+        return put;
+    }
+
+    public boolean isPutObjectHasKey() {
+        return isPutObjectHasKey;
+    }
 
     @Bindable
     public boolean isSpeaking() {
@@ -142,12 +190,14 @@ public class UserModel extends BaseObservable implements Serializable {
         this.oneTurnHasSpoken = oneTurnHasSpoken;
     }
 
+    @Bindable
     public boolean isInHome() {
         return isInHome;
     }
 
     public void setInHome(boolean inHome) {
         isInHome = inHome;
+        notifyPropertyChanged(BR.inHome);
     }
 
     public boolean isHasComeInKeyRoom() {

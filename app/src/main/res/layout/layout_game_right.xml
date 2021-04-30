@@ -4,13 +4,17 @@
     xmlns:binding="http://schemas.android.com/apk/res-auto">
 
     <data>
-
+        <import type="android.view.View"/>
         <variable
             name="user"
             type="xyz.ttyz.tourfrxohc.models.UserModel" />
+        <variable
+            name="context"
+            type="xyz.ttyz.tourfrxohc.activity.GameActivity" />
     </data>
 
     <LinearLayout
+        android:visibility="@{user == null ? View.INVISIBLE : View.VISIBLE}"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center_vertical|end"
@@ -28,7 +32,8 @@
         <RelativeLayout
             android:layout_width="68dp"
             android:layout_height="68dp"
-            android:layout_marginStart="15dp">
+            android:layout_marginStart="15dp"
+            android:onClick="@{()->context.clickBody(user)}">
 
             <ImageView
                 android:layout_width="match_parent"
@@ -37,6 +42,11 @@
                 binding:isCircle="@{true}"
                 binding:imageUrl="@{user.avatar}" />
 
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_voted"
+                binding:visible="@{user.voted}"/>
             <TextView
                 binding:visible="@{!user.inHome}"
                 android:layout_width="wrap_content"
@@ -46,6 +56,14 @@
                 android:padding="5dp"
                 binding:typeFace='@{"YouSheBiaoTiHei-2.ttf"}'
                 android:text="离开"/>
+
+
+            <View
+                binding:visible="@{user.canBeVoted &amp;&amp; context.isVoteRoundFiled}"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_alignParentEnd="true"
+                android:background="@color/colorEECC76"/>
         </RelativeLayout>
     </LinearLayout>
 </layout>

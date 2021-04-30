@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:binding="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:binding="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -9,28 +11,56 @@
 
 
         <variable
-            name="toolBarViewModel"
-            type="xyz.ttyz.toubasemvvm.vm.ToolBarViewModel" />
+            name="user"
+            type="xyz.ttyz.tourfrxohc.models.UserModel" />
     </data>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
+        android:background="@color/bc"
         android:orientation="vertical"
         tools:context="xyz.ttyz.tourfrxohc.MainActivity">
 
-        <include
-            layout="@layout/layout_toolbar"
-            binding:toolBarViewModel="@{toolBarViewModel}" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="28dp"
+            android:layout_marginTop="58dp"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_start_game"
+                android:padding="3dp">
+
+                <xyz.ttyz.toubasemvvm.weight.CardImageView
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
+                    binding:isCircle="@{true}"
+                    binding:imageUrl="@{user.avatar}"/>
+
+            </RelativeLayout>
 
 
-        <Button
+        </LinearLayout>
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            binding:onClickCommand="@{context.startGameCommand}"
-            android:text="开始游戏"/>
+            android:layout_marginBottom="128dp">
+
+            <Button
+                android:layout_width="250dp"
+                android:layout_height="250dp"
+                android:layout_centerInParent="true"
+                android:textColor="@color/black"
+                android:textSize="28sp"
+                binding:typeFace='@{"YouSheBiaoTiHei-2.ttf"}'
+                android:background="@drawable/bg_start_game"
+                android:text="开始游戏"
+                binding:onClickCommand="@{context.startGameCommand}" />
+        </RelativeLayout>
     </LinearLayout>
 
 </layout>

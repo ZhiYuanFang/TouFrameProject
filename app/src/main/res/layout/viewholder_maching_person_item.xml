@@ -28,6 +28,6 @@
             android:textSize="12sp"
             android:text="@{userModel.nickname}"
             binding:typeFace='@{"YouSheBiaoTiHei-2.ttf"}'
-            tools:text="@string/picture_cancel"/>
+            tools:text="@string/app_name"/>
     </LinearLayout>
 </layout>

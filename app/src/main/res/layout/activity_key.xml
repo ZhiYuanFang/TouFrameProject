@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:binding="http://schemas.android.com/apk/res-auto">
 
     <data>
         <variable
@@ -9,15 +10,20 @@
     </data>
 
     <LinearLayout
+        android:fitsSystemWindows="true"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/bc"
+        android:divider="@drawable/divider_put_key"
+        android:showDividers="beginning|middle|end"
         android:gravity="center_horizontal">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
+            binding:typeFace='@{"YouSheBiaoTiHei-2.ttf"}'
             android:padding="15dp"
             android:text="    选择钥匙孔投放钥匙或者查看，若选择投放则不能查看，选择查看则不能投放，
             \n    投放的钥匙口中如果有钥匙，则会清空当前钥匙孔
@@ -26,9 +32,38 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
+            android:textColor="@color/colorEECC76"
             android:textSize="38sp"
+            binding:typeFace='@{"YouSheBiaoTiHei-2.ttf"}'
             android:text='@{context.intervalTimeFiled + ""}'
             tools:text="10"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="128dp"
+            android:divider="@drawable/divider_8"
+            android:showDividers="beginning|middle|end"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/tv_1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                binding:typeFace='@{"YouSheBiaoTiHei-2.ttf"}'
+                style="@style/keyPutStyle"
+                android:onClick="@{(view)->context.selectOne(view, 1)}"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                binding:typeFace='@{"YouSheBiaoTiHei-2.ttf"}'
+                android:onClick="@{(view)->context.selectOne(view, 2)}"
+                style="@style/keyPutStyle"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                binding:typeFace='@{"YouSheBiaoTiHei-2.ttf"}'
+                android:onClick="@{(view)->context.selectOne(view, 3)}"
+                style="@style/keyPutStyle"/>
+
+        </LinearLayout>
     </LinearLayout>
 </layout>

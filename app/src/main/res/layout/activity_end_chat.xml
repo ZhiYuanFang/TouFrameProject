@@ -1,19 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:binding="http://schemas.android.com/apk/res-auto">
 
     <data>
 
+        <variable
+            name="context"
+            type="xyz.ttyz.tourfrxohc.activity.EndChatActivity" />
     </data>
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            binding:onClickCommand="@{context.exitGameCommand}"
+            android:text="退出"/>
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:gravity="center"
-            android:text="游戏结束， 聊天"/>
+            android:textColor="@color/black"
+            android:textSize="38sp"
+            android:text='@{context.saveWinFiled ? "save win !" : "attact win !"}'
+            tools:text="save win !" />
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            binding:onClickCommand="@{context.againGameCommand}"
+            android:text="再来一局"/>
     </LinearLayout>
 </layout>

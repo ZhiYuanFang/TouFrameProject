@@ -3,7 +3,6 @@ package xyz.ttyz.tourfrxohc.models;
 import java.util.List;
 
 import xyz.ttyz.tourfrxohc.models.game.HomeModel;
-import xyz.ttyz.tourfrxohc.models.game.VoiceModel;
 
 //房间id
 //动作类型actionType：人员变化0，语音变化1，房间变化2

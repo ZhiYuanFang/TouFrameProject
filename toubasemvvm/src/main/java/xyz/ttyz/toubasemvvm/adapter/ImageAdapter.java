@@ -12,6 +12,7 @@ import androidx.databinding.BindingAdapter;
 import java.io.File;
 
 import xyz.ttyz.toubasemvvm.utils.Constants;
+import xyz.ttyz.toubasemvvm.utils.ImageLoaderUtil;
 
 public class ImageAdapter {
     private static ImageLoderDelegate loderDelegate;
@@ -23,6 +24,10 @@ public class ImageAdapter {
     @BindingAdapter(value = {"notValid","loadProgressBar", "isCircle", "imageRadius", "imageUrl", "imageFilePath", "imageFile", "isBlur", "thumbnil", "dependenceWindow", "notJudgeGif"}, requireAll = false)
     public static void loadImage(ImageView imageView,boolean notValid, boolean loadProgressBar, boolean isCircle, float imageRadius, String imageUrl, String imageFilePath, File imageFile, boolean isBlur, float thumbnil, boolean dependenceWindow, boolean notJudgeGif) {
         if(notValid) return;
+        if(imageUrl == null || imageUrl.isEmpty()){
+            imageUrl = ImageLoaderUtil.testPic;
+        }
+
         ProgressBar progressBar = null;
         if (loadProgressBar) {
             progressBar = new ProgressBar(imageView.getContext());

@@ -40,8 +40,16 @@ public interface ApiService {
 
     @POST("game/confirmRoleType")
     Observable<BaseModule<Object>> confirmRoleType(@Query("roomId") long roomId, @Query("userId") long userId);
+    @POST("game/confirmPutKey")
+    Observable<BaseModule<UserModel>> confirmPutKey(@Query("roomId") long roomId, @Query("userId") long userId, @Query("number") int number, @Query("put") boolean put);
 
+    @POST("game/voteEnd")
+    Observable<BaseModule<Object>> voteEnd(@Query("roomId") long roomId, @Query("userId") long userId, @Query("voteUserId") long voteUserId);
+    @POST("game/speakEnd")
+    Observable<BaseModule<Object>> speakEnd(@Query("roomId") long roomId, @Query("userId") long userId);
 
+    @POST("game/exit")
+    Observable<BaseModule<Object>> exit(@Query("roomId") long roomId, @Query("userId") long userId);
 //    @Headers("Content-type:text/x-plain-rsa-json")
 //    @POST("api/Account/phoneCode")
 //    Observable<BaseModule<PhoneCodeModule>> phoneCode(@Body RequestBody data);

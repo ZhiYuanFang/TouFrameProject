@@ -27,6 +27,7 @@ import xyz.ttyz.toubasemvvm.utils.DialogUtils;
 import xyz.ttyz.tourfrxohc.activity.GameActivity;
 import xyz.ttyz.tourfrxohc.activity.LoginActivity;
 import xyz.ttyz.tourfrxohc.dialog.WaitDialogFragment;
+import xyz.ttyz.tourfrxohc.event.GameEndEvent;
 import xyz.ttyz.tourfrxohc.event.GoKeyRoomEvent;
 import xyz.ttyz.tourfrxohc.event.RebackVoiceRoomEvent;
 import xyz.ttyz.tourfrxohc.event.RoleTypeConfirm;
@@ -82,7 +83,7 @@ public class BaseApplication extends Application {
                 //捕获主线程异常，上传bugly
             }
         });
-        RfRxOHCUtil.initApiService(this, "http://192.168.0.110:8080/tou3_war_exploded/", "ws://192.168.0.110:8080/tou3_war_exploded/devMessage", getPackageName() + "-cache",
+        RfRxOHCUtil.initApiService(this, "http://192.168.1.201:8080/tou3_war_exploded/", "ws://192.168.1.201:8080/tou3_war_exploded/devMessage", getPackageName() + "-cache",
                 2 * 1024 * 1024, 30, BuildConfig.BUILD_TYPE.equals("release"), BuildConfig.DEBUG, BuildConfig.VERSION_NAME,
                 "huawei", "android", 1, new RfRxOHCUtil.TouRRCDelegate() {
                     @Override
@@ -174,7 +175,7 @@ public class BaseApplication extends Application {
                                     break;
                                 case ActionType.key_put_end_and_next_speak:
                                     //所有人钥匙投放结束，回到语音房间，进入发言环节
-                                    EventBus.getDefault().post(new RebackVoiceRoomEvent(socketEventModule.getUserModelList()));
+                                    EventBus.getDefault().post(new RebackVoiceRoomEvent(socketEventModule.getUserModelList(), socketEventModule.getRoomModel()));
                                     break;
                                 case ActionType.home_normal_speak:
                                     //顺序发言的时候，轮到了我，进入发言环节
@@ -188,6 +189,10 @@ public class BaseApplication extends Application {
                                 case ActionType.home_vote_criminal_end:
                                     //投票结束，得到投票结果， 如果出现投票结果的集合》1 则进入平票环节, 由平票的第一个人开始发言【后面可以改一下】
                                     EventBus.getDefault().post(new VoteEndEvent(socketEventModule.getUserModelList(), socketEventModule.getRoomModel()));
+                                    break;
+                                case ActionType.game_end:
+                                    //本局游戏结束
+                                    EventBus.getDefault().post(new GameEndEvent(socketEventModule.getRoomModel()));
                                     break;
                             }
                         }

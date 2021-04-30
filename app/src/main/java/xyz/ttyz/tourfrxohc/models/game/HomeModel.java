@@ -11,14 +11,37 @@ public class HomeModel implements Serializable{
     boolean gameStart;//游戏是否开始，还是正在匹配中
     long roomId;//房间id
     List<UserModel> roomUserList;//房间人员
-    List<UserModel> waitKeyPutMemberList;//待投币人员
+    List<UserModel> waitKeyPutMemberList;//待投放钥匙人员
+    List<UserModel> pkMemberList;//pk人员
     UserModel speakingUserModel;//指定发言人员
     int turnRoundNumber;//轮次 1，2，3
+    List<Integer> keyStatusList;//钥匙状态
+    boolean saveWin;//守护者是否胜利
 
     /**
      * {@link ActionType}
      */
     int actionType;//动作类型
+
+    public boolean isSaveWin() {
+        return saveWin;
+    }
+
+    public List<UserModel> getPkMemberList() {
+        return pkMemberList;
+    }
+
+    public void setPkMemberList(List<UserModel> pkMemberList) {
+        this.pkMemberList = pkMemberList;
+    }
+
+    public List<Integer> getKeyStatusList() {
+        return keyStatusList;
+    }
+
+    public void setKeyStatusList(List<Integer> keyStatusList) {
+        this.keyStatusList = keyStatusList;
+    }
 
     public int getTurnRoundNumber() {
         return turnRoundNumber;

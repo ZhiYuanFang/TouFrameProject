@@ -23,15 +23,26 @@ public class HomeUtils {
                 SocketUtils.openMinaReceiver(ActivityManager.getInstance().getApplication(), new SocketUtils.SocketDelegate() {
                     @Override
                     public void connectSuccess() {
-                        if(data.getRoomUserList().size() == data.getLimitNumber()){
-                            //直接进入房间
-                            GameActivity.show(data.getRoomId());
-                        } else {
-                            WaitDialogFragment waitDialogFragment = WaitDialogFragment.getInstance(data.getRoomId());
-                            waitDialogFragment.refreshList(data.getRoomUserList());
-                            waitDialogFragment.show(ActivityManager.getInstance().getSupportFragmentManager());
+                        ActivityManager.getInstance().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                ProgressUtil.missCircleProgress();
+                                if(data.getRoomUserList().size() == data.getLimitNumber()){
+                                    //直接进入房间
+                                    GameActivity.show(data.getRoomId());
+                                } else {
+                                    WaitDialogFragment waitDialogFragment = WaitDialogFragment.getInstance(data.getRoomId());
+                                    waitDialogFragment.refreshList(data.getRoomUserList());
+                                    try {
+                                        waitDialogFragment.show(ActivityManager.getInstance().getSupportFragmentManager());
+                                    } catch (Exception e) {
+                                        System.out.println(e.getMessage());
+                                    }
 
-                        }
+                                }
+                            }
+                        });
+
                     }
 
                     @Override
