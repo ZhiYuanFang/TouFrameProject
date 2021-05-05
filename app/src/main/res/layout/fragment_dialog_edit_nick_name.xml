@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:binding="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="context"
+            type="xyz.ttyz.tourfrxohc.dialog.EditNickNameDialogFragment" />
+    </data>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_margin="15dp"
+        android:layout_height="250dp"
+        android:background="@drawable/bg_conor_dialog"
+        android:gravity="center">
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:minWidth="125dp"
+            android:maxLength="15"
+            android:layout_height="wrap_content"
+            android:hint="@string/nick_name_hint"
+            android:padding="8dp"
+            android:textSize="12sp"
+            android:textColor="@color/black"
+            binding:typeFace='@{"YouSheBiaoTiHei-2.ttf"}'
+            android:background="@drawable/bg_edit"
+            android:text="@={context.nickNameFiled}"/>
+
+        <Button
+            android:layout_width="60dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="15dp"
+            binding:typeFace='@{"YouSheBiaoTiHei-2.ttf"}'
+            android:text="确定"
+            binding:onClickCommand="@{context.clickConfirmChangeNickNameCommand}"
+            binding:activated="@{!context.nickNameFiled.empty}"
+            android:background="@drawable/bg_login"/>
+
+    </LinearLayout>
+</layout>

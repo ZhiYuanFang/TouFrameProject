@@ -5,19 +5,39 @@ import android.content.Intent;
 
 import androidx.fragment.app.FragmentTransaction;
 
+import com.luck.picture.lib.PictureSelector;
+import com.luck.picture.lib.config.PictureConfig;
+import com.luck.picture.lib.config.PictureMimeType;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import xyz.ttyz.mylibrary.method.ActivityManager;
 import xyz.ttyz.mylibrary.method.BaseModule;
+import xyz.ttyz.mylibrary.method.BaseTouSubscriber;
 import xyz.ttyz.mylibrary.method.ProgressUtil;
+import xyz.ttyz.mylibrary.method.RetrofitUtils;
 import xyz.ttyz.mylibrary.method.RxOHCUtils;
 import xyz.ttyz.mylibrary.socket.SocketUtils;
 import xyz.ttyz.toubasemvvm.adapter.OnClickAdapter;
 import xyz.ttyz.toubasemvvm.utils.DialogUtils;
+import xyz.ttyz.toubasemvvm.utils.NormalImageEngine;
+import xyz.ttyz.toubasemvvm.utils.ToastUtil;
+import xyz.ttyz.toubasemvvm.utils.TouUtils;
 import xyz.ttyz.toubasemvvm.vm.ToolBarViewModel;
 import xyz.ttyz.tourfrxohc.activity.BaseActivity;
 import xyz.ttyz.tourfrxohc.activity.GameActivity;
 import xyz.ttyz.tourfrxohc.databinding.ActivityMainBinding;
+import xyz.ttyz.tourfrxohc.dialog.EditNickNameDialogFragment;
+import xyz.ttyz.tourfrxohc.event.user.UserNickNameChangeEvent;
 import xyz.ttyz.tourfrxohc.fragment.MainFragment;
 import xyz.ttyz.tourfrxohc.http.BaseSubscriber;
+import xyz.ttyz.tourfrxohc.models.UserModel;
 import xyz.ttyz.tourfrxohc.models.game.HomeModel;
 import xyz.ttyz.tourfrxohc.utils.HomeUtils;
 import xyz.ttyz.tourfrxohc.utils.UserUtils;
@@ -31,6 +51,11 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         Intent intent = new Intent(ActivityManager.getInstance(), MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         ActivityManager.getInstance().startActivity(intent);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void nickNameChange (UserNickNameChangeEvent userNickNameChangeEvent){
+        mBinding.setUser(UserUtils.getCurUserModel());
     }
 
     @Override
@@ -82,6 +107,82 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
             HomeUtils.joinHome();
         }
     };
+
+    public OnClickAdapter.onClickCommand clickNameCommand = new OnClickAdapter.onClickCommand() {
+        @Override
+        public void click() {
+            new EditNickNameDialogFragment().show(getSupportFragmentManager());
+        }
+    };
+
+    public OnClickAdapter.onClickCommand clickAvatarCommand = new OnClickAdapter.onClickCommand() {
+        @Override
+        public void click() {
+            //点击头像， 触发选择1拍照 2相册选择图片 3头像框--衍生服务
+            //S1 直接进入相册选择
+            PictureSelector.create(MainActivity.this)
+                    .openGallery(PictureMimeType.ofImage())
+                    .imageEngine(new NormalImageEngine())
+//                    .theme(R.style.picture_custom_style)
+                    .maxSelectNum(1)
+                    .minSelectNum(1)
+                    .previewImage(true)
+                    .enablePreviewAudio(false)
+                    .isCamera(true)
+                    .enableCrop(true)
+                    .circleDimmedLayer(true)
+                    .showCropFrame(false)
+                    .showCropGrid(false)
+                    .compress(true)
+                    .withAspectRatio(1, 1)
+                    .minimumCompressSize(100)
+                    .freeStyleCropEnabled(true)
+                    .rotateEnabled(false)
+                    .forResult(PictureConfig.CHOOSE_REQUEST);
+        }
+    };
+
+    //region pic select
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (data != null && resultCode == RESULT_OK && requestCode == PictureConfig.CHOOSE_REQUEST) {
+            ArrayList<String> selectPics = new ArrayList<>();
+            TouUtils.filterResSelectResult(data, selectPics);
+            if(!selectPics.isEmpty()){
+                //选择图片
+                //图片地址
+                String filePath = selectPics.get(0);
+
+                new RxOHCUtils<String>(this).executeApi(BaseApplication.apiService.picUp(RetrofitUtils.getFileBody(this, "img", new File(filePath))), new BaseSubscriber<String>(this) {
+                    @Override
+                    public void success(String picUrl) {
+                        //图片上传成功
+                        //修改用户头像信息
+                        new RxOHCUtils<UserModel>(MainActivity.this).executeApi(BaseApplication.apiService.updateAvatar(UserUtils.getCurUserModel().getPhone(), UserUtils.getCurUserModel().getPassword(), picUrl), new BaseSubscriber<UserModel>(MainActivity.this) {
+                            @Override
+                            public void success(UserModel data) {
+                                ToastUtil.showToast("头像修改成功");
+                                UserUtils.getCurUserModel().setAvatar(data.getAvatar());
+                                mBinding.setUser(UserUtils.getCurUserModel());
+                            }
+
+                            @Override
+                            public String initCacheKey() {
+                                return null;
+                            }
+                        });
+                    }
+
+                    @Override
+                    public String initCacheKey() {
+                        return null;
+                    }
+                });
+            }
+        }
+    }
+    //endregion
 }
 
 

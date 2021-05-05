@@ -1,13 +1,19 @@
 package xyz.ttyz.tourfrxohc;
 
 
+import java.io.File;
 import java.util.Map;
 
 import io.reactivex.Observable;
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.http.Body;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 import xyz.ttyz.mylibrary.method.BaseModule;
@@ -20,11 +26,6 @@ import xyz.ttyz.tourfrxohc.models.game.HomeModel;
  */
 
 public interface ApiService {
-    @POST("user/register")
-    Observable<BaseModule> register(@Query("phone") String phone, @Query("password") String password, @Query("nickname") String nickname);
-
-    @POST("user/login")
-    Observable<BaseModule<UserModel>> login(@Query("phone") String phone, @Query("password") String password);
 
     @POST("game/join")
     Observable<BaseModule<HomeModel>> join(@Query("id") long id);
@@ -50,6 +51,39 @@ public interface ApiService {
 
     @POST("game/exit")
     Observable<BaseModule<Object>> exit(@Query("roomId") long roomId, @Query("userId") long userId);
+
+
+
+
+//    @POST("pic/up")
+//    @FormUrlEncoded
+//    Observable<BaseModule<String>> picUp(@Field("img") MultipartBody.Part part);
+    @POST("pic/up")
+    @Multipart
+    Observable<BaseModule<String>> picUp(@Part MultipartBody.Part  file);
+    //region user
+
+    @POST("user/register")
+    Observable<BaseModule> register(@Query("phone") String phone, @Query("password") String password, @Query("nickname") String nickname);
+
+    @POST("user/login")
+    Observable<BaseModule<UserModel>> login(@Query("phone") String phone, @Query("password") String password);
+
+    @POST("user/updateInfo")
+    Observable<BaseModule<UserModel>> updateNickName(@Query("phone") String phone, @Query("password") String password, @Query("nickname") String nickname);
+
+    @POST("user/updateInfo")
+    Observable<BaseModule<UserModel>> updateAvatar(@Query("phone") String phone, @Query("password") String password, @Query("avatar") String avatar);
+
+    //endregion
+
+
+
+
+
+
+
+
 //    @Headers("Content-type:text/x-plain-rsa-json")
 //    @POST("api/Account/phoneCode")
 //    Observable<BaseModule<PhoneCodeModule>> phoneCode(@Body RequestBody data);

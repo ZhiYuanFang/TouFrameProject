@@ -83,7 +83,7 @@ public class BaseApplication extends Application {
                 //捕获主线程异常，上传bugly
             }
         });
-        RfRxOHCUtil.initApiService(this, "http://192.168.1.201:8080/tou3_war_exploded/", "ws://192.168.1.201:8080/tou3_war_exploded/devMessage", getPackageName() + "-cache",
+        RfRxOHCUtil.initApiService(this, "http://192.168.0.104:8080/tou3_war_exploded/", "ws://192.168.0.104:8080/tou3_war_exploded/devMessage", getPackageName() + "-cache",
                 2 * 1024 * 1024, 30, BuildConfig.BUILD_TYPE.equals("release"), BuildConfig.DEBUG, BuildConfig.VERSION_NAME,
                 "huawei", "android", 1, new RfRxOHCUtil.TouRRCDelegate() {
                     @Override

@@ -32,6 +32,7 @@
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                binding:onClickCommand="@{context.clickAvatarCommand}"
                 android:background="@drawable/bg_start_game"
                 android:padding="3dp">
 
@@ -40,9 +41,33 @@
                     android:layout_height="65dp"
                     binding:isCircle="@{true}"
                     binding:imageUrl="@{user.avatar}"/>
-
             </RelativeLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:padding="8dp"
+                    binding:onClickCommand="@{context.clickNameCommand}"
+                    binding:text="@{user.nickname}"
+                    android:textColor="@color/black"
+                    binding:typeFace='@{"YouSheBiaoTiHei-2.ttf"}'
+                    tools:text="@string/app_name"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="level: 1"
+                    android:textSize="12sp"
+                    binding:typeFace='@{"YouSheBiaoTiHei-2.ttf"}'
+                    android:layout_marginStart="8dp"
+                    android:textColor="@color/black"
+                    android:text='@{"level: " + user.level}'/>
+            </LinearLayout>
 
         </LinearLayout>
         <RelativeLayout

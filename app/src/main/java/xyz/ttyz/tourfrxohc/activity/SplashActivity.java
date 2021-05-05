@@ -8,7 +8,7 @@ import xyz.ttyz.tourfrxohc.utils.UserUtils;
 public class SplashActivity extends BaseActivity<ActivitySplashBinding> {
     @Override
     protected int initLayoutId() {
-        return R.layout.activity_login;
+        return R.layout.activity_splash;
     }
 
     @Override
@@ -23,6 +23,7 @@ public class SplashActivity extends BaseActivity<ActivitySplashBinding> {
         } else {
             LoginActivity.show();
         }
+        finish();
     }
 
     @Override
