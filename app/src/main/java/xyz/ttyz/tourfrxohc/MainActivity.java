@@ -2,6 +2,7 @@ package xyz.ttyz.tourfrxohc;
 
 import android.Manifest;
 import android.content.Intent;
+import android.view.animation.AnimationUtils;
 
 import androidx.fragment.app.FragmentTransaction;
 
@@ -72,34 +73,43 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
                 Manifest.permission.READ_EXTERNAL_STORAGE};
     }
 
-    //标题栏
-    ToolBarViewModel toolBarViewModel;
     @Override
     protected void initData() {
         mBinding.setContext(this);
-        toolBarViewModel = new ToolBarViewModel.Builder()
-                .rightTxt("退出")
-                .rightClick(new OnClickAdapter.onClickCommand() {
-                    @Override
-                    public void click() {
-                        DialogUtils.showDialog("确定要退出登录吗", new DialogUtils.DialogButtonModule("确定", new DialogUtils.DialogClickDelegate() {
-                            @Override
-                            public void click(DialogUtils.DialogButtonModule dialogButtonModule) {
-                                UserUtils.logOut();
-                            }
-                        }));
-                    }
-                })
-                .build();
-        toolBarViewModel.backClick = null;
+        //请求接口，获取最新用户信息
+        new RxOHCUtils<UserModel>(this).executeApi(BaseApplication.apiService.info(UserUtils.getCurUserModel().getId()), new BaseSubscriber<UserModel>(this) {
+            @Override
+            public void success(UserModel data) {
 
-        mBinding.setUser(UserUtils.getCurUserModel());
+                mBinding.setUser(data);
+
+                mBinding.viewStart.startAnimation(AnimationUtils.loadAnimation(MainActivity.this, R.anim.shake_anim));
+            }
+
+            @Override
+            public String initCacheKey() {
+                return null;
+            }
+        }.notShowProgress());
+
     }
 
     @Override
     protected void initServer() {
 
     }
+
+    public OnClickAdapter.onClickCommand logOutCommand = new OnClickAdapter.onClickCommand() {
+        @Override
+        public void click() {
+            DialogUtils.showDialog("确定要退出登录吗", new DialogUtils.DialogButtonModule("确定", new DialogUtils.DialogClickDelegate() {
+                @Override
+                public void click(DialogUtils.DialogButtonModule dialogButtonModule) {
+                    UserUtils.logOut();
+                }
+            }));
+        }
+    };
 
     public OnClickAdapter.onClickCommand startGameCommand = new OnClickAdapter.onClickCommand() {
         @Override

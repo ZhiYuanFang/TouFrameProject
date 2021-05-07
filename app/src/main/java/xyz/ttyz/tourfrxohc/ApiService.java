@@ -52,22 +52,18 @@ public interface ApiService {
     @POST("game/exit")
     Observable<BaseModule<Object>> exit(@Query("roomId") long roomId, @Query("userId") long userId);
 
-
-
-
-//    @POST("pic/up")
-//    @FormUrlEncoded
-//    Observable<BaseModule<String>> picUp(@Field("img") MultipartBody.Part part);
     @POST("pic/up")
     @Multipart
     Observable<BaseModule<String>> picUp(@Part MultipartBody.Part  file);
     //region user
-
     @POST("user/register")
     Observable<BaseModule> register(@Query("phone") String phone, @Query("password") String password, @Query("nickname") String nickname);
 
     @POST("user/login")
     Observable<BaseModule<UserModel>> login(@Query("phone") String phone, @Query("password") String password);
+
+    @GET("user/info")
+    Observable<BaseModule<UserModel>> info(@Query("id") long id);
 
     @POST("user/updateInfo")
     Observable<BaseModule<UserModel>> updateNickName(@Query("phone") String phone, @Query("password") String password, @Query("nickname") String nickname);

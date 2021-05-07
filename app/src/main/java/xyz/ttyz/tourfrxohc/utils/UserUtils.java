@@ -23,9 +23,18 @@ public class UserUtils {
             ToastUtil.showToast("用户信息不能为空");
             return;
         }
-        SharedPreferenceUtil.setShareString(ActivityManager.getInstance(), "phone", new Gson().toJson(userModel));
-        SharedPreferenceUtil.setShareString(ActivityManager.getInstance(), "user", new Gson().toJson(userModel));
+        saveUser(userModel);
         MainActivity.show();
+    }
+
+    public static void saveUser(UserModel userModel){
+        if(userModel == null) {
+            ToastUtil.showToast("用户信息不能为空");
+            return;
+        }
+
+        SharedPreferenceUtil.setShareString(ActivityManager.getInstance(), "phone", userModel.getPhone());
+        SharedPreferenceUtil.setShareString(ActivityManager.getInstance(), "user", new Gson().toJson(userModel));
     }
 
     public static String getHisPhone(){

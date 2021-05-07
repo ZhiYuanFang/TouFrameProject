@@ -19,7 +19,7 @@
         android:divider="@drawable/divider_8"
         android:showDividers="beginning|middle|end"
         android:gravity="center_horizontal|bottom"
-        android:background="@color/bc">
+        android:background="@drawable/bg_conor_dialog">
 
         <TextView
             android:layout_width="wrap_content"

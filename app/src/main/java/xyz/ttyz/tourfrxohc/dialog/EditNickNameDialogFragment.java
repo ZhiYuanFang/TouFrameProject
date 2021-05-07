@@ -1,5 +1,6 @@
 package xyz.ttyz.tourfrxohc.dialog;
 
+import android.view.Gravity;
 import android.view.WindowManager;
 
 import androidx.databinding.ObservableField;
@@ -35,6 +36,11 @@ public class EditNickNameDialogFragment extends BaseDialogFragment<FragmentDialo
     @Override
     protected void initData() {
         nickNameFiled.set(UserUtils.getCurUserModel().getNickname());
+    }
+
+    @Override
+    protected int showGravity() {
+        return Gravity.CENTER;
     }
 
     @Override

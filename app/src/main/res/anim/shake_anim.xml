@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?><!--震动动画-->
+
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--<rotate android:pivotX="50%"-->
+    <!--android:pivotY="50%"-->
+    <!--android:fromDegrees="-30"-->
+    <!--android:toDegrees="30"-->
+    <!--android:duration="150"-->
+    <!--android:repeatCount="3"-->
+    <!--android:repeatMode="reverse"/>-->
+    <!--<rotate-->
+    <!--android:startOffset="450"-->
+    <!--android:pivotX="50%"-->
+    <!--android:pivotY="50%"-->
+    <!--android:fromDegrees="-30"-->
+    <!--android:toDegrees="30"-->
+    <!--android:duration="200"/>-->
+
+    <translate
+        android:duration="100"
+        android:fromXDelta="-10"
+        android:repeatCount="3"
+        android:repeatMode="reverse"
+        android:toXDelta="10" />
+    <translate
+        android:startOffset="10"
+        android:duration="30"
+        android:fromYDelta="-15"
+        android:repeatCount="3"
+        android:repeatMode="reverse"
+        android:toYDelta="15" />
+</set>

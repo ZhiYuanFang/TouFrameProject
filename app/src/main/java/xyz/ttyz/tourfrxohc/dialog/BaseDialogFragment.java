@@ -75,9 +75,13 @@ public abstract class BaseDialogFragment<T extends ViewDataBinding> extends Dial
             WindowManager.LayoutParams lp = window.getAttributes();
             lp.width = WindowManager.LayoutParams.MATCH_PARENT;
             limitHeight(lp);
-            lp.gravity = Gravity.CENTER;
+            lp.gravity = showGravity();
             window.setAttributes(lp);
         }
+    }
+
+    protected int showGravity(){
+        return  Gravity.BOTTOM;
     }
 
     protected void limitHeight(WindowManager.LayoutParams lp){
