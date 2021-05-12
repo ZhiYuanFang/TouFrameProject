@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:binding="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="context"
+            type="xyz.ttyz.tourfrxohc.viewholder.PopNumberItemViewHolder"/>
+        <variable
+            name="number"
+            type="Integer"/>
+    </data>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <View
+            binding:visible="@{context.posFiled != 0}"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/black" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:paddingTop="7dp"
+            android:paddingBottom="7dp"
+            android:gravity="center"
+            android:ellipsize="middle"
+            android:singleLine="true"
+            android:textSize="12sp"
+            android:textColor="#000"
+            tools:text="1"
+            android:background="?selectableItemBackground"
+            android:text='@{number + ""}'
+            android:onClick="@{()->context.delegate.selectItem(number)}"/>
+
+    </LinearLayout>
+</layout>

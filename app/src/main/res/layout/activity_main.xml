@@ -91,22 +91,45 @@
                 android:background="@drawable/bg_start_game"
                 android:text="开始游戏"
                 binding:onClickCommand="@{context.startGameCommand}" />
+
         </RelativeLayout>
-        <RelativeLayout
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="128dp">
+            android:layout_height="128dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_login"
+                android:layout_margin="25dp"
+                binding:activated="@{true}"
+                binding:onClickCommand="@{context.createHomeCommand}"
+                binding:typeFace='@{"YouSheBiaoTiHei-2.ttf"}'
+                android:text="创建房间"/>
+
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_login"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
+                android:padding="25dp"
+                android:layout_margin="25dp"
+                binding:activated="@{true}"
+                binding:onClickCommand="@{context.joinHomeCommand}"
+                binding:typeFace='@{"YouSheBiaoTiHei-2.ttf"}'
+                android:text="加入房间"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_login"
                 android:layout_margin="25dp"
                 binding:activated="@{true}"
                 binding:onClickCommand="@{context.logOutCommand}"
                 binding:typeFace='@{"YouSheBiaoTiHei-2.ttf"}'
                 android:text="切换账号"/>
-        </RelativeLayout>
+        </LinearLayout>
     </LinearLayout>
 
 </layout>

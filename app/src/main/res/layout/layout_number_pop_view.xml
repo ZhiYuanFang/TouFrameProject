@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:binding="http://schemas.android.com/apk/res-auto">
+
+
+    <data>
+        <variable
+            name="context"
+            type="xyz.ttyz.tourfrxohc.dialog.NumberSelectView"/>
+        <variable
+            name="adapter"
+            type="xyz.ttyz.toubasemvvm.adapter.utils.BaseEmptyAdapterParent"/>
+    </data>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        tools:background="@color/black"
+        android:layout_height="wrap_content">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <View
+                android:layout_width="6dp"
+                android:layout_height="6dp"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/bg_triangle_gray" />
+        </RelativeLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            binding:adapter="@{adapter}"
+            android:background="@drawable/bg_conor_gray_3"
+            tools:listitem="@layout/layout_number_pop_item"/>
+
+    </LinearLayout>
+</layout>

@@ -15,7 +15,7 @@ import xyz.ttyz.tourfrxohc.models.game.HomeModel;
 public class HomeUtils {
     public static void joinHome(){
         ProgressUtil.showCircleProgress(xyz.ttyz.mylibrary.method.ActivityManager.getInstance(), "正在匹配中...");
-        new RxOHCUtils<HomeModel>(ActivityManager.getInstance()).executeApi(BaseApplication.apiService.join(UserUtils.getCurUserModel().getId()), new BaseSubscriber<HomeModel>(ActivityManager.getInstance()) {
+        new RxOHCUtils<HomeModel>(ActivityManager.getInstance()).executeApi(BaseApplication.apiService.startRandomGame(UserUtils.getCurUserModel().getId()), new BaseSubscriber<HomeModel>(ActivityManager.getInstance()) {
             @Override
             public void success(HomeModel data) {
                 SocketUtils.closeMinaReceiver(ActivityManager.getInstance().getApplication());
