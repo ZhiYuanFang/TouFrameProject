@@ -111,24 +111,6 @@ public class GameActivity extends BaseActivity<ActivityGameBinding> {
         mBinding.viewWait.setVisibility(View.GONE);
         //显示角色给用户 提供确认
         showRoleType(roleTypeConfirm.getSelfUserModel().getRoleType());
-        //自动3秒后，关闭角色确认画面，并告知后台 已经确认角色
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                missRoleType();
-                new RxOHCUtils<Object>(GameActivity.this).executeApi(BaseApplication.apiService.confirmRoleType(roomId, UserUtils.getCurUserModel().getId()), new BaseTouSubscriber<Object>(GameActivity.this) {
-                    @Override
-                    public void success(Object data) {
-
-                    }
-
-                    @Override
-                    public String initCacheKey() {
-                        return null;
-                    }
-                });
-            }
-        }, 3000);
     }
 
 
@@ -284,7 +266,7 @@ public class GameActivity extends BaseActivity<ActivityGameBinding> {
         }
 
 
-        new RxOHCUtils<Object>(GameActivity.this).executeApi(BaseApplication.apiService.voteEnd(roomId, UserUtils.getCurUserModel().getId(), voteUser != null ? voteUser.getId() : 0), new BaseSubscriber<Object>(this) {
+        new RxOHCUtils<Object>(GameActivity.this).executeApi(BaseApplication.apiService.vote(roomId, UserUtils.getCurUserModel().getId(), voteUser != null ? voteUser.getId() : 0), new BaseSubscriber<Object>(this) {
             @Override
             public void success(Object data) {
                 //成功投票， UI变化
@@ -438,8 +420,6 @@ public class GameActivity extends BaseActivity<ActivityGameBinding> {
                 userModelList = data.getRoomUserList();
                 //获取到了本房间的所有用户信息，绘制页面
                 bindUser();
-
-                confirmStartGame();
             }
 
             @Override
@@ -566,17 +546,7 @@ public class GameActivity extends BaseActivity<ActivityGameBinding> {
 
     //region server
     private void confirmStartGame() {
-        new RxOHCUtils<Object>(this).executeApi(BaseApplication.apiService.confirmStartGame(roomId, UserUtils.getCurUserModel().getId()), new BaseSubscriber<Object>(this) {
-            @Override
-            public void success(Object data) {
 
-            }
-
-            @Override
-            public String initCacheKey() {
-                return null;
-            }
-        });
     }
     //endregion
 

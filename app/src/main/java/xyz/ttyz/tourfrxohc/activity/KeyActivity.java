@@ -100,7 +100,7 @@ public class KeyActivity extends BaseTouActivity<ActivityKeyBinding> {
     private void confirmPut(final View view, int number, boolean put){
         intervableDisposable.dispose();
         TextView textView = (TextView) view;
-        new RxOHCUtils<UserModel>(this).executeApi(BaseApplication.apiService.confirmPutKey(roomId, UserUtils.getCurUserModel().getId(), number, put), new BaseSubscriber<UserModel>(this) {
+        new RxOHCUtils<UserModel>(this).executeApi(BaseApplication.apiService.confirmPutKey(roomId, UserUtils.getCurUserModel().getId(), number), new BaseSubscriber<UserModel>(this) {
             @Override
             public void success(UserModel data) {
                 //打开门，看里面的内容，如果是投放，动画消除或生成

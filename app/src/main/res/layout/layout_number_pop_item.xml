@@ -16,13 +16,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/bg_login"
+        binding:activated="@{true}"
         android:orientation="vertical">
-
-        <View
-            binding:visible="@{context.posFiled != 0}"
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="@color/black" />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

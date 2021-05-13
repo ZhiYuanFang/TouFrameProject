@@ -73,7 +73,7 @@ public class EndChatActivity extends BaseTouActivity<ActivityEndChatBinding> {
     public OnClickAdapter.onClickCommand exitGameCommand = new OnClickAdapter.onClickCommand() {
         @Override
         public void click() {
-            new RxOHCUtils<Object>(EndChatActivity.this).executeApi(BaseApplication.apiService.exit(roomId, UserUtils.getCurUserModel().getId()), new BaseSubscriber<Object>(EndChatActivity.this) {
+            new RxOHCUtils<Object>(EndChatActivity.this).executeApi(BaseApplication.apiService.leave(roomId, UserUtils.getCurUserModel().getId()), new BaseSubscriber<Object>(EndChatActivity.this) {
                 @Override
                 public void success(Object data) {
                     //退出房间了, 回到主页

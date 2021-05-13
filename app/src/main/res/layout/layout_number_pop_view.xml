@@ -15,7 +15,7 @@
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         tools:background="@color/black"
         android:layout_height="wrap_content">
 
@@ -32,10 +32,9 @@
                 android:background="@drawable/bg_triangle_gray" />
         </RelativeLayout>
         <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="80dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             binding:adapter="@{adapter}"
-            android:background="@drawable/bg_conor_gray_3"
             tools:listitem="@layout/layout_number_pop_item"/>
 
     </LinearLayout>
