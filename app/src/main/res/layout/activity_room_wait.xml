@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:binding="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -8,7 +9,32 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/bc"
+        android:padding="15dp">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="退出"
+            android:background="@drawable/bg_login"
+            binding:activated="@{true}"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="房间号:4568"
+                android:textSize="16sp"
+                android:padding="15dp"
+                binding:typeFace='@{"YouSheBiaoTiHei-2.ttf"}'
+                android:textColor="@color/black"/>
+        </LinearLayout>
+
 
     </LinearLayout>
 </layout>
