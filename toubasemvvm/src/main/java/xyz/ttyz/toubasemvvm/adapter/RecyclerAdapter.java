@@ -33,10 +33,10 @@ public class RecyclerAdapter {
         }
         if (layoutManager instanceof GridLayoutManager) {
             //默认给每一个列表添加动画展示效果
-            GridLayoutAnimationController gridLayoutAnimationController = new GridLayoutAnimationController(AnimationUtils.loadAnimation(recyclerView.getContext(), R.anim.item_anim));
-            gridLayoutAnimationController.setOrder(LayoutAnimationController.ORDER_REVERSE);
-            gridLayoutAnimationController.setDelay(0.15f);
-            recyclerView.setLayoutAnimation(gridLayoutAnimationController);
+//            GridLayoutAnimationController gridLayoutAnimationController = new GridLayoutAnimationController(AnimationUtils.loadAnimation(recyclerView.getContext(), R.anim.item_anim));
+//            gridLayoutAnimationController.setOrder(LayoutAnimationController.ORDER_REVERSE);
+//            gridLayoutAnimationController.setDelay(0.15f);
+//            recyclerView.setLayoutAnimation(gridLayoutAnimationController);
         } else {
             //默认给每一个列表添加动画展示效果
             LayoutAnimationController layoutAnimationController = new LayoutAnimationController(AnimationUtils.loadAnimation(recyclerView.getContext(), R.anim.item_anim));

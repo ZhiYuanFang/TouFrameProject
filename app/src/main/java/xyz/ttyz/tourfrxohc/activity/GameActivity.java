@@ -53,6 +53,7 @@ import xyz.ttyz.tourfrxohc.http.BaseSubscriber;
 import xyz.ttyz.tourfrxohc.models.RoleType;
 import xyz.ttyz.tourfrxohc.models.UserModel;
 import xyz.ttyz.tourfrxohc.models.game.HomeModel;
+import xyz.ttyz.tourfrxohc.utils.DefaultUtils;
 import xyz.ttyz.tourfrxohc.utils.UserUtils;
 
 /**
@@ -63,7 +64,6 @@ public class GameActivity extends BaseActivity<ActivityGameBinding> {
     private static final int VoteLongTime = 10;//秒
     private static final String TAG = "GameActivity";
     public static boolean confirmLeave = false;
-    private long roomId;
     List<UserModel> userModelList;//9个人的用户信息
     public ObservableInt timeCountDownFiled = new ObservableInt(0);
     public ObservableBoolean isVoteRoundFiled = new ObservableBoolean(false);
@@ -73,28 +73,21 @@ public class GameActivity extends BaseActivity<ActivityGameBinding> {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setSwipeBackEnable(false);
-        WaitDialogFragment.getInstance(roomId).dismiss();
+        WaitDialogFragment.getInstance(null).dismiss();
     }
 
     /**
      * 凑齐9个人才能进入该页面
      *
-     * @param roomId 房间id
      */
-    public static void show(long roomId) {
-        if (StringUtil.safeString(roomId).isEmpty()) {
+    public static void show() {
+        if (StringUtil.safeString(DefaultUtils.roomId).isEmpty()) {
             return;
         }
         confirmLeave = false;
         Intent intent = new Intent(ActivityManager.getInstance(), GameActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        intent.putExtra("roomId", roomId);
         ActivityManager.getInstance().startActivity(intent);
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void comingVoice(byte[] bytes) {
-        playAudio(bytes);//仅仅负责播放音频
     }
 
     //人员离线 返回
@@ -119,6 +112,7 @@ public class GameActivity extends BaseActivity<ActivityGameBinding> {
         //判断我需不需要进入钥匙房间
         showWaitKeyRoom();
         if (goKeyRoomEvent.getGoKeyUserList().contains(UserUtils.getCurUserModel())) {
+
             KeyActivity.show(goKeyRoomEvent.getRoomId());
         } else {
             //我不需要进入
@@ -231,7 +225,7 @@ public class GameActivity extends BaseActivity<ActivityGameBinding> {
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void gameEnd(GameEndEvent gameEndEvent) {
-        EndChatActivity.show(gameEndEvent.getHomeModel().getRoomId());
+        EndChatActivity.show();
         finish();
     }
 
@@ -266,7 +260,7 @@ public class GameActivity extends BaseActivity<ActivityGameBinding> {
         }
 
 
-        new RxOHCUtils<Object>(GameActivity.this).executeApi(BaseApplication.apiService.vote(roomId, UserUtils.getCurUserModel().getId(), voteUser != null ? voteUser.getId() : 0), new BaseSubscriber<Object>(this) {
+        new RxOHCUtils<Object>(GameActivity.this).executeApi(BaseApplication.apiService.vote(DefaultUtils.roomId, UserUtils.getCurUserModel().getId(), voteUser != null ? voteUser.getId() : 0), new BaseSubscriber<Object>(this) {
             @Override
             public void success(Object data) {
                 //成功投票， UI变化
@@ -315,6 +309,11 @@ public class GameActivity extends BaseActivity<ActivityGameBinding> {
     //endregion
 
     //region 播放音频
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void comingVoice(byte[] bytes) {
+        playAudio(bytes);//仅仅负责播放音频
+    }
+
     AudioTrack audioTrack;
     final int playBuffsize = AudioTrack.getMinBufferSize(44100, AudioFormat.CHANNEL_OUT_MONO,
             AudioFormat.ENCODING_PCM_16BIT);
@@ -344,6 +343,94 @@ public class GameActivity extends BaseActivity<ActivityGameBinding> {
             audioTrack.stop();
             audioTrack.release();
             audioTrack = null;
+        }
+    }
+    //endregion
+
+    //region 音频
+    public ObservableBoolean isSpeakingFiled = new ObservableBoolean(false);
+    //指定音频源 这个和MediaRecorder是相同的 MediaRecorder.AudioSource.MIC指的是麦克风
+    private static final int mAudioSource = MediaRecorder.AudioSource.MIC;
+    //指定采样率 （MediaRecoder 的采样率通常是8000Hz AAC的通常是44100Hz。 设置采样率为44100，目前为常用的采样率，官方文档表示这个值可以兼容所有的设置）
+    private static final int mSampleRateInHz = 44100;
+    //指定捕获音频的声道数目。在AudioFormat类中指定用于此的常量
+    private static final int mChannelConfig = AudioFormat.CHANNEL_IN_MONO; //单声道CHANNEL_IN_MONO
+    //指定音频量化位数 ,在AudioFormaat类中指定了以下各种可能的常量。通常我们选择ENCODING_PCM_16BIT和ENCODING_PCM_8BIT PCM代表的是脉冲编码调制，它实际上是原始音频样本。
+    //因此可以设置每个样本的分辨率为16位或者8位，16位将占用更多的空间和处理能力,表示的音频也更加接近真实。
+    private static final int mAudioFormat = AudioFormat.ENCODING_PCM_16BIT;
+    //指定缓冲区大小。调用AudioRecord类的getMinBufferSize方法可以获得。
+    private final int mBufferSizeInBytes = AudioRecord.getMinBufferSize(mSampleRateInHz, mChannelConfig, mAudioFormat);//计算最小缓冲区
+    AudioRecord audioRecord;
+
+
+    protected void startSpeak() {
+        if (audioRecord == null) {
+            //创建AudioRecord。AudioRecord类实际上不会保存捕获的音频，因此需要手动创建文件并保存下载。
+            audioRecord = new AudioRecord(mAudioSource, mSampleRateInHz, mChannelConfig,
+                    mAudioFormat, mBufferSizeInBytes);//创建AudioRecorder对象
+        }
+        audioRecord.startRecording();
+        isSpeakingFiled.set(true);
+        startCountDown();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (isSpeakingFiled.get()) {
+                    // 上传音频流
+                    byte[] recordData = new byte[mBufferSizeInBytes];
+                    audioRecord.read(recordData, 0, mBufferSizeInBytes);
+
+
+//                    SocketUtils.sendMessage(new Gson().toJson(socketEventModule));//发送告知，谁在说话
+                    SocketUtils.sendMessage(recordData);//发送语音
+                }
+            }
+        }).start();
+    }
+
+    protected void endSpeak() {
+        if (audioRecord != null) {
+            audioRecord.stop();
+            audioRecord.release();
+            audioRecord = null;
+        }
+        isSpeakingFiled.set(false);
+        stopCountDown();
+        //告知后台， 我发言完毕，后台自行切换人员并做出发言通知和轮次判断
+        new RxOHCUtils<Object>(this).executeApi(BaseApplication.apiService.speakEnd(DefaultUtils.roomId, UserUtils.getCurUserModel().getId()), new BaseSubscriber<Object>(this) {
+            @Override
+            public void success(Object data) {
+
+            }
+
+            @Override
+            public String initCacheKey() {
+                return null;
+            }
+        });
+    }
+
+
+    Disposable countDownDisposable;
+
+    private void startCountDown() {
+        timeCountDownFiled.set(SpeakLongTime);
+        countDownDisposable = Observable.interval(0, 1, TimeUnit.SECONDS, AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Long>() {
+                    @Override
+                    public void accept(Long aLong) throws Exception {
+                        timeCountDownFiled.set(timeCountDownFiled.get() - 1);
+                        if (timeCountDownFiled.get() < 0) {
+                            endSpeak();
+                        }
+                    }
+                });
+    }
+
+    private void stopCountDown() {
+        if (countDownDisposable != null && !countDownDisposable.isDisposed()) {
+            countDownDisposable.dispose();
+            countDownDisposable = null;
         }
     }
     //endregion
@@ -402,8 +489,7 @@ public class GameActivity extends BaseActivity<ActivityGameBinding> {
     @Override
     protected void initData() {
         mBinding.setContext(this);
-        roomId = getIntent().getLongExtra("roomId", 0);
-        if (StringUtil.safeString(roomId).isEmpty()) {
+        if (StringUtil.safeString(DefaultUtils.roomId).isEmpty()) {
             ToastUtil.showToast("房间不存在");
             GameActivity.this.finish();
         }
@@ -414,7 +500,7 @@ public class GameActivity extends BaseActivity<ActivityGameBinding> {
     protected void initServer() {
 
         //根据roomId 请求接口，获取当前房间人员
-        new RxOHCUtils<HomeModel>(this).executeApi(BaseApplication.apiService.roomInfo(roomId), new BaseSubscriber<HomeModel>(this) {
+        new RxOHCUtils<HomeModel>(this).executeApi(BaseApplication.apiService.roomInfo(DefaultUtils.roomId), new BaseSubscriber<HomeModel>(this) {
             @Override
             public void success(HomeModel data) {
                 userModelList = data.getRoomUserList();
@@ -443,93 +529,6 @@ public class GameActivity extends BaseActivity<ActivityGameBinding> {
     }
 
 
-    //region 音频
-    public ObservableBoolean isSpeakingFiled = new ObservableBoolean(false);
-    //指定音频源 这个和MediaRecorder是相同的 MediaRecorder.AudioSource.MIC指的是麦克风
-    private static final int mAudioSource = MediaRecorder.AudioSource.MIC;
-    //指定采样率 （MediaRecoder 的采样率通常是8000Hz AAC的通常是44100Hz。 设置采样率为44100，目前为常用的采样率，官方文档表示这个值可以兼容所有的设置）
-    private static final int mSampleRateInHz = 44100;
-    //指定捕获音频的声道数目。在AudioFormat类中指定用于此的常量
-    private static final int mChannelConfig = AudioFormat.CHANNEL_IN_MONO; //单声道CHANNEL_IN_MONO
-    //指定音频量化位数 ,在AudioFormaat类中指定了以下各种可能的常量。通常我们选择ENCODING_PCM_16BIT和ENCODING_PCM_8BIT PCM代表的是脉冲编码调制，它实际上是原始音频样本。
-    //因此可以设置每个样本的分辨率为16位或者8位，16位将占用更多的空间和处理能力,表示的音频也更加接近真实。
-    private static final int mAudioFormat = AudioFormat.ENCODING_PCM_16BIT;
-    //指定缓冲区大小。调用AudioRecord类的getMinBufferSize方法可以获得。
-    private final int mBufferSizeInBytes = AudioRecord.getMinBufferSize(mSampleRateInHz, mChannelConfig, mAudioFormat);//计算最小缓冲区
-    AudioRecord audioRecord;
-
-
-    protected void startSpeak() {
-        if (audioRecord == null) {
-            //创建AudioRecord。AudioRecord类实际上不会保存捕获的音频，因此需要手动创建文件并保存下载。
-            audioRecord = new AudioRecord(mAudioSource, mSampleRateInHz, mChannelConfig,
-                    mAudioFormat, mBufferSizeInBytes);//创建AudioRecorder对象
-        }
-        audioRecord.startRecording();
-        isSpeakingFiled.set(true);
-        startCountDown();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (isSpeakingFiled.get()) {
-                    // 上传音频流
-                    byte[] recordData = new byte[mBufferSizeInBytes];
-                    audioRecord.read(recordData, 0, mBufferSizeInBytes);
-
-
-//                    SocketUtils.sendMessage(new Gson().toJson(socketEventModule));//发送告知，谁在说话
-                    SocketUtils.sendMessage(recordData);//发送语音
-                }
-            }
-        }).start();
-    }
-
-    protected void endSpeak() {
-        if (audioRecord != null) {
-            audioRecord.stop();
-            audioRecord.release();
-            audioRecord = null;
-        }
-        isSpeakingFiled.set(false);
-        stopCountDown();
-        //告知后台， 我发言完毕，后台自行切换人员并做出发言通知和轮次判断
-        new RxOHCUtils<Object>(this).executeApi(BaseApplication.apiService.speakEnd(roomId, UserUtils.getCurUserModel().getId()), new BaseSubscriber<Object>(this) {
-            @Override
-            public void success(Object data) {
-
-            }
-
-            @Override
-            public String initCacheKey() {
-                return null;
-            }
-        });
-    }
-
-
-    Disposable countDownDisposable;
-
-    private void startCountDown() {
-        timeCountDownFiled.set(SpeakLongTime);
-        countDownDisposable = Observable.interval(0, 1, TimeUnit.SECONDS, AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<Long>() {
-                    @Override
-                    public void accept(Long aLong) throws Exception {
-                        timeCountDownFiled.set(timeCountDownFiled.get() - 1);
-                        if (timeCountDownFiled.get() < 0) {
-                            endSpeak();
-                        }
-                    }
-                });
-    }
-
-    private void stopCountDown() {
-        if (countDownDisposable != null && !countDownDisposable.isDisposed()) {
-            countDownDisposable.dispose();
-            countDownDisposable = null;
-        }
-    }
-    //endregion
 
     @Override
     protected void onDestroy() {
@@ -557,7 +556,7 @@ public class GameActivity extends BaseActivity<ActivityGameBinding> {
             DialogUtils.showDialog("确定要退出游戏嘛？", new DialogUtils.DialogButtonModule("确定", new DialogUtils.DialogClickDelegate() {
                 @Override
                 public void click(DialogUtils.DialogButtonModule dialogButtonModule) {
-                    new RxOHCUtils<Object>(GameActivity.this).executeApi(BaseApplication.apiService.leave(roomId, UserUtils.getCurUserModel().getId()), new BaseSubscriber<Object>(GameActivity.this) {
+                    new RxOHCUtils<Object>(GameActivity.this).executeApi(BaseApplication.apiService.leave(DefaultUtils.roomId, UserUtils.getCurUserModel().getId()), new BaseSubscriber<Object>(GameActivity.this) {
                         @Override
                         public void success(Object data) {
                             GameActivity.this.finish();

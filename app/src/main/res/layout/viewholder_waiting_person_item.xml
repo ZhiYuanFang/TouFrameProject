@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:binding="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="user"
+            type="xyz.ttyz.tourfrxohc.models.UserModel" />
+        <variable
+            name="context"
+            type="xyz.ttyz.tourfrxohc.viewholder.ViewHolderWaitingPersonItem" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="88dp"
+        android:layout_height="88dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/bg_start_game">
+
+        <ImageView
+            android:layout_margin="3dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            binding:isCircle="@{true}"
+            binding:imageUrl="@{user.avatar}"/>
+
+        <TextView
+            binding:visible="@{user.id == 0}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            binding:typeFace='@{"YouSheBiaoTiHei-2.ttf"}'
+            android:text="无人"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_centerInParent="true"/>
+
+    </RelativeLayout>
+</layout>

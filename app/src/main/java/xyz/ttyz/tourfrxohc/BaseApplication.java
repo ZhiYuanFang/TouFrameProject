@@ -21,9 +21,11 @@ import retrofit2.Retrofit;
 import xyz.ttyz.mylibrary.RfRxOHCUtil;
 import xyz.ttyz.mylibrary.method.ProgressUtil;
 import xyz.ttyz.mylibrary.socket.LogUtils;
+import xyz.ttyz.mylibrary.socket.SocketUtils;
 import xyz.ttyz.tou_example.init.ApplicationUtils;
 import xyz.ttyz.tou_example.init.TouDelegate;
 import xyz.ttyz.toubasemvvm.utils.DialogUtils;
+import xyz.ttyz.toubasemvvm.utils.ToastUtil;
 import xyz.ttyz.tourfrxohc.activity.GameActivity;
 import xyz.ttyz.tourfrxohc.activity.LoginActivity;
 import xyz.ttyz.tourfrxohc.dialog.WaitDialogFragment;
@@ -83,7 +85,7 @@ public class BaseApplication extends Application {
                 //捕获主线程异常，上传bugly
             }
         });
-        RfRxOHCUtil.initApiService(this, "http://192.168.1.198:8080/tou3_war_exploded/", "ws://192.168.1.198:8080/tou3_war_exploded/devMessage", getPackageName() + "-cache",
+        RfRxOHCUtil.initApiService(this, "http://192.168.0.112:8080/tou3_war_exploded/", "ws://192.168.0.112:8080/tou3_war_exploded/devMessage", getPackageName() + "-cache",
                 2 * 1024 * 1024, 30, BuildConfig.BUILD_TYPE.equals("release"), BuildConfig.DEBUG, BuildConfig.VERSION_NAME,
                 "huawei", "android", 1, new RfRxOHCUtil.TouRRCDelegate() {
                     @Override
@@ -126,13 +128,30 @@ public class BaseApplication extends Application {
 
                     @Override
                     public void socketConnectTimeOut() {
-                        //长连接断开
-                        DialogUtils.showSingleDialog("连接超时", "网络连接超时，无法正常使用", new DialogUtils.DialogButtonModule("重新连接", new DialogUtils.DialogClickDelegate() {
-                            @Override
-                            public void click(DialogUtils.DialogButtonModule dialogButtonModule) {
-                                HomeUtils.joinHome();
-                            }
-                        }));
+//                        System.out.println("长连接断开，弹出对话框");
+//                        //长连接断开
+//                        DialogUtils.showSingleDialog("连接超时", "网络连接超时，无法正常使用", new DialogUtils.DialogButtonModule("重新连接", new DialogUtils.DialogClickDelegate() {
+//                            @Override
+//                            public void click(DialogUtils.DialogButtonModule dialogButtonModule) {
+//                                SocketUtils.openMinaReceiver(BaseApplication.this, new SocketUtils.SocketDelegate() {
+//                                    @Override
+//                                    public void connectSuccess() {
+//
+//                                    }
+//
+//                                    @Override
+//                                    public long roomId() {
+//                                        return xyz.ttyz.tourfrxohc.utils.DefaultUtils.roomId;
+//                                    }
+//
+//                                    @Override
+//                                    public long userId() {
+//                                        return UserUtils.getCurUserModel().getId();
+//                                    }
+//                                });
+//                            }
+//                        }));
+                        ToastUtil.showToast("网络连接超时，无法正常使用");
                     }
 
                     @Override
@@ -150,12 +169,17 @@ public class BaseApplication extends Application {
                                 case ActionType.memberComeOut:
                                 case ActionType.memberComeIn:
                                     //考虑到匹配界面
-                                    WaitDialogFragment waitDialogFragment = WaitDialogFragment.getInstance(socketEventModule.getRoomId());
+                                    WaitDialogFragment waitDialogFragment = WaitDialogFragment.getInstance(new WaitDialogFragment.WaitDialogDelegate() {
+                                        @Override
+                                        public void cancelSuccess() {
+                                            HomeUtils.outHome();
+                                        }
+                                    });
                                     waitDialogFragment.refreshList(homeModel.getRoomUserList());
 
                                     //如果人数够了， 进入游戏界面
                                     if (homeModel.getRoomUserList().size() == homeModel.getLimitNumber()) {
-                                        GameActivity.show(homeModel.getRoomId());
+                                        GameActivity.show();
                                     }
 
                                     //考虑到游戏环节中用户离开、进入

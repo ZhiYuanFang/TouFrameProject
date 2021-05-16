@@ -41,6 +41,7 @@ public class SocketUtils {
      * 开启长连接
      */
     public static void openMinaReceiver(final Application application,@NonNull final SocketDelegate socketDelegate) {
+        closeMinaReceiver(application);
         if (null == socketBroadCastReceiver) {
             socketBroadCastReceiver = new SocketBroadCastReceiver();
         }

@@ -46,7 +46,7 @@ public interface ApiService {
      * 创建房间
      * */
     @POST("game/createRoom")
-    Observable<BaseModule<HomeModel>> createRoom(@Query("roomNumber") int roomNumber, @Query("roomId") long roomId);
+    Observable<BaseModule<HomeModel>> createRoom(@Query("roomNumber") int roomNumber, @Query("userId") long userId);
 
     /**
      * 加入创建的房间

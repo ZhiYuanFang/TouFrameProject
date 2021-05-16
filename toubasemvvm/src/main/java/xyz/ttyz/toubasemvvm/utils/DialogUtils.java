@@ -238,7 +238,7 @@ public class DialogUtils {
             this.okModule = okModule;
             View view = LayoutInflater.from(context).inflate(R.layout.layout_single_dialog, null);
             setContentView(view);
-            setCanceledOnTouchOutside(false);
+            setCanceledOnTouchOutside(true);
             tv_confirm = view.findViewById(R.id.tv_confirm);
             tv_title = view.findViewById(R.id.tv_title);
             tv_message = view.findViewById(R.id.tv_message);

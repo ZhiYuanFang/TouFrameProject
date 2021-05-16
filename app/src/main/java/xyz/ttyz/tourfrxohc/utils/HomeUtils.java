@@ -18,7 +18,7 @@ public class HomeUtils {
         new RxOHCUtils<HomeModel>(ActivityManager.getInstance()).executeApi(BaseApplication.apiService.startRandomGame(4, UserUtils.getCurUserModel().getId()), new BaseSubscriber<HomeModel>(ActivityManager.getInstance()) {
             @Override
             public void success(HomeModel data) {
-                SocketUtils.closeMinaReceiver(ActivityManager.getInstance().getApplication());
+                HomeUtils.inHome(data);
                 //为了让socket附带房间信息
                 SocketUtils.openMinaReceiver(ActivityManager.getInstance().getApplication(), new SocketUtils.SocketDelegate() {
                     @Override
@@ -29,9 +29,14 @@ public class HomeUtils {
                                 ProgressUtil.missCircleProgress();
                                 if(data.getRoomUserList().size() == data.getLimitNumber()){
                                     //直接进入房间
-                                    GameActivity.show(data.getRoomId());
+                                    GameActivity.show();
                                 } else {
-                                    WaitDialogFragment waitDialogFragment = WaitDialogFragment.getInstance(data.getRoomId());
+                                    WaitDialogFragment waitDialogFragment = WaitDialogFragment.getInstance(new WaitDialogFragment.WaitDialogDelegate() {
+                                        @Override
+                                        public void cancelSuccess() {
+                                            HomeUtils.outHome();
+                                        }
+                                    });
                                     waitDialogFragment.refreshList(data.getRoomUserList());
                                     try {
                                         waitDialogFragment.show(ActivityManager.getInstance().getSupportFragmentManager());
@@ -47,7 +52,7 @@ public class HomeUtils {
 
                     @Override
                     public long roomId() {
-                        return data.getRoomId();
+                        return DefaultUtils.roomId;
                     }
 
                     @Override
@@ -73,5 +78,12 @@ public class HomeUtils {
                 ProgressUtil.missCircleProgress();
             }
         }.notShowProgress());
+    }
+    
+    public static void inHome(HomeModel homeModel){
+        DefaultUtils.roomId = homeModel.getRoomId();
+    }
+    public static void outHome(){
+        DefaultUtils.roomId = 0;
     }
 }

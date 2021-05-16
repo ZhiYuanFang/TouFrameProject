@@ -74,7 +74,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:theme="@style/registerEditType"
-                    android:hint="@string/pwd_hint"
+                    android:hint="@string/nick_name_hint"
                     binding:typeFace='@{"YouSheBiaoTiHei-2.ttf"}'
                     android:background="@drawable/bg_edit"
                     android:text="@={context.nickNameFiled}" />
@@ -96,7 +96,7 @@
                     android:layout_height="wrap_content"
                     android:theme="@style/registerEditType"
                     binding:typeFace='@{"YouSheBiaoTiHei-2.ttf"}'
-                    android:hint="@string/nick_name_hint"
+                    android:hint="@string/pwd_hint"
                     android:inputType="textPassword"
                     android:background="@drawable/bg_edit"
                     android:text="@={context.pwdFiled}" />

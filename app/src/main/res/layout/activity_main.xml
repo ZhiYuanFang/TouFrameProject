@@ -99,36 +99,54 @@
             android:layout_height="128dp"
             android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_login"
-                android:layout_margin="25dp"
-                binding:activated="@{true}"
-                binding:onClickCommand="@{context.createHomeCommand}"
-                binding:typeFace='@{"YouSheBiaoTiHei-2.ttf"}'
-                android:text="创建房间"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_login"
-                android:padding="25dp"
-                android:layout_margin="25dp"
-                binding:activated="@{true}"
-                binding:onClickCommand="@{context.joinHomeCommand}"
-                binding:typeFace='@{"YouSheBiaoTiHei-2.ttf"}'
-                android:text="加入房间"/>
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_login"
-                android:layout_margin="25dp"
-                binding:activated="@{true}"
-                binding:onClickCommand="@{context.logOutCommand}"
-                binding:typeFace='@{"YouSheBiaoTiHei-2.ttf"}'
-                android:text="切换账号"/>
+                <Button
+                    android:id="@+id/btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_login"
+                    android:layout_centerInParent="true"
+                    binding:activated="@{true}"
+                    binding:onClickCommand="@{context.createHomeCommand}"
+                    binding:typeFace='@{"YouSheBiaoTiHei-2.ttf"}'
+                    android:text="创建房间"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_login"
+                    android:padding="25dp"
+                    android:layout_centerInParent="true"
+                    binding:activated="@{true}"
+                    binding:onClickCommand="@{context.joinHomeCommand}"
+                    binding:typeFace='@{"YouSheBiaoTiHei-2.ttf"}'
+                    android:text="加入房间"/>
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_login"
+                    android:layout_centerInParent="true"
+                    binding:activated="@{true}"
+                    binding:onClickCommand="@{context.logOutCommand}"
+                    binding:typeFace='@{"YouSheBiaoTiHei-2.ttf"}'
+                    android:text="切换账号"/>
+            </RelativeLayout>
         </LinearLayout>
     </LinearLayout>
 

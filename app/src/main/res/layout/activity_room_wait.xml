@@ -1,9 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:binding="http://schemas.android.com/apk/res-auto">
+    xmlns:binding="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <variable
+            name="context"
+            type="xyz.ttyz.tourfrxohc.activity.RoomWaitActivity" />
+        <variable
+            name="homeModel"
+            type="xyz.ttyz.tourfrxohc.models.game.HomeModel" />
+        <variable
+            name="adapter"
+            type="xyz.ttyz.toubasemvvm.adapter.utils.BaseEmptyAdapterParent" />
+        <variable
+            name="gridLayoutManager"
+            type="androidx.recyclerview.widget.GridLayoutManager" />
     </data>
 
     <LinearLayout
@@ -16,8 +28,10 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            binding:typeFace='@{"YouSheBiaoTiHei-2.ttf"}'
             android:text="退出"
             android:background="@drawable/bg_login"
+            binding:onClickCommand="@{context.leaveCommand}"
             binding:activated="@{true}"/>
 
         <LinearLayout
@@ -28,13 +42,54 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="房间号:4568"
+                tools:text="房间号:4568"
+                android:text='@{"roomId: " + homeModel.roomId}'
                 android:textSize="16sp"
                 android:padding="15dp"
                 binding:typeFace='@{"YouSheBiaoTiHei-2.ttf"}'
                 android:textColor="@color/black"/>
         </LinearLayout>
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                tools:itemCount="3"
+                tools:listitem="@layout/viewholder_waiting_person_item"
+                binding:adapter="@{adapter}"
+                binding:layoutManager="@{gridLayoutManager}"
+                binding:isNotLinearLayoutManager="@{true}"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_marginTop="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/btn_speak"
+                android:layout_width="158dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_login"
+                android:layout_centerInParent="true"
+                binding:typeFace='@{"YouSheBiaoTiHei-2.ttf"}'
+                binding:activated="@{!context.isSpeakingFiled}"
+                android:text="按住发言"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:background="@drawable/bg_login"
+                binding:activated="@{true}"
+                android:layout_alignParentEnd="true"
+                binding:typeFace='@{"YouSheBiaoTiHei-2.ttf"}'
+                android:layout_centerVertical="true"
+                binding:onClickCommand="@{context.startGameCommand}"
+                android:text="开始游戏"/>
+        </RelativeLayout>
 
     </LinearLayout>
 </layout>

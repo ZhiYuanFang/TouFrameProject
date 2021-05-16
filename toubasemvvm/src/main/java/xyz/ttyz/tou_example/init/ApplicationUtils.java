@@ -139,7 +139,7 @@ public class ApplicationUtils {
                     } catch (Throwable e) {
                         e.printStackTrace();
                         touDelegate.cacheMainThrowable(e);
-                        if (ActivityManager.getInstance() != null)
+                        if (ActivityManager.getInstance() != null && ActivityManager.getActivityList().size() > 1)
                             ActivityManager.getInstance().finish();
                     }
                 }

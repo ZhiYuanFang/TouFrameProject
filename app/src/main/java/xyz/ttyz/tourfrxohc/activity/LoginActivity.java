@@ -5,6 +5,7 @@ import android.os.Handler;
 
 import androidx.databinding.ObservableField;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -15,6 +16,7 @@ import xyz.ttyz.tourfrxohc.BaseApplication;
 import xyz.ttyz.tourfrxohc.R;
 import xyz.ttyz.tourfrxohc.databinding.ActivityLoginBinding;
 import xyz.ttyz.tourfrxohc.event.UserChangeEvent;
+import xyz.ttyz.tourfrxohc.event.user.UserNickNameChangeEvent;
 import xyz.ttyz.tourfrxohc.http.BaseSubscriber;
 import xyz.ttyz.tourfrxohc.models.UserModel;
 import xyz.ttyz.tourfrxohc.utils.UserUtils;
@@ -62,6 +64,7 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding>{
                 @Override
                 public void success(UserModel data) {
                     UserUtils.login(data);
+                    EventBus.getDefault().post(new UserNickNameChangeEvent());
                     LoginActivity.this.finish();
                 }
 

@@ -16,6 +16,7 @@ import xyz.ttyz.tourfrxohc.R;
 import xyz.ttyz.tourfrxohc.databinding.ActivityEndChatBinding;
 import xyz.ttyz.tourfrxohc.http.BaseSubscriber;
 import xyz.ttyz.tourfrxohc.models.game.HomeModel;
+import xyz.ttyz.tourfrxohc.utils.DefaultUtils;
 import xyz.ttyz.tourfrxohc.utils.HomeUtils;
 import xyz.ttyz.tourfrxohc.utils.UserUtils;
 
@@ -23,14 +24,12 @@ import xyz.ttyz.tourfrxohc.utils.UserUtils;
  * 结束界面
  */
 public class EndChatActivity extends BaseTouActivity<ActivityEndChatBinding> {
-    public static void show(long roomId){
+    public static void show(){
         Intent intent = new Intent(ActivityManager.getInstance(), EndChatActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        intent.putExtra("roomId", roomId);
         ActivityManager.getInstance().startActivity(intent);
     }
 
-    private long roomId;
     public ObservableField<Boolean> saveWinFiled = new ObservableField<>(false);
 
     @Override
@@ -46,9 +45,8 @@ public class EndChatActivity extends BaseTouActivity<ActivityEndChatBinding> {
     @Override
     protected void initData() {
         mBinding.setContext(this);
-        roomId = getIntent().getLongExtra("roomId", 0);
 
-        if (StringUtil.safeString(roomId).isEmpty()) {
+        if (StringUtil.safeString(DefaultUtils.roomId).isEmpty()) {
             ToastUtil.showToast("房间不存在");
             EndChatActivity.this.finish();
         }
@@ -57,7 +55,7 @@ public class EndChatActivity extends BaseTouActivity<ActivityEndChatBinding> {
     @Override
     protected void initServer() {
         //根据roomId 请求接口，获取当前房间人员
-        new RxOHCUtils<HomeModel>(this).executeApi(BaseApplication.apiService.roomInfo(roomId), new BaseSubscriber<HomeModel>(this) {
+        new RxOHCUtils<HomeModel>(this).executeApi(BaseApplication.apiService.roomInfo(DefaultUtils.roomId), new BaseSubscriber<HomeModel>(this) {
             @Override
             public void success(HomeModel data) {
                 saveWinFiled.set(data.isSaveWin());
@@ -73,7 +71,7 @@ public class EndChatActivity extends BaseTouActivity<ActivityEndChatBinding> {
     public OnClickAdapter.onClickCommand exitGameCommand = new OnClickAdapter.onClickCommand() {
         @Override
         public void click() {
-            new RxOHCUtils<Object>(EndChatActivity.this).executeApi(BaseApplication.apiService.leave(roomId, UserUtils.getCurUserModel().getId()), new BaseSubscriber<Object>(EndChatActivity.this) {
+            new RxOHCUtils<Object>(EndChatActivity.this).executeApi(BaseApplication.apiService.leave(DefaultUtils.roomId, UserUtils.getCurUserModel().getId()), new BaseSubscriber<Object>(EndChatActivity.this) {
                 @Override
                 public void success(Object data) {
                     //退出房间了, 回到主页
