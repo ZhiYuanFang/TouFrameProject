@@ -33,9 +33,11 @@ import xyz.ttyz.toubasemvvm.utils.TouUtils;
 import xyz.ttyz.toubasemvvm.vm.ToolBarViewModel;
 import xyz.ttyz.tourfrxohc.activity.BaseActivity;
 import xyz.ttyz.tourfrxohc.activity.GameActivity;
+import xyz.ttyz.tourfrxohc.activity.RoomWaitActivity;
 import xyz.ttyz.tourfrxohc.databinding.ActivityMainBinding;
 import xyz.ttyz.tourfrxohc.dialog.CreateHomeDialogFragment;
 import xyz.ttyz.tourfrxohc.dialog.EditNickNameDialogFragment;
+import xyz.ttyz.tourfrxohc.dialog.JoinHomeDialogFragment;
 import xyz.ttyz.tourfrxohc.event.user.UserNickNameChangeEvent;
 import xyz.ttyz.tourfrxohc.fragment.MainFragment;
 import xyz.ttyz.tourfrxohc.http.BaseSubscriber;
@@ -125,7 +127,8 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     public OnClickAdapter.onClickCommand joinHomeCommand = new OnClickAdapter.onClickCommand() {
         @Override
         public void click() {
-            // TODO: 2021/5/12 加入房间
+            // 加入房间
+            new JoinHomeDialogFragment().show(getSupportFragmentManager());
         }
     };
     public OnClickAdapter.onClickCommand startGameCommand = new OnClickAdapter.onClickCommand() {

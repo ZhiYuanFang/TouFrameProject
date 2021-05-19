@@ -52,7 +52,7 @@ public interface ApiService {
      * 加入创建的房间
      * */
     @POST("game/joinRoom")
-    Observable<BaseModule<HomeModel>> joinRoom(@Query("roomId") long roomId, @Query("userId") int userId);
+    Observable<BaseModule<HomeModel>> joinRoom(@Query("roomId") long roomId, @Query("userId") long userId);
 
     /**
      * 离开创建的房间
