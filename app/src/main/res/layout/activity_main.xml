@@ -82,6 +82,7 @@
             android:layout_weight="1">
 
             <Button
+                android:id="@+id/btn_game"
                 android:layout_width="250dp"
                 android:layout_height="250dp"
                 android:layout_centerInParent="true"
@@ -92,6 +93,42 @@
                 android:text="开始游戏"
                 binding:onClickCommand="@{context.startGameCommand}" />
 
+            <LinearLayout
+                android:layout_below="@id/btn_game"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="128dp"
+                android:layout_marginEnd="128dp"
+                android:orientation="horizontal"
+                android:layout_marginTop="38dp">
+
+                <Button
+                    android:layout_width="35dp"
+                    android:layout_height="wrap_content"
+                    binding:typeFace='@{"YouSheBiaoTiHei-2.ttf"}'
+                    android:background="@drawable/bg_login_left"
+                    binding:onClickCommand="@{context.clickReduceCommand}"
+                    android:text="-"/>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:textSize="14sp"
+                    android:textColor="@color/black"
+                    android:background="#FFD700"
+                    binding:typeFace='@{"YouSheBiaoTiHei-2.ttf"}'
+                    android:text='@{context.roomLimitNumberFiled + @string/renju}'
+                    tools:text="4人局"/>
+                <Button
+                    android:layout_width="35dp"
+                    android:layout_height="wrap_content"
+                    binding:typeFace='@{"YouSheBiaoTiHei-2.ttf"}'
+                    binding:onClickCommand="@{context.clickAddCommand}"
+                    android:background="@drawable/bg_login_right"
+                    android:text="+"/>
+
+            </LinearLayout>
         </RelativeLayout>
 
         <LinearLayout

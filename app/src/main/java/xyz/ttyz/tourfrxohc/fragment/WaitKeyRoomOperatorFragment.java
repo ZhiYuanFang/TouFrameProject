@@ -1,9 +1,13 @@
 package xyz.ttyz.tourfrxohc.fragment;
 
+import androidx.databinding.ObservableInt;
+
 import xyz.ttyz.tourfrxohc.R;
 import xyz.ttyz.tourfrxohc.databinding.FragmentWaitKeyRoomOperatorBinding;
+import xyz.ttyz.tourfrxohc.utils.DefaultUtils;
 
 public class WaitKeyRoomOperatorFragment extends BaseFragment<FragmentWaitKeyRoomOperatorBinding>{
+    public ObservableInt backTimeFiled = new ObservableInt(DefaultUtils.backPutTime);
     @Override
     protected boolean isInViewPager() {
         return false;
@@ -27,5 +31,9 @@ public class WaitKeyRoomOperatorFragment extends BaseFragment<FragmentWaitKeyRoo
     @Override
     protected void initServer() {
 
+    }
+
+    public void resetTime(int time){
+        backTimeFiled.set(time);
     }
 }

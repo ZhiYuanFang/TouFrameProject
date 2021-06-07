@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <variable
+            name="context"
+            type="xyz.ttyz.tourfrxohc.fragment.WaitKeyRoomOperatorFragment" />
     </data>
 
     <LinearLayout
@@ -18,5 +21,13 @@
             android:textColor="@color/black"
             android:textSize="28sp"
             android:text="等待要是其他人员操作"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="1"
+            android:text='@{context.backTimeFiled + ""}'
+            android:textColor="@color/black"
+            android:textSize="38sp"/>
     </LinearLayout>
 </layout>

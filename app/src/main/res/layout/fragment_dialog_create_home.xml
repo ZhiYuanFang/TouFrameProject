@@ -28,7 +28,7 @@
                 android:textColor="@color/black"
                 binding:typeFace='@{"YouSheBiaoTiHei-2.ttf"}'
                 android:layout_marginEnd="38dp"
-                android:text="人数"/>
+                android:text="游戏模式"/>
 
             <Button
                 android:layout_width="35dp"
@@ -46,8 +46,8 @@
                 android:textColor="@color/black"
                 android:background="#FFD700"
                 binding:typeFace='@{"YouSheBiaoTiHei-2.ttf"}'
-                android:text='@{context.roomLimitNumberFiled + ""}'
-                tools:text="4"/>
+                android:text='@{context.roomLimitNumberFiled + @string/renju}'
+                tools:text="4人局"/>
             <Button
                 android:layout_width="35dp"
                 android:layout_height="wrap_content"

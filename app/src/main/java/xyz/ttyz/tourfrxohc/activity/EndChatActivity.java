@@ -89,7 +89,7 @@ public class EndChatActivity extends BaseTouActivity<ActivityEndChatBinding> {
     public OnClickAdapter.onClickCommand againGameCommand = new OnClickAdapter.onClickCommand() {
         @Override
         public void click() {
-            HomeUtils.joinHome();
+            HomeUtils.joinHome(4);
         }
     };
 }

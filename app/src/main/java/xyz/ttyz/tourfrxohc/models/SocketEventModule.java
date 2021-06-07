@@ -3,6 +3,7 @@ package xyz.ttyz.tourfrxohc.models;
 import java.util.List;
 
 import xyz.ttyz.tourfrxohc.models.game.HomeModel;
+import xyz.ttyz.tourfrxohc.models.game.TurnEndModel;
 
 //房间id
 //动作类型actionType：人员变化0，语音变化1，房间变化2
@@ -28,7 +29,8 @@ public class SocketEventModule {
     int actionType;
     UserModel changeUser;
     HomeModel roomModel;
-    List<UserModel> userModelList;//进入钥匙房的人
+    int backTime;//倒计时时间 秒
+    TurnEndModel turnEndModel;//一轮结束后得到的结果
 
     public long getRoomId() {
         return roomId;
@@ -46,7 +48,11 @@ public class SocketEventModule {
         return roomModel;
     }
 
-    public List<UserModel> getUserModelList() {
-        return userModelList;
+    public int getBackTime() {
+        return backTime;
+    }
+
+    public TurnEndModel getTurnEndModel() {
+        return turnEndModel;
     }
 }

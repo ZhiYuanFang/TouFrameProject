@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.view.animation.AnimationUtils;
 
+import androidx.databinding.ObservableInt;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.luck.picture.lib.PictureSelector;
@@ -43,13 +44,14 @@ import xyz.ttyz.tourfrxohc.fragment.MainFragment;
 import xyz.ttyz.tourfrxohc.http.BaseSubscriber;
 import xyz.ttyz.tourfrxohc.models.UserModel;
 import xyz.ttyz.tourfrxohc.models.game.HomeModel;
+import xyz.ttyz.tourfrxohc.utils.DefaultUtils;
 import xyz.ttyz.tourfrxohc.utils.HomeUtils;
 import xyz.ttyz.tourfrxohc.utils.UserUtils;
 
 public class MainActivity extends BaseActivity<ActivityMainBinding> {
 
-    public static void show(){
-        if(!UserUtils.isLogin()){
+    public static void show() {
+        if (!UserUtils.isLogin()) {
             return;
         }
         Intent intent = new Intent(ActivityManager.getInstance(), MainActivity.class);
@@ -57,8 +59,10 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         ActivityManager.getInstance().startActivity(intent);
     }
 
+    public ObservableInt roomLimitNumberFiled = new ObservableInt(4);
+
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void nickNameChange (UserNickNameChangeEvent userNickNameChangeEvent){
+    public void nickNameChange(UserNickNameChangeEvent userNickNameChangeEvent) {
         mBinding.setUser(UserUtils.getCurUserModel());
     }
 
@@ -134,7 +138,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     public OnClickAdapter.onClickCommand startGameCommand = new OnClickAdapter.onClickCommand() {
         @Override
         public void click() {
-            HomeUtils.joinHome();
+            HomeUtils.joinHome(roomLimitNumberFiled.get());
         }
     };
 
@@ -145,6 +149,28 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         }
     };
 
+    public OnClickAdapter.onClickCommand clickReduceCommand = new OnClickAdapter.onClickCommand() {
+        @Override
+        public void click() {
+            if (roomLimitNumberFiled.get() > DefaultUtils.roomLimitMinNumber) {
+                roomLimitNumberFiled.set(roomLimitNumberFiled.get() - 1);
+            } else {
+                ToastUtil.showToast("最少" + DefaultUtils.roomLimitMinNumber + "人");
+            }
+        }
+    };
+
+
+    public OnClickAdapter.onClickCommand clickAddCommand = new OnClickAdapter.onClickCommand() {
+        @Override
+        public void click() {
+            if (roomLimitNumberFiled.get() < DefaultUtils.roomLimitMaxNumber) {
+                roomLimitNumberFiled.set(roomLimitNumberFiled.get() + 1);
+            } else {
+                ToastUtil.showToast("最多" + DefaultUtils.roomLimitMaxNumber + "人");
+            }
+        }
+    };
     public OnClickAdapter.onClickCommand clickAvatarCommand = new OnClickAdapter.onClickCommand() {
         @Override
         public void click() {
@@ -179,7 +205,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         if (data != null && resultCode == RESULT_OK && requestCode == PictureConfig.CHOOSE_REQUEST) {
             ArrayList<String> selectPics = new ArrayList<>();
             TouUtils.filterResSelectResult(data, selectPics);
-            if(!selectPics.isEmpty()){
+            if (!selectPics.isEmpty()) {
                 //选择图片
                 //图片地址
                 String filePath = selectPics.get(0);

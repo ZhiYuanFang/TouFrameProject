@@ -93,10 +93,10 @@ public class CreateHomeDialogFragment extends BaseDialogFragment<FragmentDialogC
     public OnClickAdapter.onClickCommand clickReduceCommand = new OnClickAdapter.onClickCommand() {
         @Override
         public void click() {
-            if(roomLimitNumberFiled.get() > 4){
+            if(roomLimitNumberFiled.get() > DefaultUtils.roomLimitMinNumber){
                 roomLimitNumberFiled.set(roomLimitNumberFiled.get() - 1);
             } else {
-                ToastUtil.showToast("最少4人");
+                ToastUtil.showToast("最少" + DefaultUtils.roomLimitMinNumber + "人");
             }
         }
     };
@@ -105,10 +105,12 @@ public class CreateHomeDialogFragment extends BaseDialogFragment<FragmentDialogC
     public OnClickAdapter.onClickCommand clickAddCommand = new OnClickAdapter.onClickCommand() {
         @Override
         public void click() {
-            if(roomLimitNumberFiled.get() < 9){
+            if(roomLimitNumberFiled.get() < DefaultUtils.roomLimitMaxNumber){
                 roomLimitNumberFiled.set(roomLimitNumberFiled.get() + 1);
             } else {
                 ToastUtil.showToast("最多9人");
+                ToastUtil.showToast("最多" + DefaultUtils.roomLimitMaxNumber + "人");
+
             }
         }
     };

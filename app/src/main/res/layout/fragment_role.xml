@@ -26,6 +26,6 @@
             android:paddingBottom="150dp"
             binding:typeFace='@{"YouSheBiaoTiHei-2.ttf"}'
             android:padding="15dp"
-            android:text='@{context.roleType > 0 ? "save man": "normal man"}'/>
+            android:text='@{context.isSaveType ? "save man": "normal man"}'/>
     </LinearLayout>
 </layout>

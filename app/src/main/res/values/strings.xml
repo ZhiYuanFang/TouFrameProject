@@ -14,4 +14,5 @@
     <string name="confirm_pwd">确认密码: </string>
 
     <string name="cancel_match">取消匹配</string>
+    <string name="renju">人局</string>
 </resources>

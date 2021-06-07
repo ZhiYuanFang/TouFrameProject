@@ -6,18 +6,18 @@ import xyz.ttyz.tourfrxohc.models.UserModel;
 
 public class GoKeyRoomEvent {
     long roomId;
-    List<UserModel> goKeyUserList;
+    UserModel goKeyUser;
 
-    public GoKeyRoomEvent(long roomId, List<UserModel> goKeyUserList) {
+    public GoKeyRoomEvent(long roomId, UserModel goKeyUser) {
         this.roomId = roomId;
-        this.goKeyUserList = goKeyUserList;
+        this.goKeyUser = goKeyUser;
     }
 
     public long getRoomId() {
         return roomId;
     }
 
-    public List<UserModel> getGoKeyUserList() {
-        return goKeyUserList;
+    public UserModel getGoKeyUser() {
+        return goKeyUser;
     }
 }

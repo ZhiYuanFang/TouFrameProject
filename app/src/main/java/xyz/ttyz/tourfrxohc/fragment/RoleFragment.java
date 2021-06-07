@@ -4,10 +4,10 @@ import xyz.ttyz.tourfrxohc.R;
 import xyz.ttyz.tourfrxohc.databinding.FragmentRoleBinding;
 
 public class RoleFragment extends BaseFragment<FragmentRoleBinding>{
-    public int roleType;
+    public boolean isSaveType;
 
-    public RoleFragment(int roleType) {
-        this.roleType = roleType;
+    public RoleFragment(boolean isSaveType) {
+        this.isSaveType = isSaveType;
     }
 
     @Override

@@ -55,6 +55,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
+            <Button
+                binding:visible="@{context.isWaitGetVoiceFiled}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                binding:onClickCommand="@{context.wantVoiceCommand}"
+                android:text="抢麦"/>
             <View
                 android:layout_width="0dp"
                 android:layout_height="1dp"

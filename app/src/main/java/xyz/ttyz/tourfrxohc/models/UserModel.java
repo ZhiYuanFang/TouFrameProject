@@ -4,9 +4,12 @@ import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import xyz.ttyz.tourfrxohc.BR;
+import xyz.ttyz.tourfrxohc.models.game.ArmModel;
 
 
 public class UserModel extends BaseObservable implements Serializable {
@@ -18,81 +21,33 @@ public class UserModel extends BaseObservable implements Serializable {
 
     private int level;//等级
 
-    /**
-     * {@link RoleType}
-     */
-    int roleType;
+    boolean isSaveType;//是守护者
     boolean isConfirmGame;//是否确认游戏
     boolean isConfirmRoleType;//是否确认角色
-    boolean isConfirmPutKey;//是否确认投放钥匙
+    boolean thisTurnHasPutedKey;//在本轮进入过钥匙房
     boolean isVote;//是否投票
-    boolean oneTurnHasSpoken;//当轮已经发过言了
-    boolean isInHome;//是否在房间内
+    boolean isInHome;//是否在房间内,用户中途离开
     boolean hasComeInKeyRoom;//是否已经进入过钥匙房间
-    boolean isDoubtMember;//是否为本轮怀疑对象
     boolean isDead;//是否死亡
+
+    int thisTurnSpeakTimes;//每个人 一轮里面 最多可以发三次言论
+
+    int putNumber;//动作对象 1，2，3
+
+    int paddle;//划水次数，超过两次就宣布死亡
+    int speakTime = 60;//初始60秒
 
     long voteUserId;//投票对象的id
     int votedNumber;//被投票数量
 
-    int putNumber;//动作对象 1，2，3
-    boolean put;//动作类型， false 看看  true 投放
-    boolean isPutObjectHasKey;//选择的框框里结果是有还是没有钥匙
+    boolean wantSpeak;//希望在本轮发言
+
+    List<ArmModel> armModelList = new ArrayList<ArmModel>();
 
     //region local
     boolean isSpeaking;
     boolean isVoted;//他是否被我投票
     boolean canBeVoted;//是否可以被投票
-
-    public void setPutNumber(int putNumber) {
-        this.putNumber = putNumber;
-    }
-
-    public void setPut(boolean put) {
-        this.put = put;
-    }
-
-    public void setPutObjectHasKey(boolean putObjectHasKey) {
-        isPutObjectHasKey = putObjectHasKey;
-    }
-
-    public boolean isCanBeVoted() {
-        return canBeVoted;
-    }
-
-    public void setCanBeVoted(boolean canBeVoted) {
-        this.canBeVoted = canBeVoted;
-    }
-
-    public boolean isVoted() {
-        return isVoted;
-    }
-
-    public void setVoted(boolean voted) {
-        isVoted = voted;
-    }
-
-    public int getPutNumber() {
-        return putNumber;
-    }
-
-    public boolean isPut() {
-        return put;
-    }
-
-    public boolean isPutObjectHasKey() {
-        return isPutObjectHasKey;
-    }
-
-    @Bindable
-    public boolean isSpeaking() {
-        return isSpeaking;
-    }
-
-    public void setSpeaking(boolean speaking) {
-        isSpeaking = speaking;
-        notifyPropertyChanged(BR.speaking);
-    }
 
     public long getId() {
         return id;
@@ -142,12 +97,12 @@ public class UserModel extends BaseObservable implements Serializable {
         this.level = level;
     }
 
-    public int getRoleType() {
-        return roleType;
+    public boolean isSaveType() {
+        return isSaveType;
     }
 
-    public void setRoleType(int roleType) {
-        this.roleType = roleType;
+    public void setSaveType(boolean saveType) {
+        isSaveType = saveType;
     }
 
     public boolean isConfirmGame() {
@@ -166,12 +121,12 @@ public class UserModel extends BaseObservable implements Serializable {
         isConfirmRoleType = confirmRoleType;
     }
 
-    public boolean isConfirmPutKey() {
-        return isConfirmPutKey;
+    public boolean isThisTurnHasPutedKey() {
+        return thisTurnHasPutedKey;
     }
 
-    public void setConfirmPutKey(boolean confirmPutKey) {
-        isConfirmPutKey = confirmPutKey;
+    public void setThisTurnHasPutedKey(boolean thisTurnHasPutedKey) {
+        this.thisTurnHasPutedKey = thisTurnHasPutedKey;
     }
 
     public boolean isVote() {
@@ -182,22 +137,12 @@ public class UserModel extends BaseObservable implements Serializable {
         isVote = vote;
     }
 
-    public boolean isOneTurnHasSpoken() {
-        return oneTurnHasSpoken;
-    }
-
-    public void setOneTurnHasSpoken(boolean oneTurnHasSpoken) {
-        this.oneTurnHasSpoken = oneTurnHasSpoken;
-    }
-
-    @Bindable
     public boolean isInHome() {
         return isInHome;
     }
 
     public void setInHome(boolean inHome) {
         isInHome = inHome;
-        notifyPropertyChanged(BR.inHome);
     }
 
     public boolean isHasComeInKeyRoom() {
@@ -208,20 +153,44 @@ public class UserModel extends BaseObservable implements Serializable {
         this.hasComeInKeyRoom = hasComeInKeyRoom;
     }
 
-    public boolean isDoubtMember() {
-        return isDoubtMember;
-    }
-
-    public void setDoubtMember(boolean doubtMember) {
-        isDoubtMember = doubtMember;
-    }
-
     public boolean isDead() {
         return isDead;
     }
 
     public void setDead(boolean dead) {
         isDead = dead;
+    }
+
+    public int getThisTurnSpeakTimes() {
+        return thisTurnSpeakTimes;
+    }
+
+    public void setThisTurnSpeakTimes(int thisTurnSpeakTimes) {
+        this.thisTurnSpeakTimes = thisTurnSpeakTimes;
+    }
+
+    public int getPutNumber() {
+        return putNumber;
+    }
+
+    public void setPutNumber(int putNumber) {
+        this.putNumber = putNumber;
+    }
+
+    public int getPaddle() {
+        return paddle;
+    }
+
+    public void setPaddle(int paddle) {
+        this.paddle = paddle;
+    }
+
+    public int getSpeakTime() {
+        return speakTime;
+    }
+
+    public void setSpeakTime(int speakTime) {
+        this.speakTime = speakTime;
     }
 
     public long getVoteUserId() {
@@ -238,6 +207,46 @@ public class UserModel extends BaseObservable implements Serializable {
 
     public void setVotedNumber(int votedNumber) {
         this.votedNumber = votedNumber;
+    }
+
+    public boolean isWantSpeak() {
+        return wantSpeak;
+    }
+
+    public void setWantSpeak(boolean wantSpeak) {
+        this.wantSpeak = wantSpeak;
+    }
+
+    public List<ArmModel> getArmModelList() {
+        return armModelList;
+    }
+
+    public void setArmModelList(List<ArmModel> armModelList) {
+        this.armModelList = armModelList;
+    }
+
+    public boolean isSpeaking() {
+        return isSpeaking;
+    }
+
+    public void setSpeaking(boolean speaking) {
+        isSpeaking = speaking;
+    }
+
+    public boolean isVoted() {
+        return isVoted;
+    }
+
+    public void setVoted(boolean voted) {
+        isVoted = voted;
+    }
+
+    public boolean isCanBeVoted() {
+        return canBeVoted;
+    }
+
+    public void setCanBeVoted(boolean canBeVoted) {
+        this.canBeVoted = canBeVoted;
     }
 
     @Override
