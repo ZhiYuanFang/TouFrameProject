@@ -44,6 +44,7 @@ import xyz.ttyz.tourfrxohc.fragment.MainFragment;
 import xyz.ttyz.tourfrxohc.http.BaseSubscriber;
 import xyz.ttyz.tourfrxohc.models.UserModel;
 import xyz.ttyz.tourfrxohc.models.game.HomeModel;
+import xyz.ttyz.tourfrxohc.practice.PracticeRoomThread;
 import xyz.ttyz.tourfrxohc.utils.DefaultUtils;
 import xyz.ttyz.tourfrxohc.utils.HomeUtils;
 import xyz.ttyz.tourfrxohc.utils.UserUtils;
@@ -143,6 +144,18 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
 
     }
 
+    //region Action
+    PracticeRoomThread practiceRoomThread;
+    //进入训练场
+    public OnClickAdapter.onClickCommand practiceCommand = new OnClickAdapter.onClickCommand() {
+        @Override
+        public void click() {
+            GameActivity.show();
+            //开启本地线程控制训练场
+            practiceRoomThread = new PracticeRoomThread();
+        }
+    };
+
     public OnClickAdapter.onClickCommand logOutCommand = new OnClickAdapter.onClickCommand() {
         @Override
         public void click() {
@@ -234,6 +247,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
                     .forResult(PictureConfig.CHOOSE_REQUEST);
         }
     };
+    //endregion
 
     //region pic select
     @Override
@@ -276,6 +290,15 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         }
     }
     //endregion
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(practiceRoomThread != null){
+            practiceRoomThread.gameEnd();
+        }
+    }
 }
 
 

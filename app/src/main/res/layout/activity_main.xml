@@ -27,6 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="28dp"
             android:layout_marginTop="58dp"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <RelativeLayout
@@ -46,6 +47,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:orientation="vertical">
 
                 <TextView
@@ -74,6 +76,13 @@
                     android:text='@{"level: " + user.level}'/>
             </LinearLayout>
 
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:padding="5dp"
+                android:layout_marginEnd="25dp"
+                binding:onClickCommand="@{context.logOutCommand}"
+                android:src="@mipmap/icon_mine_setting"/>
         </LinearLayout>
         <RelativeLayout
             android:id="@+id/view_start"
@@ -81,6 +90,18 @@
             android:layout_height="0dp"
             android:layout_weight="1">
 
+            <Button
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="35dp"
+                android:textColor="@color/black"
+                android:textSize="12sp"
+                binding:typeFace='@{"YouSheBiaoTiHei-2.ttf"}'
+                android:background="@drawable/bg_login"
+                binding:activated="@{true}"
+                android:text="@string/practice_name"
+                binding:onClickCommand="@{context.practiceCommand}" />
             <Button
                 android:id="@+id/btn_game"
                 android:layout_width="250dp"
@@ -90,10 +111,11 @@
                 android:textSize="28sp"
                 binding:typeFace='@{"YouSheBiaoTiHei-2.ttf"}'
                 android:background="@drawable/bg_start_game"
-                android:text="开始游戏"
+                android:text="@string/start_game"
                 binding:onClickCommand="@{context.startGameCommand}" />
 
             <LinearLayout
+                android:visibility="gone"
                 android:layout_below="@id/btn_game"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -132,6 +154,7 @@
         </RelativeLayout>
 
         <LinearLayout
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="128dp"
             android:orientation="horizontal">

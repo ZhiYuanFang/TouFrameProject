@@ -1,6 +1,8 @@
 <resources>
-    <string name="app_name">夺宝联盟</string>
-    <string name="welcome">欢迎来到夺宝联盟</string>
+    <string name="app_name">xxxx</string>
+    <string name="welcome">欢迎来到xxx</string>
+    <string name="start_game">xxxx</string>
+    <string name="practice_name">训练场</string>
     <string name="login">登录</string>
     <string name="register">注册</string>
     <string name="account">账号: </string>

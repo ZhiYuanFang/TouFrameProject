@@ -5,26 +5,30 @@ import androidx.databinding.Bindable;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
 import xyz.ttyz.tourfrxohc.BR;
 import xyz.ttyz.tourfrxohc.models.game.ArmModel;
+import xyz.ttyz.tourfrxohc.models.game.PutKeyModel;
+import xyz.ttyz.tourfrxohc.models.game.VoteModel;
 
 
 public class UserModel extends BaseObservable implements Serializable {
+    //基础信息
     private long id;
-    private String avatar;
-    private String phone;
-    private String nickname;
-    private String password;
+    private String avatar;//头像
+    private String phone;//手机号
+    private String nickname;//昵称
+    private String password;//密码
+    private int score;//积分
+    //房间内信息
+    int identity;//身份 0守护者 1进攻者
+    HashMap<Integer, PutKeyModel> putKeyMap;//投放钥匙累计 第Integer轮，投票PutKeyModel, eg. 第2轮划水没投票，则不存在KEY = 2
+    List<ArmModel> armModels;//拥有的武器
+    HashMap<Integer, VoteModel> voteMap;//投票累计， 第Integer次投票
 
-    private int level;//等级
-
-    boolean isSaveType;//是守护者
-    boolean isConfirmGame;//是否确认游戏
-    boolean isConfirmRoleType;//是否确认角色
-    boolean thisTurnHasPutedKey;//在本轮进入过钥匙房
     boolean isVote;//是否投票
     boolean isInHome;//是否在房间内,用户中途离开
     boolean hasComeInKeyRoom;//是否已经进入过钥匙房间

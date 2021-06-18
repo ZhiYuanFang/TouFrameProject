@@ -7,11 +7,12 @@ import java.util.List;
 import xyz.ttyz.tourfrxohc.models.UserModel;
 
 public class HomeModel implements Serializable{
-    int limitNumber;
-    boolean gameStart;//游戏是否开始，还是正在匹配中
+    int limitNumber;//房间最多的人数
     long roomId;//房间id
     List<UserModel> roomUserList;//房间人员
-    List<UserModel> waitKeyPutMemberList;//待投放钥匙人员
+    UserModel putKeyUser;//投放钥匙人员, 根据status判断该人员是刚刚投放的，还是即将投放的
+    int status;//阶段
+
     List<UserModel> pkMemberList;//pk人员
     UserModel speakingUserModel;//指定发言人员
     int turnRoundNumber;//轮次 1，2，3
