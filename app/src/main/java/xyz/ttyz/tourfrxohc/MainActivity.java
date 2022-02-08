@@ -15,11 +15,13 @@ import xyz.ttyz.toubasemvvm.adapter.OnClickAdapter;
 import xyz.ttyz.toubasemvvm.adapter.utils.BaseEmptyAdapterParent;
 import xyz.ttyz.toubasemvvm.adapter.utils.BaseRecyclerAdapter;
 import xyz.ttyz.toubasemvvm.utils.DialogUtils;
+import xyz.ttyz.toubasemvvm.utils.ToastUtil;
 import xyz.ttyz.toubasemvvm.vm.ToolBarViewModel;
 import xyz.ttyz.tourfrxohc.activity.BaseActivity;
 import xyz.ttyz.tourfrxohc.databinding.ActivityMainBinding;
 import xyz.ttyz.tourfrxohc.fragment.MainFragment;
 import xyz.ttyz.tourfrxohc.http.BaseSubscriber;
+import xyz.ttyz.tourfrxohc.jni.JNITools;
 import xyz.ttyz.tourfrxohc.models.Hardware;
 import xyz.ttyz.tourfrxohc.models.MainModel;
 import xyz.ttyz.tourfrxohc.models.ResorceModel;
@@ -60,11 +62,14 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
                         DialogUtils.showDialog("点击返回按钮可以关闭图片", new DialogUtils.DialogButtonModule("显示图片", new DialogUtils.DialogClickDelegate() {
                             @Override
                             public void click(DialogUtils.DialogButtonModule dialogButtonModule) {
-                                MainFragment mainFragment = new MainFragment();
-                                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                                fragmentTransaction.add(R.id.container, mainFragment);
-                                fragmentTransaction.commitAllowingStateLoss();
-                                fragmentTransaction.addToBackStack("");
+//                                MainFragment mainFragment = new MainFragment();
+//                                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+//                                fragmentTransaction.add(R.id.container, mainFragment);
+//                                fragmentTransaction.commitAllowingStateLoss();
+//                                fragmentTransaction.addToBackStack("");
+
+
+                                ToastUtil.showToast(JNITools.add(1,3) + "");
                             }
                         }));
                     }
