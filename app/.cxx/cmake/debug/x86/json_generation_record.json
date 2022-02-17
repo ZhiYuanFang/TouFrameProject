@@ -1,0 +1,140 @@
+[
+  {
+    "level": "INFO",
+    "message": "Start JSON generation. Platform version: 21 min SDK version: x86",
+    "file": "D:\\project\\fzy\\TouFrameProject\\app\\CMakeLists.txt",
+    "tag": "debug|x86"
+  },
+  {
+    "level": "INFO",
+    "message": "No CMake version was specified in build.gradle. Using default version 3.10.2.",
+    "file": "D:\\project\\fzy\\TouFrameProject\\app\\CMakeLists.txt",
+    "tag": "debug|x86"
+  },
+  {
+    "level": "INFO",
+    "message": "Trying to locate CMake in local SDK repository.",
+    "file": "D:\\project\\fzy\\TouFrameProject\\app\\CMakeLists.txt",
+    "tag": "debug|x86"
+  },
+  {
+    "level": "INFO",
+    "message": "- CMake found in SDK at \u0027D:\\Android\\Sdk\\cmake\\3.10.2.4988404\u0027 had version \u00273.10.2\u0027",
+    "file": "D:\\project\\fzy\\TouFrameProject\\app\\CMakeLists.txt",
+    "tag": "debug|x86"
+  },
+  {
+    "level": "INFO",
+    "message": "rebuilding JSON D:\\project\\fzy\\TouFrameProject\\app\\.cxx\\cmake\\debug\\x86\\android_gradle_build.json due to:",
+    "file": "D:\\project\\fzy\\TouFrameProject\\app\\CMakeLists.txt",
+    "tag": "debug|x86"
+  },
+  {
+    "level": "INFO",
+    "message": "- expected json D:\\project\\fzy\\TouFrameProject\\app\\.cxx\\cmake\\debug\\x86\\android_gradle_build.json file is not present, will remove stale json folder",
+    "file": "D:\\project\\fzy\\TouFrameProject\\app\\CMakeLists.txt",
+    "tag": "debug|x86"
+  },
+  {
+    "level": "INFO",
+    "message": "- missing previous command file D:\\project\\fzy\\TouFrameProject\\app\\.cxx\\cmake\\debug\\x86\\build_command.txt, will remove stale json folder",
+    "file": "D:\\project\\fzy\\TouFrameProject\\app\\CMakeLists.txt",
+    "tag": "debug|x86"
+  },
+  {
+    "level": "INFO",
+    "message": "- command changed from previous, will remove stale json folder",
+    "file": "D:\\project\\fzy\\TouFrameProject\\app\\CMakeLists.txt",
+    "tag": "debug|x86"
+  },
+  {
+    "level": "INFO",
+    "message": "removing stale contents from \u0027D:\\project\\fzy\\TouFrameProject\\app\\.cxx\\cmake\\debug\\x86\u0027",
+    "file": "D:\\project\\fzy\\TouFrameProject\\app\\CMakeLists.txt",
+    "tag": "debug|x86"
+  },
+  {
+    "level": "INFO",
+    "message": "created folder \u0027D:\\project\\fzy\\TouFrameProject\\app\\.cxx\\cmake\\debug\\x86\u0027",
+    "file": "D:\\project\\fzy\\TouFrameProject\\app\\CMakeLists.txt",
+    "tag": "debug|x86"
+  },
+  {
+    "level": "INFO",
+    "message": "executing cmake Executable : D:\\Android\\Sdk\\cmake\\3.10.2.4988404\\bin\\cmake.exe\narguments : \n-HD:\\project\\fzy\\TouFrameProject\\app\n-DCMAKE_FIND_ROOT_PATH\u003dD:\\project\\fzy\\TouFrameProject\\app\\.cxx\\cmake\\debug\\prefab\\x86\\prefab\n-DCMAKE_BUILD_TYPE\u003dDebug\n-DCMAKE_TOOLCHAIN_FILE\u003dD:\\Android\\Sdk\\ndk\\20.0.5594570\\build\\cmake\\android.toolchain.cmake\n-DANDROID_ABI\u003dx86\n-DANDROID_NDK\u003dD:\\Android\\Sdk\\ndk\\20.0.5594570\n-DANDROID_PLATFORM\u003dandroid-21\n-DCMAKE_ANDROID_ARCH_ABI\u003dx86\n-DCMAKE_ANDROID_NDK\u003dD:\\Android\\Sdk\\ndk\\20.0.5594570\n-DCMAKE_EXPORT_COMPILE_COMMANDS\u003dON\n-DCMAKE_LIBRARY_OUTPUT_DIRECTORY\u003dD:\\project\\fzy\\TouFrameProject\\app\\build\\intermediates\\cmake\\debug\\obj\\x86\n-DCMAKE_MAKE_PROGRAM\u003dD:\\Android\\Sdk\\cmake\\3.10.2.4988404\\bin\\ninja.exe\n-DCMAKE_SYSTEM_NAME\u003dAndroid\n-DCMAKE_SYSTEM_VERSION\u003d21\n-BD:\\project\\fzy\\TouFrameProject\\app\\.cxx\\cmake\\debug\\x86\n-GNinja\njvmArgs : \n\n",
+    "file": "D:\\project\\fzy\\TouFrameProject\\app\\CMakeLists.txt",
+    "tag": "debug|x86"
+  },
+  {
+    "level": "INFO",
+    "message": "\n",
+    "file": "D:\\project\\fzy\\TouFrameProject\\app\\CMakeLists.txt",
+    "tag": "debug|x86"
+  },
+  {
+    "level": "INFO",
+    "message": "[\u003d\u003d \"CMake Server\" \u003d\u003d[\n",
+    "file": "D:\\project\\fzy\\TouFrameProject\\app\\CMakeLists.txt",
+    "tag": "debug|x86"
+  },
+  {
+    "level": "INFO",
+    "message": "{\"supportedProtocolVersions\":[{\"isExperimental\":true,\"major\":1,\"minor\":1}],\"type\":\"hello\"}\n",
+    "file": "D:\\project\\fzy\\TouFrameProject\\app\\CMakeLists.txt",
+    "tag": "debug|x86"
+  },
+  {
+    "level": "INFO",
+    "message": "]\u003d\u003d \"CMake Server\" \u003d\u003d]\n",
+    "file": "D:\\project\\fzy\\TouFrameProject\\app\\CMakeLists.txt",
+    "tag": "debug|x86"
+  },
+  {
+    "level": "INFO",
+    "message": "{\n  \"type\": \"handshake\",\n  \"cookie\": \"gradle-cmake-cookie\",\n  \"protocolVersion\": {\n    \"isExperimental\": true,\n    \"major\": 1,\n    \"minor\": 1\n  },\n  \"sourceDirectory\": \"D:/project/fzy/TouFrameProject/app\",\n  \"buildDirectory\": \"D:/project/fzy/TouFrameProject/app/.cxx/cmake/debug/x86\",\n  \"generator\": \"Ninja\"\n}\n",
+    "file": "D:\\project\\fzy\\TouFrameProject\\app\\CMakeLists.txt",
+    "tag": "debug|x86"
+  },
+  {
+    "level": "INFO",
+    "message": "{\"cookie\":\"gradle-cmake-cookie\",\"inReplyTo\":\"handshake\",\"type\":\"reply\"}\n",
+    "file": "D:\\project\\fzy\\TouFrameProject\\app\\CMakeLists.txt",
+    "tag": "debug|x86"
+  },
+  {
+    "level": "INFO",
+    "message": "{\n  \"type\": \"configure\",\n  \"cacheArguments\": [\n    \"\",\n    \"-DCMAKE_FIND_ROOT_PATH\\u003dD:\\\\project\\\\fzy\\\\TouFrameProject\\\\app\\\\.cxx\\\\cmake\\\\debug\\\\prefab\\\\x86\\\\prefab\",\n    \"-DCMAKE_BUILD_TYPE\\u003dDebug\",\n    \"-DCMAKE_TOOLCHAIN_FILE\\u003dD:\\\\Android\\\\Sdk\\\\ndk\\\\20.0.5594570\\\\build\\\\cmake\\\\android.toolchain.cmake\",\n    \"-DANDROID_ABI\\u003dx86\",\n    \"-DANDROID_NDK\\u003dD:\\\\Android\\\\Sdk\\\\ndk\\\\20.0.5594570\",\n    \"-DANDROID_PLATFORM\\u003dandroid-21\",\n    \"-DCMAKE_ANDROID_ARCH_ABI\\u003dx86\",\n    \"-DCMAKE_ANDROID_NDK\\u003dD:\\\\Android\\\\Sdk\\\\ndk\\\\20.0.5594570\",\n    \"-DCMAKE_EXPORT_COMPILE_COMMANDS\\u003dON\",\n    \"-DCMAKE_LIBRARY_OUTPUT_DIRECTORY\\u003dD:\\\\project\\\\fzy\\\\TouFrameProject\\\\app\\\\build\\\\intermediates\\\\cmake\\\\debug\\\\obj\\\\x86\",\n    \"-DCMAKE_MAKE_PROGRAM\\u003dD:\\\\Android\\\\Sdk\\\\cmake\\\\3.10.2.4988404\\\\bin\\\\ninja.exe\",\n    \"-DCMAKE_SYSTEM_NAME\\u003dAndroid\",\n    \"-DCMAKE_SYSTEM_VERSION\\u003d21\"\n  ]\n}\n",
+    "file": "D:\\project\\fzy\\TouFrameProject\\app\\CMakeLists.txt",
+    "tag": "debug|x86"
+  },
+  {
+    "level": "INFO",
+    "message": "{\"cookie\":\"\",\"inReplyTo\":\"configure\",\"message\":\"CMake Error: The source directory \\\"D:/project/fzy/TouFrameProject/app\\\" does not appear to contain CMakeLists.txt.\\nSpecify --help for usage, or press the help button on the CMake GUI.\",\"title\":\"Error\",\"type\":\"message\"}\n",
+    "file": "D:\\project\\fzy\\TouFrameProject\\app\\CMakeLists.txt",
+    "tag": "debug|x86"
+  },
+  {
+    "level": "ERROR",
+    "message": "CMake Error: The source directory \"D:/project/fzy/TouFrameProject/app\" does not appear to contain CMakeLists.txt.\r\nSpecify --help for usage, or press the help button on the CMake GUI.",
+    "file": "D:\\project\\fzy\\TouFrameProject\\app\\CMakeLists.txt",
+    "tag": "debug|x86"
+  },
+  {
+    "level": "INFO",
+    "message": "{\"cookie\":\"\",\"errorMessage\":\"Configuration failed.\",\"inReplyTo\":\"configure\",\"type\":\"error\"}\n",
+    "file": "D:\\project\\fzy\\TouFrameProject\\app\\CMakeLists.txt",
+    "tag": "debug|x86"
+  },
+  {
+    "level": "ERROR",
+    "message": "Configuration failed.",
+    "file": "D:\\project\\fzy\\TouFrameProject\\app\\CMakeLists.txt",
+    "tag": "debug|x86"
+  },
+  {
+    "level": "INFO",
+    "message": "JSON generation completed with problem. Exception: com.android.ide.common.process.ProcessException: Error configuring CMake server (D:\\Android\\Sdk\\cmake\\3.10.2.4988404\\bin).\r\nCMake Error: The source directory \"D:/project/fzy/TouFrameProject/app\" does not appear to contain CMakeLists.txt.\nSpecify --help for usage, or press the help button on the CMake GUI.\n",
+    "file": "D:\\project\\fzy\\TouFrameProject\\app\\CMakeLists.txt",
+    "tag": "debug|x86"
+  }
+]

@@ -1,10 +1,14 @@
 package xyz.ttyz.tourfrxohc;
 
 import android.Manifest;
+import android.content.ComponentName;
+import android.content.pm.PackageManager;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.toutou.myapplication.Native;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,7 +34,6 @@ import xyz.ttyz.tourfrxohc.models.UserModel;
 import xyz.ttyz.tourfrxohc.viewholder.ResorceViewHolder;
 
 public class MainActivity extends BaseActivity<ActivityMainBinding> {
-
     @Override
     protected int initLayoutId() {
         return R.layout.activity_main;
@@ -51,6 +54,15 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     ToolBarViewModel toolBarViewModel;
     @Override
     protected void initData() {
+        mPm = getApplicationContext().getPackageManager();
+        ComponentName defaultName = getComponentName();
+        ComponentName double11 = new ComponentName(getBaseContext(), "xyz.ttyz.tourfrxohc.test11");
+        ComponentName double12 = new ComponentName(getBaseContext(), "xyz.ttyz.tourfrxohc.test12");
+        disableComponent(defaultName);
+        enableComponent(double11);
+        disableComponent(double12);
+
+
         hardware = new Hardware();
         software = new Software();
         mBinding.setContext(this);
@@ -69,7 +81,8 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
 //                                fragmentTransaction.addToBackStack("");
 
 
-                                ToastUtil.showToast(JNITools.add(1,3) + "");
+
+                                ToastUtil.showToast(Native.stringFromJNI(MainActivity.this));
                             }
                         }));
                     }
@@ -147,6 +160,27 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
             }
 
         });
+    }
+
+    private PackageManager mPm;
+    private void enableComponent(ComponentName componentName) {
+
+        mPm.setComponentEnabledSetting(componentName,
+
+                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+
+                PackageManager.DONT_KILL_APP);
+
+    }
+
+    private void disableComponent(ComponentName componentName) {
+
+        mPm.setComponentEnabledSetting(componentName,
+
+                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+
+                PackageManager.DONT_KILL_APP);
+
     }
 
     //region 测试接口需要，不用管

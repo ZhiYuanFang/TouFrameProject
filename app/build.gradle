@@ -63,4 +63,5 @@ dependencies {
     implementation 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.4@aar'
     implementation project(':RfRxOHC')
     implementation project(':toubasemvvm')
+    implementation project(':myapplication')
 }
