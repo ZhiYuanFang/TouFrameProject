@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:binding="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="context"
+            type="xyz.ttyz.tourfrxohc.activity.TicketScanActivity" />
+    </data>
+
+    <RelativeLayout
+        android:fitsSystemWindows="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <TextView
+            android:layout_width="120dp"
+            android:layout_height="45dp"
+            android:background="@drawable/bg_conor_btn"
+            android:foreground="?selectableItemBackground"
+            android:gravity="center"
+            android:text="切换账号"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            binding:onClickCommand="@{context.reLoginClick}"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="15dp"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="120dp"
+                android:layout_height="45dp"
+                android:textColor="@color/white"
+                android:background="@drawable/bg_conor_btn"
+                android:foreground="?selectableItemBackground"
+                android:gravity="center"
+                binding:onClickCommand="@{context.scanERCode}"
+                android:text="扫描二维码"/>
+
+            <TextView
+                android:layout_width="120dp"
+                android:layout_height="45dp"
+                android:textColor="@color/white"
+                android:layout_marginTop="35dp"
+                android:background="@drawable/bg_conor_btn"
+                android:foreground="?selectableItemBackground"
+                binding:onClickCommand="@{context.scanIDCard}"
+                android:gravity="center"
+                android:text="扫描身份证"/>
+        </LinearLayout>
+    </RelativeLayout>
+</layout>

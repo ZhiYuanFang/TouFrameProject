@@ -130,21 +130,21 @@ public class ApplicationUtils {
                 }
             }
         });
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() { //主线程异常拦截
-                while (true) {
-                    try {
-                        Looper.loop();//主线程的异常会从这里抛出
-                    } catch (Throwable e) {
-                        e.printStackTrace();
-                        touDelegate.cacheMainThrowable(e);
-                        if (ActivityManager.getInstance() != null)
-                            ActivityManager.getInstance().finish();
-                    }
-                }
-            }
-        });
+//        new Handler(Looper.getMainLooper()).post(new Runnable() {
+//            @Override
+//            public void run() { //主线程异常拦截
+//                while (true) {
+//                    try {
+//                        Looper.loop();//主线程的异常会从这里抛出
+//                    } catch (Throwable e) {
+//                        e.printStackTrace();
+//                        touDelegate.cacheMainThrowable(e);
+//                        if (ActivityManager.getInstance() != null)
+//                            ActivityManager.getInstance().finish();
+//                    }
+//                }
+//            }
+//        });
     }
 
     private static void initSmartRefresh() {
