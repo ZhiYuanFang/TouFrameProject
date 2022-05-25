@@ -3,6 +3,7 @@
     xmlns:binding="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <import type="xyz.ttyz.tourfrxohc.activity.AccountInfoActivity"/>
         <variable
             name="context"
             type="xyz.ttyz.tourfrxohc.activity.TicketScanActivity" />
@@ -20,12 +21,12 @@
             android:background="@drawable/bg_conor_btn"
             android:foreground="?selectableItemBackground"
             android:gravity="center"
-            android:text="切换账号"
+            android:text="账户信息"
             android:textColor="@color/white"
             android:textSize="18sp"
-            binding:onClickCommand="@{context.reLoginClick}"
+            android:onClick="@{()-> AccountInfoActivity.show()}"
             android:layout_alignParentEnd="true"
-            android:layout_margin="15dp"/>
+            android:layout_margin="35dp"/>
 
         <LinearLayout
             android:layout_width="wrap_content"

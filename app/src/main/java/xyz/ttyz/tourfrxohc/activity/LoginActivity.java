@@ -17,6 +17,7 @@ public class LoginActivity extends BaseTouActivity<ActivityLoginBinding> {
         DefaultUtils.token = null;
         Intent intent = new Intent(ActivityManager.getInstance(), LoginActivity.class);
         ActivityManager.getInstance().startActivity(intent);
+        ActivityManager.popOtherActivity(LoginActivity.class);
     }
 
     public ObservableField<String> accountFiled = new ObservableField<>("");
@@ -48,7 +49,6 @@ public class LoginActivity extends BaseTouActivity<ActivityLoginBinding> {
         public void click() {
             DefaultUtils.token = "123";
             TicketScanActivity.show();
-            finish();
         }
     };
 }

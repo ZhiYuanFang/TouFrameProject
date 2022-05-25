@@ -5,13 +5,18 @@ import android.content.Intent;
 import xyz.ttyz.tou_example.ActivityManager;
 import xyz.ttyz.toubasemvvm.adapter.OnClickAdapter;
 import xyz.ttyz.toubasemvvm.ui.BaseTouActivity;
+import xyz.ttyz.toubasemvvm.utils.ToastUtil;
 import xyz.ttyz.tourfrxohc.R;
+import xyz.ttyz.tourfrxohc.Utils;
 import xyz.ttyz.tourfrxohc.databinding.ActivityScanDetailBinding;
 
 public class ScanDetailActivity extends BaseTouActivity<ActivityScanDetailBinding> {
-    public static void show(){
+    public static void show(String data){
         Intent intent = new Intent(ActivityManager.getInstance(), ScanDetailActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("data", data);
         ActivityManager.getInstance().startActivity(intent);
+        ActivityManager.popOtherActivity(ScanDetailActivity.class);
     }
 
     @Override
@@ -31,14 +36,23 @@ public class ScanDetailActivity extends BaseTouActivity<ActivityScanDetailBindin
 
     @Override
     protected void initServer() {
-
+        String data = getIntent().getStringExtra("data");
+        System.out.println("扫码结果：" + data);
+        ToastUtil.showToast(data);
     }
 
-    public OnClickAdapter.onClickCommand clickContinueScan = new OnClickAdapter.onClickCommand() {
+
+    public OnClickAdapter.onClickCommand clickContinueScanERCode = new OnClickAdapter.onClickCommand() {
         @Override
         public void click() {
-            TicketScanActivity.show();
-            finish();
+            Utils.scanERCode();
+        }
+    };
+
+    public OnClickAdapter.onClickCommand clickContinueScanIDCard = new OnClickAdapter.onClickCommand() {
+        @Override
+        public void click() {
+            ToastUtil.showToast("身份证");
         }
     };
 }

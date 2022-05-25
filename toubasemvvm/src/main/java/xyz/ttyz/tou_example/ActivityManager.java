@@ -2,6 +2,8 @@ package xyz.ttyz.tou_example;
 
 import android.app.Activity;
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,10 +60,11 @@ public class ActivityManager {
         }
     }
 
-    public static Activity getInstance(){
+    public static @NonNull Activity getInstance(){
         if(activityList.size() > 0){
             return activityList.get(activityList.size() - 1);
-        } else return null;
+        } else
+            throw new NullPointerException();
     }
 
     public static boolean isOnlyActivity(Activity activity){
