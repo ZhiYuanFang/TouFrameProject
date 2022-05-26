@@ -14,6 +14,9 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        ndk {
+            abiFilters "armeabi-v7a"
+        }
     }
     signingConfigs {
         tou {
@@ -62,4 +65,8 @@ dependencies {
 
     /* 二维码*/
     implementation 'io.github.devilsen:czxing:1.1.0'
+    /* 身份证识别*/
+    implementation project(':idcard')
+    implementation project(":idcard2")
+    implementation project(':lib')
 }

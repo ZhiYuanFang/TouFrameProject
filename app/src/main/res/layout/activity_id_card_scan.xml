@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="context"
+            type="xyz.ttyz.tourfrxohc.activity.IDCardScanActivity" />
+    </data>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.shouzhong.scanner.ScannerView
+            android:id="@+id/sv"
+            android:layout_width="match_parent"
+            android:layout_height="1080px"
+            android:background="#000000"/>
+    </LinearLayout>
+</layout>

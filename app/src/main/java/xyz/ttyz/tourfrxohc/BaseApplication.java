@@ -1,7 +1,6 @@
 package xyz.ttyz.tourfrxohc;
 
 import android.app.Application;
-import android.util.Log;
 
 import com.ihsanbal.logging.LoggingInterceptor;
 
@@ -16,6 +15,7 @@ import retrofit2.Retrofit;
 import xyz.ttyz.mylibrary.RfRxOHCUtil;
 import xyz.ttyz.tou_example.init.ApplicationUtils;
 import xyz.ttyz.tou_example.init.TouDelegate;
+import xyz.ttyz.tourfrxohc.activity.LoginActivity;
 
 /**
  * Created by tou on 2019/5/20.
@@ -37,6 +37,7 @@ public class BaseApplication extends Application {
             @Override
             public void gotoLoginActivity() {
                 //前往登录界面
+                LoginActivity.show();
             }
 
             @Override
@@ -113,5 +114,7 @@ public class BaseApplication extends Application {
                         return true;
                     }
                 });
+
+
     }
 }

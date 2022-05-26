@@ -1,2 +1,2 @@
 rootProject.name = 'TouFrameProject'
-include ':app', ':RfRxOHC', ':toubasemvvm'
+include ':app', ':RfRxOHC', ':toubasemvvm', 'idcard','lib', ':idcard2'

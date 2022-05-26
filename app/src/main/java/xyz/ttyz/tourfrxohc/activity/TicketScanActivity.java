@@ -4,8 +4,14 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.SurfaceHolder;
+
+import androidx.annotation.Nullable;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.security.PublicKey;
@@ -25,6 +31,8 @@ import xyz.ttyz.tourfrxohc.R;
 import xyz.ttyz.tourfrxohc.Utils;
 import xyz.ttyz.tourfrxohc.databinding.ActivityTicketScanBinding;
 
+import static xyz.ttyz.tourfrxohc.Utils.SCAN_IDCARD_REQUEST;
+
 public class TicketScanActivity extends BaseTouActivity<ActivityTicketScanBinding> {
     public static void show(){
         Intent intent = new Intent(ActivityManager.getInstance(), TicketScanActivity.class);
@@ -39,7 +47,7 @@ public class TicketScanActivity extends BaseTouActivity<ActivityTicketScanBindin
 
     @Override
     protected String[] initPermission() {
-        return new String[]{Manifest.permission.CAMERA};
+        return new String[]{Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE};
     }
 
     @Override
@@ -67,7 +75,7 @@ public class TicketScanActivity extends BaseTouActivity<ActivityTicketScanBindin
     public OnClickAdapter.onClickCommand scanIDCard = new OnClickAdapter.onClickCommand() {
         @Override
         public void click() {
-            ToastUtil.showToast("身份证");
+            Utils.scanIDCard();
         }
     };
 

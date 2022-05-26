@@ -1,17 +1,26 @@
 package xyz.ttyz.tourfrxohc.activity;
 
+import android.Manifest;
 import android.content.Intent;
+
+import androidx.annotation.Nullable;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import xyz.ttyz.tou_example.ActivityManager;
 import xyz.ttyz.toubasemvvm.adapter.OnClickAdapter;
 import xyz.ttyz.toubasemvvm.ui.BaseTouActivity;
+import xyz.ttyz.toubasemvvm.utils.DialogUtils;
 import xyz.ttyz.toubasemvvm.utils.ToastUtil;
 import xyz.ttyz.tourfrxohc.R;
 import xyz.ttyz.tourfrxohc.Utils;
 import xyz.ttyz.tourfrxohc.databinding.ActivityScanDetailBinding;
 
+import static xyz.ttyz.tourfrxohc.Utils.SCAN_IDCARD_REQUEST;
+
 public class ScanDetailActivity extends BaseTouActivity<ActivityScanDetailBinding> {
-    public static void show(String data){
+    public static void show(String data) {
         Intent intent = new Intent(ActivityManager.getInstance(), ScanDetailActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra("data", data);
@@ -26,7 +35,10 @@ public class ScanDetailActivity extends BaseTouActivity<ActivityScanDetailBindin
 
     @Override
     protected String[] initPermission() {
-        return new String[0];
+        return new String[]{
+                Manifest.permission.CAMERA,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+        };
     }
 
     @Override
@@ -38,7 +50,14 @@ public class ScanDetailActivity extends BaseTouActivity<ActivityScanDetailBindin
     protected void initServer() {
         String data = getIntent().getStringExtra("data");
         System.out.println("扫码结果：" + data);
-        ToastUtil.showToast(data);
+        try {
+            JSONObject json = new JSONObject(data);
+            /* 扫的是身份证*/
+            DialogUtils.showSingleDialog("身份证", data);
+        } catch (JSONException e) {
+            /* 扫的是二维码*/
+            DialogUtils.showSingleDialog("二维码", data);
+        }
     }
 
 
@@ -52,7 +71,7 @@ public class ScanDetailActivity extends BaseTouActivity<ActivityScanDetailBindin
     public OnClickAdapter.onClickCommand clickContinueScanIDCard = new OnClickAdapter.onClickCommand() {
         @Override
         public void click() {
-            ToastUtil.showToast("身份证");
+            Utils.scanIDCard();
         }
     };
 }
