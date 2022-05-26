@@ -12,6 +12,9 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import xyz.ttyz.tou_example.ActivityManager;
 import xyz.ttyz.toubasemvvm.adapter.OnClickAdapter;
 import xyz.ttyz.toubasemvvm.ui.BaseTouActivity;
@@ -64,13 +67,14 @@ public class ScanDetailActivity extends BaseTouActivity<ActivityScanDetailBindin
             /* 扫的是身份证*/
             scanTypeFiled.set("身份证");
             userModel = new Gson().fromJson(data, UserModel.class);
+            userModel.setCardNumber(dealIDCard(userModel.getCardNumber()));
         } catch (JSONException e) {
             /* 扫的是二维码*/
             scanTypeFiled.set("二维码");
             userModel = new UserModel();
             userModel.setType("测试票");
             userModel.setName("张三");
-            userModel.setCardNumber("336522198611102370");
+            userModel.setCardNumber(dealIDCard("330121311012091293"));
         }
         mBinding.setUserModel(userModel);
 
@@ -90,4 +94,13 @@ public class ScanDetailActivity extends BaseTouActivity<ActivityScanDetailBindin
             Utils.scanIDCard();
         }
     };
+
+    private String dealIDCard(String idCardNum){
+        if(idCardNum != null && idCardNum.length() > 6){
+            Pattern credentialsPattern = Pattern.compile("(\\d{3})\\d*([0-9a-zA-Z]{4})");
+            Matcher credentialsMatch = credentialsPattern.matcher(idCardNum);
+            idCardNum = credentialsMatch.replaceAll("$1****$2");
+            return idCardNum;
+        } else return idCardNum;
+    }
 }
