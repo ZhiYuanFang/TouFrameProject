@@ -87,29 +87,30 @@ public abstract class BaseTouActivity<T extends ViewDataBinding> extends SwipeBa
             StatusBarUtil.setStatusBarColor(this, 0x55000000);
         }
         mBinding = DataBindingUtil.setContentView(this, initLayoutId());
-        //页面基础渲染之后，延迟300毫秒做逻辑渲染，防止逻辑渲染卡顿
-        Observable.timer(300, TimeUnit.MILLISECONDS)
-                .subscribe(new Observer<Long>() {
-                    @Override
-                    public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onNext(@io.reactivex.annotations.NonNull Long aLong) {
-
-                    }
-
-                    @Override
-                    public void onError(@io.reactivex.annotations.NonNull Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        doInit();
-                    }
-                });
+        //页面基础渲染之后，延迟300毫秒做逻辑渲染，防止逻辑渲染卡顿，做延迟加载，会导致需要在onResume做功能的时候，onCreate没有初始化好，导致功能异常
+//        Observable.timer(300, TimeUnit.MILLISECONDS)
+//                .subscribe(new Observer<Long>() {
+//                    @Override
+//                    public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onNext(@io.reactivex.annotations.NonNull Long aLong) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onError(@io.reactivex.annotations.NonNull Throwable e) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onComplete() {
+//                        doInit();
+//                    }
+//                });
+        doInit();
     }
 
     @Override
