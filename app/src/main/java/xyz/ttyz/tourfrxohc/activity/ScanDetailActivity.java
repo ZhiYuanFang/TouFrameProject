@@ -4,6 +4,10 @@ import android.Manifest;
 import android.content.Intent;
 
 import androidx.annotation.Nullable;
+import androidx.databinding.ObservableField;
+import androidx.databinding.ObservableInt;
+
+import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,6 +20,7 @@ import xyz.ttyz.toubasemvvm.utils.ToastUtil;
 import xyz.ttyz.tourfrxohc.R;
 import xyz.ttyz.tourfrxohc.Utils;
 import xyz.ttyz.tourfrxohc.databinding.ActivityScanDetailBinding;
+import xyz.ttyz.tourfrxohc.models.UserModel;
 
 import static xyz.ttyz.tourfrxohc.Utils.SCAN_IDCARD_REQUEST;
 
@@ -27,6 +32,9 @@ public class ScanDetailActivity extends BaseTouActivity<ActivityScanDetailBindin
         ActivityManager.getInstance().startActivity(intent);
         ActivityManager.popOtherActivity(ScanDetailActivity.class);
     }
+
+    public ObservableField<String> scanTypeFiled = new ObservableField<>("");
+    public UserModel userModel;//用户信息
 
     @Override
     protected int initLayoutId() {
@@ -50,14 +58,22 @@ public class ScanDetailActivity extends BaseTouActivity<ActivityScanDetailBindin
     protected void initServer() {
         String data = getIntent().getStringExtra("data");
         System.out.println("扫码结果：" + data);
+        /*根据扫码得到的数据类型，区分扫码类型*/
         try {
             JSONObject json = new JSONObject(data);
             /* 扫的是身份证*/
-            DialogUtils.showSingleDialog("身份证", data);
+            scanTypeFiled.set("身份证");
+            userModel = new Gson().fromJson(data, UserModel.class);
         } catch (JSONException e) {
             /* 扫的是二维码*/
-            DialogUtils.showSingleDialog("二维码", data);
+            scanTypeFiled.set("二维码");
+            userModel = new UserModel();
+            userModel.setType("测试票");
+            userModel.setName("张三");
+            userModel.setCardNumber("336522198611102370");
         }
+        mBinding.setUserModel(userModel);
+
     }
 
 

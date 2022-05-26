@@ -17,13 +17,16 @@ import com.shouzhong.scanner.Result;
 import xyz.ttyz.tou_example.ActivityManager;
 import xyz.ttyz.toubasemvvm.ui.BaseTouActivity;
 import xyz.ttyz.toubasemvvm.utils.ToastUtil;
+import xyz.ttyz.toubasemvvm.vm.ToolBarViewModel;
 import xyz.ttyz.tourfrxohc.R;
 import xyz.ttyz.tourfrxohc.databinding.ActivityIdCardScanBinding;
 
 public class IDCardScanActivity extends BaseTouActivity<ActivityIdCardScanBinding> {
 
     private Vibrator vibrator;
-    public static void show(){
+    ToolBarViewModel toolBarViewModel;
+
+    public static void show() {
         Intent intent = new Intent(ActivityManager.getInstance(), IDCardScanActivity.class);
         ActivityManager.getInstance().startActivity(intent);
     }
@@ -40,6 +43,8 @@ public class IDCardScanActivity extends BaseTouActivity<ActivityIdCardScanBindin
 
     @Override
     protected void initData() {
+        toolBarViewModel = new ToolBarViewModel.Builder().title("扫描身份证").build();
+        mBinding.setToolBarViewModel(toolBarViewModel);
         mBinding.setContext(this);
 
         mBinding.sv.setShouldAdjustFocusArea(true);
@@ -48,10 +53,10 @@ public class IDCardScanActivity extends BaseTouActivity<ActivityIdCardScanBindin
         mBinding.sv.setCallback(new Callback() {
             @Override
             public void result(Result result) {
-                System.out.println("识别结果：\n" + result.toString());
-                ToastUtil.showToast(result.toString());
-                startVibrator();
-                mBinding.sv.restartPreviewAfterDelay(2000);
+                /*继续扫描*/
+//                startVibrator();
+//                mBinding.sv.restartPreviewAfterDelay(2000);
+                ScanDetailActivity.show(result.toJsonString());
             }
         });
     }
@@ -88,7 +93,6 @@ public class IDCardScanActivity extends BaseTouActivity<ActivityIdCardScanBindin
         }
         super.onDestroy();
     }
-
 
 
     private static class ViewFinder extends View implements IViewFinder {

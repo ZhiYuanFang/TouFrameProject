@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:binding="http://schemas.android.com/apk/res-auto">
+    xmlns:binding="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
         <import type="xyz.ttyz.tourfrxohc.activity.AccountInfoActivity"/>
         <variable
             name="context"
             type="xyz.ttyz.tourfrxohc.activity.ScanDetailActivity" />
+        <variable
+            name="userModel"
+            type="xyz.ttyz.tourfrxohc.models.UserModel" />
 
     </data>
 
@@ -54,7 +58,8 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorPrimary"
                 android:textSize="28sp"
-                android:text="团体票"/>
+                tools:text="团体票"
+                android:text="@{userModel.type}"/>
         </LinearLayout>
 
         <LinearLayout
@@ -74,7 +79,8 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorPrimary"
                 android:textSize="28sp"
-                android:text="张三"/>
+                tools:text="张三"
+                android:text="@{userModel.name}"/>
         </LinearLayout>
 
         <LinearLayout
@@ -94,9 +100,30 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorPrimary"
                 android:textSize="28sp"
-                android:text="330xxxxxxx0470"/>
+                tools:text="330xxxxxxx0470"
+                android:text="@{userModel.cardNumber}"/>
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal"
+            android:gravity="bottom">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="扫码类型:"
+                android:textColor="@color/black"
+                android:textSize="18sp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorEECC76"
+                android:textSize="28sp"
+                android:text="@{context.scanTypeFiled}"
+                tools:text="身份证"/>
+        </LinearLayout>
         <View
             android:layout_width="match_parent"
             android:layout_height="135dp"/>

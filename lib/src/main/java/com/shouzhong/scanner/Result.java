@@ -67,4 +67,8 @@ public class Result {
         sb.append("\n").append(data);
         return sb.toString();
     }
+
+    public String toJsonString(){
+        return data;
+    }
 }
