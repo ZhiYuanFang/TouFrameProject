@@ -63,8 +63,9 @@ dependencies {
     implementation project(':toubasemvvm')
 
 
-    /* 二维码*/
-    implementation 'io.github.devilsen:czxing:1.1.0'
+    /* 二维码 条形码*/
+    implementation 'com.github.jenly1314:zxing-lite:2.1.1'
+//    implementation 'io.github.devilsen:czxing:1.1.0'
     /* 身份证识别*/
     implementation project(':idcard')
     implementation project(":idcard2")

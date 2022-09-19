@@ -31,7 +31,7 @@ public class BaseApplication extends Application {
         ApplicationUtils.init(this, 750, 1334, new TouDelegate() {
             @Override
             public boolean isLogin() {
-                return DefaultUtils.token != null;//当前用户是否登录
+                return DefaultUtils.getUser() != null;//当前用户是否登录
             }
 
             @Override
@@ -58,7 +58,7 @@ public class BaseApplication extends Application {
                 //捕获主线程异常，上传bugly
             }
         });
-        RfRxOHCUtil.initApiService(this, "http://api.x16.com/", "ws://192.168.1.201:8080/tou3_war_exploded/devMessage",getPackageName() + "-cache",
+        RfRxOHCUtil.initApiService(this, "http://47.111.185.38:8001/", "ws://192.168.1.201:8080/tou3_war_exploded/devMessage",getPackageName() + "-cache",
                 2 * 1024 * 1024, 30, BuildConfig.BUILD_TYPE.equals("release"), BuildConfig.DEBUG, BuildConfig.VERSION_NAME,
                 "huawei", "android", 0, new RfRxOHCUtil.TouRRCDelegate() {
                     @Override
@@ -68,11 +68,11 @@ public class BaseApplication extends Application {
                             @Override
                             public Response intercept(Chain chain) throws IOException {
                                 Request originalRequest = chain.request();
-                                if (DefaultUtils.token == null) {
+                                if (DefaultUtils.getUser() != null) {
                                     return chain.proceed(originalRequest);
                                 }
                                 Request authorised = originalRequest.newBuilder()
-                                        .header("Authorization", "Bearer " + DefaultUtils.token)
+                                        .header("Authorization", "Bearer " + DefaultUtils.getUser().getAccessToken())
                                         .header("Role", "32")
                                         .build();
                                 return chain.proceed(authorised);

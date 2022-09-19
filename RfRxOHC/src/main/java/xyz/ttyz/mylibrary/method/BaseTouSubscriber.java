@@ -44,7 +44,7 @@ public abstract class BaseTouSubscriber<D> extends BaseObserver<BaseModule<D>> {
         //执行剩余接口
         if (HttpDefaultUtils.getWaitUiSubscriber().size() > 0) {
             BaseTouSubscriber baseSubscriber = HttpDefaultUtils.getWaitUiSubscriber().get(0);
-            new RxOHCUtils<>(initContext()).executeApi(baseSubscriber.getApiObservable(), baseSubscriber);
+            new RxOHCUtils(initContext()).executeApi(baseSubscriber.getApiObservable(), baseSubscriber);
         }
     }
 
@@ -61,8 +61,9 @@ public abstract class BaseTouSubscriber<D> extends BaseObserver<BaseModule<D>> {
     @Override
     public void onRfRxNext(BaseModule<D> baseModule) {
         onStart();
-        if (baseModule.getCode() == RfRxOHCUtil.successCode) {
-            success((D) baseModule.getData());
+        System.out.println("Success: " + baseModule.isSuccess());
+        if (baseModule.isSuccess()) {
+            success((D) baseModule.getEx());
         } else {
             fail(baseModule);
         }
@@ -79,6 +80,7 @@ public abstract class BaseTouSubscriber<D> extends BaseObserver<BaseModule<D>> {
      * @param baseModule int code 自定义
      */
     protected void fail(BaseModule<D> baseModule){
+        System.out.println("message: " + baseModule.getMsg());
         Toast.makeText(ActivityManager.getInstance(), baseModule.getMsg(), Toast.LENGTH_LONG).show();
     }
 

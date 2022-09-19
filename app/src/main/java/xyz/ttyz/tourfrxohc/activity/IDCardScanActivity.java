@@ -21,7 +21,7 @@ import xyz.ttyz.toubasemvvm.vm.ToolBarViewModel;
 import xyz.ttyz.tourfrxohc.R;
 import xyz.ttyz.tourfrxohc.databinding.ActivityIdCardScanBinding;
 
-public class IDCardScanActivity extends BaseTouActivity<ActivityIdCardScanBinding> {
+public class IDCardScanActivity extends BaseActivity<ActivityIdCardScanBinding> {
 
     private Vibrator vibrator;
     ToolBarViewModel toolBarViewModel;
@@ -56,7 +56,7 @@ public class IDCardScanActivity extends BaseTouActivity<ActivityIdCardScanBindin
                 /*继续扫描*/
 //                startVibrator();
 //                mBinding.sv.restartPreviewAfterDelay(2000);
-                ScanDetailActivity.show(result.toJsonString());
+                ScanDetailActivity.show(result.toJsonString(), 2);
             }
         });
     }

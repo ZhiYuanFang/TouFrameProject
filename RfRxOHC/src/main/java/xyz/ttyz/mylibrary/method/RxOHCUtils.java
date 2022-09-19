@@ -24,7 +24,7 @@ import xyz.ttyz.mylibrary.protect.StringUtil;
  * 集成本地缓存
  */
 
-public class RxOHCUtils<M extends RfRxOHCBaseModule> {
+public class RxOHCUtils {
     private static final String TAG = "RxOHCUtils";
     private Context c;
 

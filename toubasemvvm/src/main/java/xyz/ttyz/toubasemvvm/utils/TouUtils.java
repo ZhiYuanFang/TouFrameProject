@@ -17,8 +17,8 @@ import android.widget.ScrollView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.luck.picture.lib.PictureSelector;
-import com.luck.picture.lib.entity.LocalMedia;
+//import com.luck.picture.lib.PictureSelector;
+//import com.luck.picture.lib.entity.LocalMedia;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -51,28 +51,28 @@ public class TouUtils {
      *
      * @return true 为模拟器
      */
-    public static boolean isMonitor() {
-        Activity activity = ActivityManager.getInstance();
-        boolean notHsaBluetooth;
-        BluetoothAdapter ba = BluetoothAdapter.getDefaultAdapter();
-        if (ba == null) {
-            notHsaBluetooth = true;
-        } else {
-// 如果有蓝牙不一定是有效的。获取蓝牙名称，若为null 则默认为模拟器
-            String name = ba.getName();
-            notHsaBluetooth = TextUtils.isEmpty(name);
-        }
-
-        boolean notHasLightSensor;
-        SensorManager sensorManager = (SensorManager) activity.getSystemService(SENSOR_SERVICE);
-        Sensor sensor8 = null; //光
-        if (sensorManager != null) {
-            sensor8 = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
-        }
-        notHasLightSensor = null == sensor8;
-
-        return notHsaBluetooth || notHasLightSensor;
-    }
+//    public static boolean isMonitor() {
+//        Activity activity = ActivityManager.getInstance();
+//        boolean notHsaBluetooth;
+//        BluetoothAdapter ba = BluetoothAdapter.getDefaultAdapter();
+//        if (ba == null) {
+//            notHsaBluetooth = true;
+//        } else {
+//// 如果有蓝牙不一定是有效的。获取蓝牙名称，若为null 则默认为模拟器
+//            String name = ba.getName();
+//            notHsaBluetooth = TextUtils.isEmpty(name);
+//        }
+//
+//        boolean notHasLightSensor;
+//        SensorManager sensorManager = (SensorManager) activity.getSystemService(SENSOR_SERVICE);
+//        Sensor sensor8 = null; //光
+//        if (sensorManager != null) {
+//            sensor8 = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+//        }
+//        notHasLightSensor = null == sensor8;
+//
+//        return notHsaBluetooth || notHasLightSensor;
+//    }
 
     //获取网络视频第一帧
     public static Bitmap getNetVideoBitmap(String videoUrl) {
@@ -125,19 +125,6 @@ public class TouUtils {
         return 0;
     }
 
-    public static void filterResSelectResult(Intent data, ArrayList<String> selectPics){
-        List<LocalMedia> selectList = PictureSelector.obtainMultipleResult(data);
-        if (selectList.size() > 0) {
-            for (LocalMedia media : selectList) {
-                String filePath = media.getPath();
-                if (media.isCompressed()) {
-                    filePath = media.getCompressPath();
-                }
-                filePath = FileUtil.getRealPathFromUri(ActivityManager.getInstance(), Uri.parse(filePath));
-                selectPics.add(filePath);
-            }
-        }
-    }
     public static String jumpString;//通知点击跳转的链接
 
     public static boolean equalsList(List list1, List list2) throws Exception{

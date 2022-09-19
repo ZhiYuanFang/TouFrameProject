@@ -42,7 +42,7 @@ implementation project(':RfRxOHC')
 > 主项目的Application中调用
 
 ```java
-RfRxOHCUtil.initApiService(this, "http://api.x16.com/", "ws://192.168.1.201:8080/tou3_war_exploded/devMessage" , getPackageName() + "-cache",
+RfRxOHCUtil.initApiService(this, "http://47.111.185.38:8001/", "ws://192.168.1.201:8080/tou3_war_exploded/devMessage" , getPackageName() + "-cache",
                 2 * 1024 * 1024, 30, BuildConfig.BUILD_TYPE.equals("release"), BuildConfig.DEBUG, BuildConfig.VERSION_NAME,
                 "huawei", "android", 0, new RfRxOHCUtil.TouRRCDelegate() {
                     @Override

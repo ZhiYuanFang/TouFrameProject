@@ -130,7 +130,18 @@
         <TextView
             android:layout_width="120dp"
             android:layout_height="45dp"
-            android:text="扫描二维码"
+            android:text="检票"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:foreground="?selectableItemBackground"
+            binding:onClickCommand="@{context.clickUseTicket}"
+            android:background="@drawable/bg_conor_btn"/>
+        <TextView
+            android:layout_width="120dp"
+            android:layout_height="45dp"
+            android:text="扫描二维码/条形码"
+            android:layout_marginTop="35dp"
             android:textColor="@color/white"
             android:gravity="center"
             android:textSize="18sp"

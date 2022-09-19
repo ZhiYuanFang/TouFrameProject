@@ -1,40 +1,20 @@
 package xyz.ttyz.tourfrxohc.activity;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
-import android.content.res.Resources;
-import android.os.Bundle;
-import android.provider.MediaStore;
-import android.view.SurfaceHolder;
 
 import androidx.annotation.Nullable;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.king.zxing.CameraScan;
 
-import java.io.IOException;
-import java.security.PublicKey;
-import java.util.Arrays;
-import java.util.List;
-
-import me.devilsen.czxing.Scanner;
-import me.devilsen.czxing.code.BarcodeFormat;
-import me.devilsen.czxing.util.BarCodeUtil;
-import me.devilsen.czxing.view.ScanActivityDelegate;
-import me.devilsen.czxing.view.ScanView;
 import xyz.ttyz.tou_example.ActivityManager;
 import xyz.ttyz.toubasemvvm.adapter.OnClickAdapter;
-import xyz.ttyz.toubasemvvm.ui.BaseTouActivity;
-import xyz.ttyz.toubasemvvm.utils.ToastUtil;
 import xyz.ttyz.tourfrxohc.R;
 import xyz.ttyz.tourfrxohc.Utils;
 import xyz.ttyz.tourfrxohc.databinding.ActivityTicketScanBinding;
 
-import static xyz.ttyz.tourfrxohc.Utils.SCAN_IDCARD_REQUEST;
-
-public class TicketScanActivity extends BaseTouActivity<ActivityTicketScanBinding> {
-    public static void show(){
+public class TicketScanActivity extends BaseActivity<ActivityTicketScanBinding> {
+    public static void show() {
         Intent intent = new Intent(ActivityManager.getInstance(), TicketScanActivity.class);
         ActivityManager.getInstance().startActivity(intent);
         ActivityManager.popOtherActivity(TicketScanActivity.class);
@@ -47,7 +27,7 @@ public class TicketScanActivity extends BaseTouActivity<ActivityTicketScanBindin
 
     @Override
     protected String[] initPermission() {
-        return new String[]{Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        return new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
     }
 
     @Override
@@ -79,4 +59,13 @@ public class TicketScanActivity extends BaseTouActivity<ActivityTicketScanBindin
         }
     };
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Utils.SCAN_ERCODE_REQUEST && resultCode == RESULT_OK) {
+            String scanResult = data.getStringExtra(CameraScan.SCAN_RESULT);
+            ScanDetailActivity.show(scanResult, 1);
+            finish();
+        }
+    }
 }

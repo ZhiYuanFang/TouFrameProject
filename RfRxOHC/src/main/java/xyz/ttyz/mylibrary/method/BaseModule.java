@@ -6,18 +6,23 @@ package xyz.ttyz.mylibrary.method;
 
 public class BaseModule<D> extends RfRxOHCBaseModule {
     int code;
-    String msg;
-    D data;
+    String Message;
+    D Ex;
+    boolean Success;
+
+    public boolean isSuccess() {
+        return Success;
+    }
 
     public int getCode() {
         return code;
     }
 
     public String getMsg() {
-        return msg;
+        return Message;
     }
 
-    public D getData() {
-        return data;
+    public D getEx() {
+        return Ex;
     }
 }
