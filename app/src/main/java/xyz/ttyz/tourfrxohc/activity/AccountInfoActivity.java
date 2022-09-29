@@ -36,6 +36,7 @@ public class AccountInfoActivity extends BaseActivity<ActivityAccountInfoBinding
         toolBarViewModel = new ToolBarViewModel.Builder().title("账户信息").build();
         mBinding.setToolBarViewModel(toolBarViewModel);
         mBinding.setContext(this);
+        mBinding.setUserModel(DefaultUtils.getUser());
     }
 
     @Override
@@ -49,7 +50,7 @@ public class AccountInfoActivity extends BaseActivity<ActivityAccountInfoBinding
                 @Override
                 public void success(UserModel data) {
                     System.out.println("登出成功");
-                    DefaultUtils.setUser(null);
+                    DefaultUtils.clearCache();
                     LoginActivity.show();
                 }
 

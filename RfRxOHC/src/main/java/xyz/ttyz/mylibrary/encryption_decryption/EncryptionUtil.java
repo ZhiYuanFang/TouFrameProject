@@ -11,7 +11,6 @@ import java.security.MessageDigest;
  * @Copyright: 2017-2018 dgztc Inc. All rights reserved.
  */
 public class EncryptionUtil {
-
     /**
      * 对字符串进行md5加密
      *

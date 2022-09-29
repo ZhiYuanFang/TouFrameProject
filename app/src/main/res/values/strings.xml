@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">检票机</string>
+
+    <string name="searchsuccess">查票成功</string>
+    <string name="searchfail">查票失败</string>
 </resources>

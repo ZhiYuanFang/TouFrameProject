@@ -4,10 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="xyz.ttyz.tourfrxohc.activity.AccountInfoActivity"/>
+
+        <import type="xyz.ttyz.tourfrxohc.activity.AccountInfoActivity" />
+
         <variable
             name="context"
             type="xyz.ttyz.tourfrxohc.activity.ScanDetailActivity" />
+
         <variable
             name="userModel"
             type="xyz.ttyz.tourfrxohc.models.UserModel" />
@@ -15,151 +18,200 @@
     </data>
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center">
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="120dp"
             android:layout_height="45dp"
             android:layout_gravity="end"
+            android:layout_marginTop="35dp"
+            android:layout_marginEnd="15dp"
             android:background="@drawable/bg_conor_btn"
             android:foreground="?selectableItemBackground"
             android:gravity="center"
+            android:onClick="@{()->AccountInfoActivity.show()}"
             android:text="账户信息"
             android:textColor="@color/white"
-            android:textSize="18sp"
-            android:onClick="@{()->AccountInfoActivity.show()}"
-            android:layout_marginEnd="15dp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="检票成功"
-            android:textSize="36dp"
-            android:textColor="@android:color/holo_green_light"
-            android:layout_marginTop="55dp"/>
+            android:textSize="18sp" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:orientation="horizontal"
-            android:gravity="bottom">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="票据类型:"
-                android:textColor="@color/black"
-                android:textSize="18sp"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/colorPrimary"
-                android:textSize="28sp"
-                tools:text="团体票"
-                android:text="@{userModel.type}"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:orientation="horizontal"
-            android:gravity="bottom">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="游客姓名:"
-                android:textColor="@color/black"
-                android:textSize="18sp"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/colorPrimary"
-                android:textSize="28sp"
-                tools:text="张三"
-                android:text="@{userModel.name}"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:orientation="horizontal"
-            android:gravity="bottom">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="身份证:"
-                android:textColor="@color/black"
-                android:textSize="18sp"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/colorPrimary"
-                android:textSize="28sp"
-                tools:text="330xxxxxxx0470"
-                android:text="@{userModel.cardNumber}"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:orientation="horizontal"
-            android:gravity="bottom">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="扫码类型:"
-                android:textColor="@color/black"
-                android:textSize="18sp"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/colorEECC76"
-                android:textSize="28sp"
-                android:text="@{context.scanTypeFiled}"
-                tools:text="身份证"/>
-        </LinearLayout>
-        <View
             android:layout_width="match_parent"
-            android:layout_height="135dp"/>
-        <TextView
-            android:layout_width="120dp"
-            android:layout_height="45dp"
-            android:text="检票"
-            android:textColor="@color/white"
-            android:gravity="center"
-            android:textSize="18sp"
-            android:foreground="?selectableItemBackground"
-            binding:onClickCommand="@{context.clickUseTicket}"
-            android:background="@drawable/bg_conor_btn"/>
-        <TextView
-            android:layout_width="120dp"
-            android:layout_height="45dp"
-            android:text="扫描二维码/条形码"
-            android:layout_marginTop="35dp"
-            android:textColor="@color/white"
-            android:gravity="center"
-            android:textSize="18sp"
-            android:foreground="?selectableItemBackground"
-            binding:onClickCommand="@{context.clickContinueScanERCode}"
-            android:background="@drawable/bg_conor_btn"/>
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
 
-        <TextView
-            android:layout_width="120dp"
-            android:layout_height="45dp"
-            android:text="扫描身份证"
-            android:textColor="@color/white"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="55dp"
+                android:text="@{context.searchSuccessFiled ? @string/searchsuccess : @string/searchfail}"
+                android:textSize="36dp"
+                tools:text="检票成功"
+                tools:textColor="@android:color/holo_green_light" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="@{context.tipMessageFiled}"
+                android:textSize="26dp"
+                binding:visible="@{!context.searchSuccessFiled}"
+                tools:text="无门"
+                tools:textColor="@color/black" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                binding:visible="@{context.searchSuccessFiled}">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:gravity="bottom"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="票据类型:"
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{userModel.type}"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="28sp"
+                        tools:text="团体票" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:gravity="bottom"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="游客姓名:"
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{userModel.name}"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="28sp"
+                        tools:text="张三" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:gravity="bottom"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="身份证:"
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{context.dealIDCard(userModel.cardNumber)}"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="28sp"
+                        tools:text="330xxxxxxx0470" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:gravity="bottom"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="扫码类型:"
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{context.scanTypeFiled}"
+                        android:textColor="@color/colorEECC76"
+                        android:textSize="28sp"
+                        tools:text="身份证" />
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="35dp"
+            android:divider="@drawable/divider_size"
             android:gravity="center"
-            android:layout_marginTop="35dp"
-            android:textSize="18sp"
-            android:foreground="?selectableItemBackground"
-            binding:onClickCommand="@{context.clickContinueScanIDCard}"
-            android:background="@drawable/bg_conor_btn"/>
+            android:orientation="horizontal"
+            android:showDividers="middle">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_conor_5_blue"
+                android:foreground="?selectableItemBackground"
+                android:gravity="center"
+                android:padding="15dp"
+                android:text="扫描二维码"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                binding:onClickCommand="@{context.clickContinueScanERCode}" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_conor_5_blue"
+                android:foreground="?selectableItemBackground"
+                android:gravity="center"
+                android:padding="15dp"
+                android:text="扫描身份证"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                binding:onClickCommand="@{context.clickContinueScanIDCard}" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_conor_btn"
+                android:foreground="?selectableItemBackground"
+                android:gravity="center"
+                android:padding="15dp"
+                android:text="检票"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                binding:onClickCommand="@{context.clickUseTicket}"
+                binding:visible="@{context.searchSuccessFiled}" />
+        </LinearLayout>
 
     </LinearLayout>
 </layout>

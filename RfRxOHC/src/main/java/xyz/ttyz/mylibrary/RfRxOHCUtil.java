@@ -20,6 +20,7 @@ import io.reactivex.schedulers.Schedulers;
 import okhttp3.Cache;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.internal.platform.Platform;
 import retrofit2.Retrofit;
@@ -106,7 +107,14 @@ public class RfRxOHCUtil {
 
         OkHttpClient okHttpClient = httpBuilder
                 .addInterceptor(loggingInterceptor)
-//                .addInterceptor(new RfRxOHCIntercept(application))
+                .addInterceptor(new Interceptor() {
+                    @Override
+                    public Response intercept(Chain chain) throws IOException {
+                        Response response = chain.proceed(chain.request());
+                        touRRCDelegate.dealRebackHeader(response);
+                        return response;
+                    }
+                })
                 .build();
         //返回数据格式处理
         Retrofit.Builder retBuilder = new Retrofit.Builder()
@@ -215,5 +223,7 @@ public class RfRxOHCUtil {
          * 如果已经登录，APP打开后，连接socket
          */
         boolean isLogin();
+
+        void dealRebackHeader(Response response);
     }
 }

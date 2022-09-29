@@ -14,11 +14,24 @@ public class UserModel extends BaseObservable implements Serializable {
     String name;//姓名
     int checkType;//检票类型
 
-    long id;
+    String id;
     String user_name;
     String lan;
     int role_id;//1
     String work_type;//01
+    String sessionID;
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getSessionID() {
+        return sessionID;
+    }
+
+    public void setSessionID(String sessionID) {
+        this.sessionID = sessionID;
+    }
 
     public int getCheckType() {
         return checkType;
@@ -28,13 +41,10 @@ public class UserModel extends BaseObservable implements Serializable {
         this.checkType = checkType;
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public String getUser_name() {
         return user_name;

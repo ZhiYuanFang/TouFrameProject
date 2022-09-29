@@ -1,10 +1,12 @@
 package xyz.ttyz.tourfrxohc;
 
 import android.app.Application;
+import android.util.Log;
 
 import com.ihsanbal.logging.LoggingInterceptor;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Map;
 
 import okhttp3.Interceptor;
@@ -31,7 +33,7 @@ public class BaseApplication extends Application {
         ApplicationUtils.init(this, 750, 1334, new TouDelegate() {
             @Override
             public boolean isLogin() {
-                return DefaultUtils.getUser() != null;//当前用户是否登录
+                return DefaultUtils.getCookie() != null;
             }
 
             @Override
@@ -43,9 +45,9 @@ public class BaseApplication extends Application {
             @Override
             public void checkVersion(VersionDelegate versionDelegate) {
                 //请求接口判断是否需要更新
-                if (true) {
-                    versionDelegate.installVersion("", "更新了一些功能", BuildConfig.VERSION_CODE);
-                }
+//                if (true) {
+//                    versionDelegate.installVersion("", "更新了一些功能", BuildConfig.VERSION_CODE);
+//                }
             }
 
             @Override
@@ -58,7 +60,7 @@ public class BaseApplication extends Application {
                 //捕获主线程异常，上传bugly
             }
         });
-        RfRxOHCUtil.initApiService(this, "http://47.111.185.38:8001/", "ws://192.168.1.201:8080/tou3_war_exploded/devMessage",getPackageName() + "-cache",
+        RfRxOHCUtil.initApiService(this, "http://47.111.185.38:8001/", "",getPackageName() + "-cache",
                 2 * 1024 * 1024, 30, BuildConfig.BUILD_TYPE.equals("release"), BuildConfig.DEBUG, BuildConfig.VERSION_NAME,
                 "huawei", "android", 0, new RfRxOHCUtil.TouRRCDelegate() {
                     @Override
@@ -67,15 +69,16 @@ public class BaseApplication extends Application {
                         httpBuilder.addInterceptor(new Interceptor() {
                             @Override
                             public Response intercept(Chain chain) throws IOException {
-                                Request originalRequest = chain.request();
-                                if (DefaultUtils.getUser() != null) {
-                                    return chain.proceed(originalRequest);
+                                Request.Builder builder = chain.request().newBuilder();
+                                HashSet<String> preferences = DefaultUtils.getCookie();
+                                if (preferences != null) {
+                                    for (String cookie : preferences) {
+                                        builder.addHeader("Cookie", cookie);
+                                        Log.v("OkHttp", "Adding Header: " + cookie); // This is done so I know which headers are being added; this interceptor is used after the normal logging of OkHttp
+                                    }
                                 }
-                                Request authorised = originalRequest.newBuilder()
-                                        .header("Authorization", "Bearer " + DefaultUtils.getUser().getAccessToken())
-                                        .header("Role", "32")
-                                        .build();
-                                return chain.proceed(authorised);
+                                return chain.proceed(builder.build());
+
                             }
                         });
                     }
@@ -110,8 +113,22 @@ public class BaseApplication extends Application {
                     }
 
                     @Override
+                    public void dealRebackHeader(Response originalResponse) {
+                        if (!originalResponse.headers("Set-Cookie").isEmpty()) {
+                            HashSet<String> cookies = new HashSet<>();
+
+                            for (String header : originalResponse.headers("Set-Cookie")) {
+                                cookies.add(header);
+                            }
+
+                           DefaultUtils.setCookie(cookies);
+                        }
+
+                    }
+
+                    @Override
                     public boolean isLogin() {
-                        return true;
+                        return DefaultUtils.getCookie() != null;
                     }
                 });
 

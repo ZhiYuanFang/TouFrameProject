@@ -20,14 +20,14 @@ import xyz.ttyz.tourfrxohc.models.UserModel;
 
 public class LoginActivity extends BaseActivity<ActivityLoginBinding> {
     public static void show(){
-        DefaultUtils.setUser(null);
+        DefaultUtils.clearCache();
         Intent intent = new Intent(ActivityManager.getInstance(), LoginActivity.class);
         ActivityManager.getInstance().startActivity(intent);
         ActivityManager.popOtherActivity(LoginActivity.class);
     }
 
     public ObservableField<String> accountFiled = new ObservableField<>("000000");
-    public ObservableField<String> password = new ObservableField<>("pswtxt");
+    public ObservableField<String> password = new ObservableField<>("pz");
 
 
     @Override
@@ -57,7 +57,7 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding> {
                 ToastUtil.showToast("请输入账号/密码");
                 return;
             }
-            new RxOHCUtils(LoginActivity.this).executeApi(BaseApplication.apiService.login(accountFiled.get(), EncryptionUtil.md5(password.get()) ), new BaseSubscriber<UserModel>(LoginActivity.this) {
+            new RxOHCUtils(LoginActivity.this).executeApi(BaseApplication.apiService.login(accountFiled.get(), EncryptionUtil.md5(password.get()).toUpperCase() ), new BaseSubscriber<UserModel>(LoginActivity.this) {
                 @Override
                 public void success(UserModel data) {
                     if (data != null) {

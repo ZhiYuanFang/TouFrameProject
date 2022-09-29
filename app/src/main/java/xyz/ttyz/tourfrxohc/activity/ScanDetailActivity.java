@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 
 import androidx.annotation.Nullable;
+import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableField;
 import androidx.databinding.ObservableInt;
 
@@ -46,6 +47,8 @@ public class ScanDetailActivity extends BaseActivity<ActivityScanDetailBinding> 
         ActivityManager.popOtherActivity(ScanDetailActivity.class);
     }
 
+    public ObservableBoolean searchSuccessFiled = new ObservableBoolean(false);
+    public ObservableField<String> tipMessageFiled = new ObservableField<>("");
     public ObservableField<String> scanTypeFiled = new ObservableField<>("");
     public UserModel userModel;//用户信息
 
@@ -83,7 +86,7 @@ public class ScanDetailActivity extends BaseActivity<ActivityScanDetailBinding> 
                     /* 扫的是身份证*/
                     scanTypeFiled.set("身份证");
                     userModel = new Gson().fromJson(data, UserModel.class);
-                    userModel.setCardNumber(dealIDCard(userModel.getCardNumber()));
+                    userModel.setCardNumber(userModel.getCardNumber());
                     userModel.setCheckType(2);
                     searchTicket();
                 } catch (JSONException e) {
@@ -93,7 +96,7 @@ public class ScanDetailActivity extends BaseActivity<ActivityScanDetailBinding> 
                 }
                 break;
             case 3:
-                //todo 市名卡
+                // 市名卡
                 break;
             default:
         }
@@ -116,14 +119,22 @@ public class ScanDetailActivity extends BaseActivity<ActivityScanDetailBinding> 
 
     //查票
     private void searchTicket(){
-        new RxOHCUtils(ScanDetailActivity.this).executeApi(BaseApplication.apiService.searchTicket(userModel.getCardNumber(), userModel.getCheckType(), "1",false,DefaultUtils.getUser().getId()), new BaseSubscriber<UserModel>(ScanDetailActivity.this) {
+        new RxOHCUtils(ScanDetailActivity.this).executeApi(BaseApplication.apiService.searchTicket(userModel.getCardNumber(), userModel.getCheckType(), userModel.getName(), "1",false,DefaultUtils.getUser().getId()), new BaseSubscriber<UserModel>(ScanDetailActivity.this) {
             @Override
             public void success(UserModel data) {
-                if (data != null) {
-                    // TODO: 2022/9/19 等接口
+
+            }
+
+            @Override
+            public void onRfRxNext(BaseModule<UserModel> baseModule) {
+                super.onRfRxNext(baseModule);
+                searchSuccessFiled.set(baseModule.isSuccess());
+                if(baseModule.isSuccess()){
                     System.out.println("查票成功");
                     ticketID = "";
                     communicationId="";
+                } else {
+                    tipMessageFiled.set(baseModule.getMsg());
                 }
             }
 
@@ -178,7 +189,7 @@ public class ScanDetailActivity extends BaseActivity<ActivityScanDetailBinding> 
         }
     };
 
-    private String dealIDCard(String idCardNum){
+    public String dealIDCard(String idCardNum){
         if(idCardNum != null && idCardNum.length() > 6){
             Pattern credentialsPattern = Pattern.compile("(\\d{3})\\d*([0-9a-zA-Z]{4})");
             Matcher credentialsMatch = credentialsPattern.matcher(idCardNum);

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:binding="http://schemas.android.com/apk/res-auto">
+    xmlns:binding="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
         <variable
@@ -9,6 +10,9 @@
         <variable
             name="toolBarViewModel"
             type="xyz.ttyz.toubasemvvm.vm.ToolBarViewModel"/>
+        <variable
+            name="userModel"
+            type="xyz.ttyz.tourfrxohc.models.UserModel" />
     </data>
 
     <LinearLayout
@@ -36,7 +40,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/app_name"
+                tools:text="@string/app_name"
+                android:text="@{userModel.user_name}"
                 android:textColor="@color/colorPrimary"
                 android:textSize="35sp"/>
         </LinearLayout>
@@ -52,7 +57,7 @@
             android:background="@drawable/bg_conor_btn"
             android:foreground="?selectableItemBackground"
             android:gravity="center"
-            android:text="退出登录"
+            android:text="退出登陆"
             android:layout_gravity="end"
             android:textColor="@color/white"
             android:textSize="18sp"
