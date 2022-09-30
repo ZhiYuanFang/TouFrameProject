@@ -12,8 +12,8 @@
             type="xyz.ttyz.tourfrxohc.activity.ScanDetailActivity" />
 
         <variable
-            name="userModel"
-            type="xyz.ttyz.tourfrxohc.models.UserModel" />
+            name="ticketDetail"
+            type="xyz.ttyz.tourfrxohc.models.TicketDetail" />
 
     </data>
 
@@ -23,8 +23,8 @@
         android:orientation="vertical">
 
         <TextView
-            android:layout_width="120dp"
-            android:layout_height="45dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:layout_marginTop="35dp"
             android:layout_marginEnd="15dp"
@@ -32,113 +32,38 @@
             android:foreground="?selectableItemBackground"
             android:gravity="center"
             android:onClick="@{()->AccountInfoActivity.show()}"
-            android:text="账户信息"
+            android:text="设置"
+            android:padding="8dp"
             android:textColor="@color/white"
-            android:textSize="18sp" />
+            android:textSize="12sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:gravity="center_horizontal"
+            android:gravity="center"
             android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="55dp"
-                android:text="@{context.searchSuccessFiled ? @string/searchsuccess : @string/searchfail}"
-                android:textSize="36dp"
-                tools:text="检票成功"
-                tools:textColor="@android:color/holo_green_light" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
                 android:text="@{context.tipMessageFiled}"
-                android:textSize="26dp"
-                binding:visible="@{!context.searchSuccessFiled}"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                binding:visible="@{context.tipMessageFiled != null}"
                 tools:text="无门"
-                tools:textColor="@color/black" />
+                android:textColor="@color/red" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:orientation="vertical"
-                binding:visible="@{context.searchSuccessFiled}">
+                binding:visible="@{context.tipMessageFiled == null}">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:gravity="bottom"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="票据类型:"
-                        android:textColor="@color/black"
-                        android:textSize="18sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@{userModel.type}"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="28sp"
-                        tools:text="团体票" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:gravity="bottom"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="游客姓名:"
-                        android:textColor="@color/black"
-                        android:textSize="18sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@{userModel.name}"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="28sp"
-                        tools:text="张三" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:gravity="bottom"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="身份证:"
-                        android:textColor="@color/black"
-                        android:textSize="18sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@{context.dealIDCard(userModel.cardNumber)}"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="28sp"
-                        tools:text="330xxxxxxx0470" />
-                </LinearLayout>
-
-                <LinearLayout
+                    android:visibility="gone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
@@ -160,7 +85,181 @@
                         android:textSize="28sp"
                         tools:text="身份证" />
                 </LinearLayout>
+
+                <LinearLayout
+                    android:layout_marginTop="15dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal">
+
+                    <TableLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:divider="@drawable/divider_table_heng"
+                        android:showDividers="beginning|middle|end"
+                        android:orientation="vertical">
+                        <TableRow
+                            android:divider="@drawable/divider_table"
+                            android:showDividers="beginning|middle|end"
+                            android:orientation="horizontal">
+                            <TextView android:text="开始时间"
+                                android:padding="8dp"
+                                android:gravity="center"
+                                style="@style/TableTitle"/>
+                            <TextView tools:text="2022-09-23 10:45:53"
+                                android:text="@{ticketDetail.begindate}"
+                                android:padding="8dp"
+                                android:gravity="center"
+                                style="@style/TableTxt"/>
+                        </TableRow>
+                        <TableRow
+                            android:divider="@drawable/divider_table"
+                            android:showDividers="beginning|middle|end"
+                            android:orientation="horizontal">
+                            <TextView android:text="结束时间"
+                                android:padding="8dp"
+                                android:gravity="center"
+                                style="@style/TableTitle"/>
+                            <TextView tools:text="2022-09-23 23:59:59"
+                                android:text="@{ticketDetail.enddate}"
+                                android:padding="8dp"
+                                android:gravity="center"
+                                style="@style/TableTxt"/>
+                        </TableRow>
+                        <TableRow
+                            android:divider="@drawable/divider_table"
+                            android:showDividers="beginning|middle|end"
+                            android:orientation="horizontal">
+                            <TextView android:text="剩余数量"
+                                android:padding="8dp"
+                                android:gravity="center"
+                                style="@style/TableTitle"/>
+                            <TextView tools:text="0"
+                                android:text="@{ticketDetail.leftCount}"
+                                android:padding="8dp"
+                                android:gravity="center"
+                                style="@style/TableTxt"/>
+                        </TableRow>
+                        <TableRow
+                            android:divider="@drawable/divider_table"
+                            android:showDividers="beginning|middle|end"
+                            android:orientation="horizontal">
+                            <TextView android:text="票型"
+                                android:padding="8dp"
+                                android:gravity="center"
+                                style="@style/TableTitle"/>
+                            <TextView tools:text="成人票"
+                                android:text="@{ticketDetail.playSoundName}"
+                                android:padding="8dp"
+                                android:gravity="center"
+                                style="@style/TableTxt"/>
+                        </TableRow>
+                        <TableRow
+                            android:divider="@drawable/divider_table"
+                            android:showDividers="beginning|middle|end"
+                            android:orientation="horizontal">
+                            <TextView android:text="够买时间"
+                                android:padding="8dp"
+                                android:gravity="center"
+                                style="@style/TableTitle"/>
+                            <TextView tools:text="2022-09-23 10:45:55"
+                                android:text="@{ticketDetail.sellTime}"
+                                android:padding="8dp"
+                                android:gravity="center"
+                                style="@style/TableTxt"/>
+                        </TableRow>
+                    </TableLayout>
+
+                    <TableLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:divider="@drawable/divider_table_heng"
+                        android:showDividers="beginning|middle|end"
+                        android:orientation="vertical">
+                        <TableRow
+                            android:divider="@drawable/divider_table"
+                            android:showDividers="beginning|middle|end"
+                            android:orientation="horizontal">
+                            <TextView android:text="查票类型"
+                                android:padding="8dp"
+                                android:gravity="center"
+                                style="@style/TableTitle"/>
+                            <TextView tools:text="wmw成人"
+                                android:text="@{ticketDetail.ticketkindname}"
+                                android:padding="8dp"
+                                android:gravity="center"
+                                style="@style/TableTxt"/>
+                        </TableRow>
+                        <TableRow
+                            android:divider="@drawable/divider_table"
+                            android:showDividers="beginning|middle|end"
+                            android:orientation="horizontal">
+                            <TextView android:text="票型名称"
+                                android:padding="8dp"
+                                android:gravity="center"
+                                style="@style/TableTitle"/>
+                            <TextView tools:text="wmw票型名称001"
+                                android:text="@{ticketDetail.tktModelName}"
+                                android:padding="8dp"
+                                android:gravity="center"
+                                style="@style/TableTxt"/>
+                        </TableRow>
+                        <TableRow
+                            android:divider="@drawable/divider_table"
+                            android:showDividers="beginning|middle|end"
+                            android:orientation="horizontal">
+                            <TextView android:text="使用时间"
+                                android:padding="8dp"
+                                android:gravity="center"
+                                style="@style/TableTitle"/>
+                            <TextView tools:text="2022-09-23 14:27:49"
+                                android:text="@{ticketDetail.useTime}"
+                                android:padding="8dp"
+                                android:gravity="center"
+                                style="@style/TableTxt"/>
+                        </TableRow>
+                        <TableRow
+                            android:divider="@drawable/divider_table"
+                            android:showDividers="beginning|middle|end"
+                            android:orientation="horizontal">
+                            <TextView android:text="使用状态"
+                                android:padding="8dp"
+                                android:gravity="center"
+                                style="@style/TableTitle"/>
+                            <TextView tools:text="已使用"
+                                android:text="@{ticketDetail.useflagStr}"
+                                android:padding="8dp"
+                                android:gravity="center"
+                                style="@style/TableTxt"/>
+                        </TableRow>
+                        <TableRow
+                            android:divider="@drawable/divider_table"
+                            android:showDividers="beginning|middle|end"
+                            android:orientation="horizontal">
+                            <TextView android:text=""
+                                android:padding="8dp"
+                                android:gravity="center"
+                                style="@style/TableTxt"/>
+                            <TextView tools:text=""
+                                android:padding="8dp"
+                                android:gravity="center"
+                                style="@style/TableTxt"/>
+                        </TableRow>
+                    </TableLayout>
+                </LinearLayout>
+
             </LinearLayout>
+
+            <TextView
+                binding:visible="@{context.checkTickerFiled}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:textSize="16sp"
+                tools:text="检票成功"
+                android:textColor="@{context.checkTickerFiled ? @color/green : @color/red}"
+                tools:textColor="@color/black" />
 
         </LinearLayout>
 
@@ -210,7 +309,7 @@
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 binding:onClickCommand="@{context.clickUseTicket}"
-                binding:visible="@{context.searchSuccessFiled}" />
+                binding:visible="@{context.tipMessageFiled == null &amp;&amp; !context.checkTickerFiled}" />
         </LinearLayout>
 
     </LinearLayout>

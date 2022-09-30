@@ -46,4 +46,25 @@ public class DefaultUtils {
         setUser(null);
     }
 
+
+
+    //配置
+    private static String doorID = "2";
+    private static String ip = "http://47.111.185.38:8001/";
+
+    public static String getDoorID() {
+        return doorID;
+    }
+
+    public static String getIp() {
+        return ip;
+    }
+
+    public static void setDoorID(String doorID) {
+        DefaultUtils.doorID = doorID;
+    }
+
+    public static void setIp(String ip) {
+        DefaultUtils.ip = ip;
+    }
 }
