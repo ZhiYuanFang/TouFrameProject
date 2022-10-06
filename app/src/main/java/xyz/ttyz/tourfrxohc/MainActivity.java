@@ -47,7 +47,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
 
     @Override
     protected void initData() {
-        if(DefaultUtils.getUser() != null){
+        if(DefaultUtils.getCookie() != null){
             TicketScanActivity.show();
         } else {
             LoginActivity.show();

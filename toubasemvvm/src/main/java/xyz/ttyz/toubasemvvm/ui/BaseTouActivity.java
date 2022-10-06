@@ -335,7 +335,7 @@ public abstract class BaseTouActivity<T extends ViewDataBinding> extends SwipeBa
                     if (v != null) {
                         imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                     }
-                    EventBus.getDefault().post(new InputHideEvent());
+//                    EventBus.getDefault().post(new InputHideEvent());
                 }
             }
             return super.dispatchTouchEvent(ev);
