@@ -2,6 +2,7 @@ package xyz.ttyz.tourfrxohc.activity;
 
 import android.Manifest;
 import android.content.Intent;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.databinding.ObservableBoolean;
@@ -39,6 +40,7 @@ import static xyz.ttyz.tourfrxohc.Utils.SCAN_IDCARD_REQUEST;
 
 public class ScanDetailActivity extends BaseActivity<ActivityScanDetailBinding> {
     int type;//1:条码 2:身份证 3:IC 卡
+
     public static void show(String data, int type) {
         Intent intent = new Intent(ActivityManager.getInstance(), ScanDetailActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -75,7 +77,7 @@ public class ScanDetailActivity extends BaseActivity<ActivityScanDetailBinding> 
         int type = getIntent().getIntExtra("type", 0);
         String data = getIntent().getStringExtra("data");
         System.out.println("扫码结果：" + data);
-        switch (type){
+        switch (type) {
             case 1:
                 dealERCode(data);
                 break;
@@ -103,7 +105,7 @@ public class ScanDetailActivity extends BaseActivity<ActivityScanDetailBinding> 
     }
 
     //处理二维码/条形码返回结果
-    private void dealERCode(String data){
+    private void dealERCode(String data) {
         scanTypeFiled.set("二维码/条形码");
         userModel = new UserModel();
         userModel.setType("测试票");
@@ -115,22 +117,27 @@ public class ScanDetailActivity extends BaseActivity<ActivityScanDetailBinding> 
         searchTicket();
     }
 
+    private static final String TAG = "ScanDetailActivity";
+
     //查票
-    private void searchTicket(){
-        new RxOHCUtils(ScanDetailActivity.this).executeApi(BaseApplication.apiService.searchTicket(userModel.getCardNumber(), userModel.getCheckType(), userModel.getName(), DefaultUtils.getDoorID(),false,DefaultUtils.getUser().getId()), new BaseSubscriber<TicketDetail>(ScanDetailActivity.this) {
+    private void searchTicket() {
+        new RxOHCUtils(ScanDetailActivity.this).executeApi(BaseApplication.apiService.searchTicket(userModel.getCardNumber(), userModel.getCheckType(), userModel.getName(), DefaultUtils.getDoorID(), false, DefaultUtils.getUser().getId()), new BaseSubscriber<Integer>(ScanDetailActivity.this) {
             @Override
-            public void success(TicketDetail data) {
-                if(data != null){
-                    mBinding.setTicketDetail(data);
-                    ticketID = data.getId();
-                    communicationId=data.getCommunicationId();
-                }
+            public void success(Integer data) {
+
             }
 
             @Override
-            public void onRfRxNext(BaseModule<TicketDetail> baseModule) {
+            public void onRfRxNext(BaseModule<Integer> baseModule) {
                 tipMessageFiled.set(baseModule.getMsg());
                 super.onRfRxNext(baseModule);
+                Object data = baseModule.getData();
+                String json = new Gson().toJson(data);
+                Log.i(TAG, "onRfRxNext: " + json);
+                TicketDetail ticketDetail = new Gson().fromJson(json, TicketDetail.class);
+                mBinding.setTicketDetail(ticketDetail);
+                ticketID = mBinding.getTicketDetail().getId();
+                communicationId = mBinding.getTicketDetail().getCommunicationId();
             }
 
             @Override
@@ -154,8 +161,8 @@ public class ScanDetailActivity extends BaseActivity<ActivityScanDetailBinding> 
     public OnClickAdapter.onClickCommand clickUseTicket = new OnClickAdapter.onClickCommand() {
         @Override
         public void click() {
-            new RxOHCUtils(ScanDetailActivity.this).executeApi(BaseApplication.apiService.checkTicket(userModel.getCardNumber(), userModel.getCheckType(), DefaultUtils.getDoorID(),false,
-                    ticketID,communicationId,
+            new RxOHCUtils(ScanDetailActivity.this).executeApi(BaseApplication.apiService.checkTicket(userModel.getCardNumber(), userModel.getCheckType(), DefaultUtils.getDoorID(), false,
+                    ticketID, communicationId,
                     DefaultUtils.getUser().getId()), new BaseSubscriber<UserModel>(ScanDetailActivity.this) {
                 @Override
                 public void success(UserModel data) {
@@ -166,8 +173,8 @@ public class ScanDetailActivity extends BaseActivity<ActivityScanDetailBinding> 
                 @Override
                 public void onRfRxNext(BaseModule<UserModel> baseModule) {
                     super.onRfRxNext(baseModule);
-                    if(baseModule.getMsg() != null){
-                        DialogUtils.showSingleDialog("检票失败", baseModule.getMsg(),new DialogUtils.DialogButtonModule("确定"));
+                    if (baseModule.getMsg() != null) {
+                        DialogUtils.showSingleDialog("检票失败", baseModule.getMsg(), new DialogUtils.DialogButtonModule("确定"));
                     }
                 }
 
@@ -198,8 +205,8 @@ public class ScanDetailActivity extends BaseActivity<ActivityScanDetailBinding> 
         }
     };
 
-    public String dealIDCard(String idCardNum){
-        if(idCardNum != null && idCardNum.length() > 6){
+    public String dealIDCard(String idCardNum) {
+        if (idCardNum != null && idCardNum.length() > 6) {
             Pattern credentialsPattern = Pattern.compile("(\\d{3})\\d*([0-9a-zA-Z]{4})");
             Matcher credentialsMatch = credentialsPattern.matcher(idCardNum);
             idCardNum = credentialsMatch.replaceAll("$1****$2");

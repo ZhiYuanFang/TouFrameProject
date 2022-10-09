@@ -45,7 +45,7 @@ public interface ApiService {
     @POST("lg/UserLogout")
     Observable<BaseModule> loginOut(@Query("LoginID")String LoginID);
     @POST("mj/searchTicket")//查票
-    Observable<BaseModule<TicketDetail>> searchTicket(@Query("checkNo")String checkNo,//条码/身份证
+    Observable<BaseModule<Integer>> searchTicket(@Query("checkNo")String checkNo,//条码/身份证
                                                       @Query("checkType")int checkType,//检票类型 1:条码 2:身份证 3:IC 卡
                                                       @Query("checkName")String checkName,//checkType为2时必填
                                                       @Query("doorID")String doorID,//通道号

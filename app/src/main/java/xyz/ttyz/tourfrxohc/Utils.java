@@ -14,6 +14,7 @@ import android.os.Bundle;
 import com.king.zxing.CaptureActivity;
 
 import xyz.ttyz.tou_example.ActivityManager;
+import xyz.ttyz.tourfrxohc.activity.CaptureNextActivity;
 import xyz.ttyz.tourfrxohc.activity.IDCardScanActivity;
 import xyz.ttyz.tourfrxohc.activity.ScanDetailActivity;
 import xyz.ttyz.tourfrxohc.activity.TicketScanActivity;
@@ -22,7 +23,7 @@ public class Utils {
 
     public static final int SCAN_ERCODE_REQUEST = 2;/* 身份证识别 返回码*/
     public static void scanERCode(){
-        ActivityManager.getInstance().startActivityForResult(new Intent(ActivityManager.getInstance(), CaptureActivity.class),SCAN_ERCODE_REQUEST);
+        ActivityManager.getInstance().startActivityForResult(new Intent(ActivityManager.getInstance(), CaptureNextActivity.class),SCAN_ERCODE_REQUEST);
 //        Scanner.with(ActivityManager.getInstance())
 //                .setBorderSize(BarCodeUtil.dp2px(ActivityManager.getInstance(), 200))            // 设置扫码框大小
 ////        .setBorderSize(BarCodeUtil.dp2px(this, 200), BarCodeUtil.dp2px(this, 100))     // 设置扫码框长宽（如果同时调用了两个setBorderSize方法优先使用上一个）

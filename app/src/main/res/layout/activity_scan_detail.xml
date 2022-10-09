@@ -6,7 +6,7 @@
     <data>
 
         <import type="xyz.ttyz.tourfrxohc.activity.AccountInfoActivity" />
-
+        <import type="xyz.ttyz.toubasemvvm.utils.StringUtil"/>
         <variable
             name="context"
             type="xyz.ttyz.tourfrxohc.activity.ScanDetailActivity" />
@@ -108,7 +108,7 @@
                                 android:gravity="center"
                                 style="@style/TableTitle"/>
                             <TextView tools:text="2022-09-23 10:45:53"
-                                android:text="@{ticketDetail.begindate}"
+                                android:text="@{StringUtil.safeString(ticketDetail.begindate)}"
                                 android:padding="8dp"
                                 android:gravity="center"
                                 style="@style/TableTxt"/>
@@ -122,7 +122,7 @@
                                 android:gravity="center"
                                 style="@style/TableTitle"/>
                             <TextView tools:text="2022-09-23 23:59:59"
-                                android:text="@{ticketDetail.enddate}"
+                                android:text="@{StringUtil.safeString(ticketDetail.enddate)}"
                                 android:padding="8dp"
                                 android:gravity="center"
                                 style="@style/TableTxt"/>
@@ -136,7 +136,7 @@
                                 android:gravity="center"
                                 style="@style/TableTitle"/>
                             <TextView tools:text="0"
-                                android:text="@{ticketDetail.leftCount}"
+                                android:text='@{StringUtil.safeString(ticketDetail.leftCount)}'
                                 android:padding="8dp"
                                 android:gravity="center"
                                 style="@style/TableTxt"/>
@@ -150,7 +150,7 @@
                                 android:gravity="center"
                                 style="@style/TableTitle"/>
                             <TextView tools:text="成人票"
-                                android:text="@{ticketDetail.playSoundName}"
+                                android:text="@{StringUtil.safeString(ticketDetail.playSoundName)}"
                                 android:padding="8dp"
                                 android:gravity="center"
                                 style="@style/TableTxt"/>
@@ -164,7 +164,7 @@
                                 android:gravity="center"
                                 style="@style/TableTitle"/>
                             <TextView tools:text="2022-09-23 10:45:55"
-                                android:text="@{ticketDetail.sellTime}"
+                                android:text="@{StringUtil.safeString(ticketDetail.sellTime)}"
                                 android:padding="8dp"
                                 android:gravity="center"
                                 style="@style/TableTxt"/>
@@ -186,7 +186,7 @@
                                 android:gravity="center"
                                 style="@style/TableTitle"/>
                             <TextView tools:text="wmw成人"
-                                android:text="@{ticketDetail.ticketkindname}"
+                                android:text="@{StringUtil.safeString(ticketDetail.ticketkindname)}"
                                 android:padding="8dp"
                                 android:gravity="center"
                                 style="@style/TableTxt"/>
@@ -200,7 +200,7 @@
                                 android:gravity="center"
                                 style="@style/TableTitle"/>
                             <TextView tools:text="wmw票型名称001"
-                                android:text="@{ticketDetail.tktModelName}"
+                                android:text="@{StringUtil.safeString(ticketDetail.tktModelName)}"
                                 android:padding="8dp"
                                 android:gravity="center"
                                 style="@style/TableTxt"/>
@@ -214,7 +214,7 @@
                                 android:gravity="center"
                                 style="@style/TableTitle"/>
                             <TextView tools:text="2022-09-23 14:27:49"
-                                android:text="@{ticketDetail.useTime}"
+                                android:text="@{StringUtil.safeString(ticketDetail.useTime)}"
                                 android:padding="8dp"
                                 android:gravity="center"
                                 style="@style/TableTxt"/>
@@ -228,7 +228,7 @@
                                 android:gravity="center"
                                 style="@style/TableTitle"/>
                             <TextView tools:text="已使用"
-                                android:text="@{ticketDetail.useflagStr}"
+                                android:text="@{StringUtil.safeString(ticketDetail.useflagStr)}"
                                 android:padding="8dp"
                                 android:gravity="center"
                                 style="@style/TableTxt"/>

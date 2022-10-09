@@ -9,7 +9,7 @@ public class TicketDetail extends BaseObservable implements Serializable {
     String communicationId;// "4cd68b45-1840-4cce-9a0d-8aac607b2dba",
     String enddate;
     String id;//": null,
-    int leftCount;//": null,
+    String leftCount;//": null,
     String playSoundName;//": null,
     String sellTime;//": null,
     String ticketkindname;//": "无效票",
@@ -50,11 +50,11 @@ public class TicketDetail extends BaseObservable implements Serializable {
         this.id = id;
     }
 
-    public int getLeftCount() {
+    public String getLeftCount() {
         return leftCount;
     }
 
-    public void setLeftCount(int leftCount) {
+    public void setLeftCount(String leftCount) {
         this.leftCount = leftCount;
     }
 

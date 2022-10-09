@@ -9,6 +9,15 @@ public class BaseModule<D> extends RfRxOHCBaseModule {
     String Message;
     D Ex;
     boolean Success;
+    Object Data;
+
+    public String getMessage() {
+        return Message;
+    }
+
+    public Object getData() {
+        return Data;
+    }
 
     public boolean isSuccess() {
         return Success;
