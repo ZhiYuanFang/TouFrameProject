@@ -23,6 +23,11 @@ public class UserModel extends BaseObservable implements Serializable {
     private String nickname;//昵称
     private String password;//密码
     private int score;//积分
+    int level;
+    boolean isSaveType;
+    boolean isConfirmGame;
+    boolean isConfirmRoleType;
+    boolean thisTurnHasPutedKey;
     //房间内信息
     int identity;//身份 0守护者 1进攻者
     HashMap<Integer, PutKeyModel> putKeyMap;//投放钥匙累计 第Integer轮，投票PutKeyModel, eg. 第2轮划水没投票，则不存在KEY = 2

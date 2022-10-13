@@ -12,7 +12,8 @@ public class HomeModel implements Serializable{
     List<UserModel> roomUserList;//房间人员
     UserModel putKeyUser;//投放钥匙人员, 根据status判断该人员是刚刚投放的，还是即将投放的
     int status;//阶段
-
+    List<UserModel> waitKeyPutMemberList;
+    boolean gameStart;
     List<UserModel> pkMemberList;//pk人员
     UserModel speakingUserModel;//指定发言人员
     int turnRoundNumber;//轮次 1，2，3

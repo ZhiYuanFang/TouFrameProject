@@ -106,7 +106,7 @@ public class KeyActivity extends BaseTouActivity<ActivityKeyBinding> {
                 //打开门，看里面的内容，如果是投放，动画消除或生成
                 //动画1秒， 立刻返回上一级界面
 
-                boolean hasKey = data.isPutObjectHasKey();
+                boolean hasKey = data.isThisTurnHasPutedKey();
                 textView.setText(hasKey ? "有" : "");
                 new Handler().postDelayed(new Runnable() {
                     @Override
