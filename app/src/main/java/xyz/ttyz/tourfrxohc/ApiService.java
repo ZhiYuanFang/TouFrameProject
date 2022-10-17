@@ -21,25 +21,6 @@ import xyz.ttyz.tourfrxohc.models.UserModel;
  */
 
 public interface ApiService {
-//    @POST("msu/v1/signin/code")
-//    Observable<BaseModule<UserModel>> login(@Body RequestBody data);
-//
-//    @GET("msr/v1/app/personal/index")
-//    Observable<BaseModule<MainModel>> getHistory(@QueryMap Map<String, Object> map);
-
-
-//    @Headers("Content-type:text/x-plain-rsa-json")
-//    @POST("api/Account/phoneCode")
-//    Observable<BaseModule<PhoneCodeModule>> phoneCode(@Body RequestBody data);
-//
-//    @Headers("Content-type:text/x-plain-rsa-json")
-//    @POST("api/Account/codeLogin")
-//    Observable<BaseModule<LoginModule>> codeLogin(@Body RequestBody data);
-//
-//    @Headers("Content-type:text/x-plain-aes-json")
-//    @POST("api/Account/userInfo")
-//    Observable<BaseModule<LoginModule>> userInfo(@Body RequestBody data);
-//
     @POST("lg/UserLoginValidate")
     Observable<BaseModule<UserModel>> login(@Query("uservalue")String uservalue, @Query("psw")String psw);
     @POST("lg/UserLogout")

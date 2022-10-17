@@ -28,6 +28,7 @@ import xyz.ttyz.toubasemvvm.utils.DialogUtils;
 import xyz.ttyz.toubasemvvm.utils.ToastUtil;
 import xyz.ttyz.toubasemvvm.utils.TouUtils;
 import xyz.ttyz.tourfrxohc.BaseApplication;
+import xyz.ttyz.tourfrxohc.BuildConfig;
 import xyz.ttyz.tourfrxohc.DefaultUtils;
 import xyz.ttyz.tourfrxohc.R;
 import xyz.ttyz.tourfrxohc.Utils;
@@ -112,7 +113,7 @@ public class ScanDetailActivity extends BaseActivity<ActivityScanDetailBinding> 
 //            userModel.setName("张三");
         userModel.setName(data);
         userModel.setCheckType(1);
-        userModel.setCardNumber(dealIDCard("330121311012091293"));
+        userModel.setCardNumber("330121311012091293");
 
         searchTicket();
     }
@@ -121,7 +122,7 @@ public class ScanDetailActivity extends BaseActivity<ActivityScanDetailBinding> 
 
     //查票
     private void searchTicket() {
-        new RxOHCUtils(ScanDetailActivity.this).executeApi(BaseApplication.apiService.searchTicket(userModel.getCardNumber(), userModel.getCheckType(), userModel.getName(), DefaultUtils.getDoorID(), false, DefaultUtils.getUser().getId()), new BaseSubscriber<Integer>(ScanDetailActivity.this) {
+        new RxOHCUtils(ScanDetailActivity.this).executeApi(BaseApplication.apiService.searchTicket(BuildConfig.DEBUG ? "MP220923105345000394" : userModel.getCardNumber(), userModel.getCheckType(), userModel.getName(), DefaultUtils.getDoorID(), false, DefaultUtils.getUser().getId()), new BaseSubscriber<Integer>(ScanDetailActivity.this) {
             @Override
             public void success(Integer data) {
 
@@ -135,9 +136,11 @@ public class ScanDetailActivity extends BaseActivity<ActivityScanDetailBinding> 
                 String json = new Gson().toJson(data);
                 Log.i(TAG, "onRfRxNext: " + json);
                 TicketDetail ticketDetail = new Gson().fromJson(json, TicketDetail.class);
-                mBinding.setTicketDetail(ticketDetail);
-                ticketID = mBinding.getTicketDetail().getId();
-                communicationId = mBinding.getTicketDetail().getCommunicationId();
+                if(null != ticketDetail){
+                    mBinding.setTicketDetail(ticketDetail);
+                    ticketID = mBinding.getTicketDetail().getId();
+                    communicationId = mBinding.getTicketDetail().getCommunicationId();
+                }
             }
 
             @Override

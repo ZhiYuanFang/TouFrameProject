@@ -49,7 +49,7 @@ public class DefaultUtils {
 
 
     //配置
-    private static String doorID = "2";
+    private static String doorID = "1001";
     private static String ip = "http://47.111.185.38:8001/";
 
     public static String getDoorID() {
