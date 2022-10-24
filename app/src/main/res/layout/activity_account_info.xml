@@ -13,6 +13,7 @@
         <variable
             name="userModel"
             type="xyz.ttyz.tourfrxohc.models.UserModel" />
+        <import type="xyz.ttyz.tourfrxohc.DefaultUtils"/>
     </data>
 
     <LinearLayout
@@ -44,6 +45,73 @@
                 android:text="@{userModel.user_name}"
                 android:textColor="@color/colorPrimary"
                 android:textSize="35sp"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="35dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:text="门号："/>
+            <RelativeLayout
+                android:layout_width="120dp"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    tools:visibility="gone"
+                    binding:visible="@{!context.isEditDoorFiled}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:text="1001"
+                    android:text="@={context.doorIDFiled}"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="35sp"/>
+
+                <EditText
+                    binding:visible="@{context.isEditDoorFiled}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:text="1001"
+                    android:text="@={context.doorIDFiled}"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="35sp"/>
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:background="@drawable/bg_conor_btn"
+                android:foreground="?selectableItemBackground"
+                tools:text="修改"
+                android:text="@{context.isEditDoorFiled ? @string/save : @string/xiugai}"
+                android:textColor="@color/white"
+                android:textSize="10sp"
+                binding:onClickCommand="@{context.dealDoor}"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="35dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textStyle="italic"
+                android:text="服务IP："/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="http://47.111.185.38:8001/"
+                android:text="@{DefaultUtils.getIp}"
+                android:textStyle="italic"
+                android:textSize="16sp"/>
         </LinearLayout>
 
         <View

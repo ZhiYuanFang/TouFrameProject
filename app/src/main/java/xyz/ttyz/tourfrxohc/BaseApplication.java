@@ -1,6 +1,7 @@
 package xyz.ttyz.tourfrxohc;
 
 import android.app.Application;
+import android.content.Context;
 import android.util.Log;
 
 import com.ihsanbal.logging.LoggingInterceptor;
@@ -26,10 +27,11 @@ import xyz.ttyz.tourfrxohc.activity.LoginActivity;
 public class BaseApplication extends Application {
     private static final String TAG = "BaseApplication";
     public static ApiService apiService;
-
+    public static Context ctx;
     @Override
     public void onCreate() {
         super.onCreate();
+        ctx = this;
         ApplicationUtils.init(this, 750, 1334, new TouDelegate() {
             @Override
             public boolean isLogin() {

@@ -3,4 +3,14 @@
 
     <string name="searchsuccess">查票成功</string>
     <string name="searchfail">查票失败</string>
+    <string name="need_power">需要授权</string>
+    <string name="not_power">不用授权</string>
+    <string name="need_check_health">需要校验</string>
+    <string name="not_check_health">无需校验</string>
+    <string name="zhen">针</string>
+    <string name="get_sms">获取验证码</string>
+    <string name="miao">秒</string>
+    <string name="xiugai">修改</string>
+    <string name="save">保存</string>
+
 </resources>

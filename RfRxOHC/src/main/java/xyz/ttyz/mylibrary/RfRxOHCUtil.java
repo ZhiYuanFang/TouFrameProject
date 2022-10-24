@@ -105,7 +105,7 @@ public class RfRxOHCUtil {
         touRRCDelegate.addMoreForOkHttpClient(httpBuilder);
         LoggingInterceptor loggingInterceptor = logBuilder.build();
 
-        OkHttpClient okHttpClient = httpBuilder
+        okHttpClient = httpBuilder
                 .addInterceptor(loggingInterceptor)
                 .addInterceptor(new Interceptor() {
                     @Override
@@ -164,6 +164,16 @@ public class RfRxOHCUtil {
 
             }
         });
+    }
+
+    private static OkHttpClient okHttpClient;
+    public static void resetIP(String baseUrl){
+        Retrofit.Builder retBuilder = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .client(okHttpClient)
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
+                .addConverterFactory(CustomGsonConverterFactory.create());
+        touRRCDelegate.initApiService(retBuilder.build());
     }
 
     public interface TouRRCDelegate {

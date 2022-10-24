@@ -1,6 +1,5 @@
 package xyz.ttyz.toubasemvvm.utils;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
@@ -10,6 +9,8 @@ import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StrikethroughSpan;
 
+
+import androidx.core.content.ContextCompat;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
@@ -24,7 +25,92 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import xyz.ttyz.tou_example.ActivityManager;
+
 public class StringUtil {
+
+    public static String helthInfo(String codeStr){
+        int code = -1;
+        if(StringUtil.isNumeric(codeStr)){
+            code = Integer.parseInt(codeStr);
+        }
+        switch (code){
+            case 1:
+                return "绿码";
+
+            case 2:
+                return "黄码";
+
+            case 3:
+                return "红码";
+
+            case 4:
+                return "灰码";
+
+            default: return "未知";
+        }
+    }
+
+    public static int helthColor(String codeStr){
+        int code = -1;
+        if(StringUtil.isNumeric(codeStr)){
+            code = Integer.parseInt(codeStr);
+        }
+        switch (code){
+            case 1:
+                return ContextCompat.getColor(ActivityManager.getInstance(), android.R.color.holo_green_dark);
+
+            case 2:
+                return Color.parseColor("#FF9800");
+
+            case 3:
+                return ContextCompat.getColor(ActivityManager.getInstance(), android.R.color.holo_red_dark);
+
+            case 4:
+                return ContextCompat.getColor(ActivityManager.getInstance(), android.R.color.darker_gray);
+
+            default: return ContextCompat.getColor(ActivityManager.getInstance(), android.R.color.black);
+        }
+    }
+
+    public static String nucleinInfo(String codeStr){
+        int code = -1;
+        if(StringUtil.isNumeric(codeStr)){
+            code = Integer.parseInt(codeStr);
+        }
+        switch (code){
+            case 1:
+                return "校验通过";
+
+            case 2:
+                return "校验不通过";
+
+
+            default: return "无结果";
+        }
+    }
+
+    public static int nucleinColor(String codeStr){
+        int code = -1;
+        if(StringUtil.isNumeric(codeStr)){
+            code = Integer.parseInt(codeStr);
+        }
+        switch (code){
+            case 1:
+                return ContextCompat.getColor(ActivityManager.getInstance(), android.R.color.holo_green_dark);
+
+            case 2:
+                return Color.parseColor("#FF9800");
+
+            default: return ContextCompat.getColor(ActivityManager.getInstance(), android.R.color.black);
+        }
+    }
+
+    public static boolean string2bool (String tf){
+        return StringUtil.safeString(tf).toUpperCase().equals("T");
+    }
+
+
     /**
      * 获取string值,保证不是null且为字符串类型
      */
@@ -856,6 +942,9 @@ public class StringUtil {
      * @param str 0193280128 @return 是否為数字
      */
     public static boolean isNumeric(String str){
+        if(safeString(str).isEmpty()){
+            str = "-1";
+        }
         Pattern pattern = Pattern.compile("[0-9]*");
         Matcher isNum = pattern.matcher(str);
         return isNum.matches();

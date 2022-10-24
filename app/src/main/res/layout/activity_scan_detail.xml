@@ -6,7 +6,9 @@
     <data>
 
         <import type="xyz.ttyz.tourfrxohc.activity.AccountInfoActivity" />
-        <import type="xyz.ttyz.toubasemvvm.utils.StringUtil"/>
+
+        <import type="xyz.ttyz.toubasemvvm.utils.StringUtil" />
+
         <variable
             name="context"
             type="xyz.ttyz.tourfrxohc.activity.ScanDetailActivity" />
@@ -32,236 +34,424 @@
             android:foreground="?selectableItemBackground"
             android:gravity="center"
             android:onClick="@{()->AccountInfoActivity.show()}"
-            android:text="设置"
             android:padding="8dp"
+            android:text="设置"
             android:textColor="@color/white"
             android:textSize="12sp" />
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:layout_weight="1">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:text="@{context.tipMessageFiled}"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                binding:visible="@{context.tipMessageFiled != null}"
-                tools:text="无门"
-                android:textColor="@color/red" />
-
-            <LinearLayout
+            <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:orientation="vertical"
-                binding:visible="@{context.tipMessageFiled == null}">
+                android:layout_centerInParent="true">
 
                 <LinearLayout
-                    android:visibility="gone"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:gravity="bottom"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="扫码类型:"
-                        android:textColor="@color/black"
-                        android:textSize="18sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@{context.scanTypeFiled}"
-                        android:textColor="@color/colorEECC76"
-                        android:textSize="28sp"
-                        tools:text="身份证" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_marginTop="15dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:orientation="horizontal">
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
 
-                    <TableLayout
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:divider="@drawable/divider_table_heng"
-                        android:showDividers="beginning|middle|end"
-                        android:orientation="vertical">
-                        <TableRow
-                            android:divider="@drawable/divider_table"
-                            android:showDividers="beginning|middle|end"
-                            android:orientation="horizontal">
-                            <TextView android:text="开始时间"
-                                android:padding="8dp"
-                                android:gravity="center"
-                                style="@style/TableTitle"/>
-                            <TextView tools:text="2022-09-23 10:45:53"
-                                android:text="@{StringUtil.safeString(ticketDetail.begindate)}"
-                                android:padding="8dp"
-                                android:gravity="center"
-                                style="@style/TableTxt"/>
-                        </TableRow>
-                        <TableRow
-                            android:divider="@drawable/divider_table"
-                            android:showDividers="beginning|middle|end"
-                            android:orientation="horizontal">
-                            <TextView android:text="结束时间"
-                                android:padding="8dp"
-                                android:gravity="center"
-                                style="@style/TableTitle"/>
-                            <TextView tools:text="2022-09-23 23:59:59"
-                                android:text="@{StringUtil.safeString(ticketDetail.enddate)}"
-                                android:padding="8dp"
-                                android:gravity="center"
-                                style="@style/TableTxt"/>
-                        </TableRow>
-                        <TableRow
-                            android:divider="@drawable/divider_table"
-                            android:showDividers="beginning|middle|end"
-                            android:orientation="horizontal">
-                            <TextView android:text="剩余数量"
-                                android:padding="8dp"
-                                android:gravity="center"
-                                style="@style/TableTitle"/>
-                            <TextView tools:text="0"
-                                android:text='@{StringUtil.safeString(ticketDetail.leftCount)}'
-                                android:padding="8dp"
-                                android:gravity="center"
-                                style="@style/TableTxt"/>
-                        </TableRow>
-                        <TableRow
-                            android:divider="@drawable/divider_table"
-                            android:showDividers="beginning|middle|end"
-                            android:orientation="horizontal">
-                            <TextView android:text="票型"
-                                android:padding="8dp"
-                                android:gravity="center"
-                                style="@style/TableTitle"/>
-                            <TextView tools:text="成人票"
-                                android:text="@{StringUtil.safeString(ticketDetail.playSoundName)}"
-                                android:padding="8dp"
-                                android:gravity="center"
-                                style="@style/TableTxt"/>
-                        </TableRow>
-                        <TableRow
-                            android:divider="@drawable/divider_table"
-                            android:showDividers="beginning|middle|end"
-                            android:orientation="horizontal">
-                            <TextView android:text="够买时间"
-                                android:padding="8dp"
-                                android:gravity="center"
-                                style="@style/TableTitle"/>
-                            <TextView tools:text="2022-09-23 10:45:55"
-                                android:text="@{StringUtil.safeString(ticketDetail.sellTime)}"
-                                android:padding="8dp"
-                                android:gravity="center"
-                                style="@style/TableTxt"/>
-                        </TableRow>
-                    </TableLayout>
+                        android:layout_marginTop="15dp"
+                        android:text="@{context.tipMessageFiled}"
+                        android:textColor="@color/red"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        binding:visible="@{context.tipMessageFiled != null}"
+                        tools:text="无门" />
 
-                    <TableLayout
+
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:divider="@drawable/divider_table_heng"
-                        android:showDividers="beginning|middle|end"
-                        android:orientation="vertical">
-                        <TableRow
-                            android:divider="@drawable/divider_table"
-                            android:showDividers="beginning|middle|end"
-                            android:orientation="horizontal">
-                            <TextView android:text="查票类型"
-                                android:padding="8dp"
-                                android:gravity="center"
-                                style="@style/TableTitle"/>
-                            <TextView tools:text="wmw成人"
-                                android:text="@{StringUtil.safeString(ticketDetail.ticketkindname)}"
-                                android:padding="8dp"
-                                android:gravity="center"
-                                style="@style/TableTxt"/>
-                        </TableRow>
-                        <TableRow
-                            android:divider="@drawable/divider_table"
-                            android:showDividers="beginning|middle|end"
-                            android:orientation="horizontal">
-                            <TextView android:text="票型名称"
-                                android:padding="8dp"
-                                android:gravity="center"
-                                style="@style/TableTitle"/>
-                            <TextView tools:text="wmw票型名称001"
-                                android:text="@{StringUtil.safeString(ticketDetail.tktModelName)}"
-                                android:padding="8dp"
-                                android:gravity="center"
-                                style="@style/TableTxt"/>
-                        </TableRow>
-                        <TableRow
-                            android:divider="@drawable/divider_table"
-                            android:showDividers="beginning|middle|end"
-                            android:orientation="horizontal">
-                            <TextView android:text="使用时间"
-                                android:padding="8dp"
-                                android:gravity="center"
-                                style="@style/TableTitle"/>
-                            <TextView tools:text="2022-09-23 14:27:49"
-                                android:text="@{StringUtil.safeString(ticketDetail.useTime)}"
-                                android:padding="8dp"
-                                android:gravity="center"
-                                style="@style/TableTxt"/>
-                        </TableRow>
-                        <TableRow
-                            android:divider="@drawable/divider_table"
-                            android:showDividers="beginning|middle|end"
-                            android:orientation="horizontal">
-                            <TextView android:text="使用状态"
-                                android:padding="8dp"
-                                android:gravity="center"
-                                style="@style/TableTitle"/>
-                            <TextView tools:text="已使用"
-                                android:text="@{StringUtil.safeString(ticketDetail.useflagStr)}"
-                                android:padding="8dp"
-                                android:gravity="center"
-                                style="@style/TableTxt"/>
-                        </TableRow>
-                        <TableRow
-                            android:divider="@drawable/divider_table"
-                            android:showDividers="beginning|middle|end"
-                            android:orientation="horizontal">
-                            <TextView android:text=""
-                                android:padding="8dp"
-                                android:gravity="center"
-                                style="@style/TableTxt"/>
-                            <TextView tools:text=""
-                                android:padding="8dp"
-                                android:gravity="center"
-                                style="@style/TableTxt"/>
-                        </TableRow>
-                    </TableLayout>
+                        android:layout_marginTop="15dp"
+                        android:textColor="@{context.checkTickerFiled ? @color/green : @color/red}"
+                        android:textSize="16sp"
+                        binding:visible="@{context.checkTickerFiled}"
+                        tools:text="检票成功"
+                        tools:textColor="@color/black" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical"
+                        binding:visible="@{context.tipMessageFiled == null}">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="15dp"
+                            android:gravity="bottom"
+                            android:orientation="horizontal"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="扫码类型:"
+                                android:textColor="@color/black"
+                                android:textSize="18sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@{context.scanTypeFiled}"
+                                android:textColor="@color/colorEECC76"
+                                android:textSize="28sp"
+                                tools:text="身份证" />
+                        </LinearLayout>
+
+                        <TableLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="15dp"
+                            android:layout_marginTop="15dp"
+                            android:divider="@drawable/divider_table_heng"
+                            android:orientation="vertical"
+                            android:showDividers="beginning|middle|end">
+
+                            <TableRow
+                                android:divider="@drawable/divider_table"
+                                android:orientation="horizontal"
+                                android:showDividers="beginning|middle|end">
+
+                                <TextView
+                                    style="@style/TableTitle"
+                                    android:gravity="center"
+                                    android:padding="8dp"
+                                    android:text="开始时间" />
+
+                                <TextView
+                                    style="@style/TableTxt"
+                                    android:gravity="center"
+                                    android:padding="8dp"
+                                    android:text="@{StringUtil.safeString(ticketDetail.begindate)}"
+                                    tools:text="2022-09-23 10:45:53" />
+                            </TableRow>
+
+                            <TableRow
+                                android:divider="@drawable/divider_table"
+                                android:orientation="horizontal"
+                                android:showDividers="beginning|middle|end">
+
+                                <TextView
+                                    style="@style/TableTitle"
+                                    android:gravity="center"
+                                    android:padding="8dp"
+                                    android:text="结束时间" />
+
+                                <TextView
+                                    style="@style/TableTxt"
+                                    android:gravity="center"
+                                    android:padding="8dp"
+                                    android:text="@{StringUtil.safeString(ticketDetail.enddate)}"
+                                    tools:text="2022-09-23 23:59:59" />
+                            </TableRow>
+
+                            <TableRow
+                                android:divider="@drawable/divider_table"
+                                android:orientation="horizontal"
+                                android:showDividers="beginning|middle|end">
+
+                                <TextView
+                                    style="@style/TableTitle"
+                                    android:gravity="center"
+                                    android:padding="8dp"
+                                    android:text="剩余次数" />
+
+                                <TextView
+                                    style="@style/TableTxt"
+                                    android:gravity="center"
+                                    android:padding="8dp"
+                                    android:text='@{StringUtil.safeString(ticketDetail.leftCount)}'
+                                    tools:text="0" />
+                            </TableRow>
+
+                            <TableRow
+                                android:divider="@drawable/divider_table"
+                                android:orientation="horizontal"
+                                android:showDividers="beginning|middle|end">
+
+                                <TextView
+                                    style="@style/TableTitle"
+                                    android:gravity="center"
+                                    android:padding="8dp"
+                                    android:text="票型" />
+
+                                <TextView
+                                    style="@style/TableTxt"
+                                    android:gravity="center"
+                                    android:padding="8dp"
+                                    android:text="@{StringUtil.safeString(ticketDetail.playSoundName)}"
+                                    tools:text="成人票" />
+                            </TableRow>
+
+                            <TableRow
+                                android:divider="@drawable/divider_table"
+                                android:orientation="horizontal"
+                                android:showDividers="beginning|middle|end">
+
+                                <TextView
+                                    style="@style/TableTitle"
+                                    android:gravity="center"
+                                    android:padding="8dp"
+                                    android:text="够买时间" />
+
+                                <TextView
+                                    style="@style/TableTxt"
+                                    android:gravity="center"
+                                    android:padding="8dp"
+                                    android:text="@{StringUtil.safeString(ticketDetail.sellTime)}"
+                                    tools:text="2022-09-23 10:45:55" />
+                            </TableRow>
+
+                            <TableRow
+                                android:divider="@drawable/divider_table"
+                                android:orientation="horizontal"
+                                android:showDividers="beginning|middle|end">
+
+                                <TextView
+                                    style="@style/TableTitle"
+                                    android:gravity="center"
+                                    android:padding="8dp"
+                                    android:text="校验健康码" />
+
+                                <TextView
+                                    style="@style/TableTxt"
+                                    android:gravity="center"
+                                    android:padding="8dp"
+                                    android:text="@{StringUtil.string2bool(ticketDetail.healthShow) ? @string/not_check_health : @string/need_check_health}"
+                                    tools:text="需要校验" />
+                            </TableRow>
+
+                            <TableRow
+                                android:divider="@drawable/divider_table"
+                                android:orientation="horizontal"
+                                android:showDividers="beginning|middle|end">
+
+                                <TextView
+                                    style="@style/TableTitle"
+                                    android:gravity="center"
+                                    android:padding="8dp"
+                                    android:text="健康码信息" />
+
+                                <TextView
+                                    style="@style/TableTxt"
+                                    binding:bacColor="@{StringUtil.helthColor(ticketDetail.healthCode)}"
+                                    android:gravity="center"
+                                    android:padding="8dp"
+                                    android:text="@{StringUtil.helthInfo(ticketDetail.healthCode)}"
+                                    android:textColor="@color/white"
+                                    tools:background="@android:color/darker_gray"
+                                    tools:text="绿码" />
+                            </TableRow>
+
+                            <TableRow
+                                android:divider="@drawable/divider_table"
+                                android:orientation="horizontal"
+                                android:showDividers="beginning|middle|end">
+
+                                <TextView
+                                    style="@style/TableTitle"
+                                    android:gravity="center"
+                                    android:padding="8dp"
+                                    android:text="校验行程码" />
+
+                                <TextView
+                                    style="@style/TableTxt"
+                                    android:gravity="center"
+                                    android:padding="8dp"
+                                    android:text="@{StringUtil.string2bool(ticketDetail.travelShow) ? @string/not_check_health : @string/need_check_health}"
+                                    tools:text="需要校验" />
+                            </TableRow>
+
+                            <TableRow
+                                android:divider="@drawable/divider_table"
+                                android:orientation="horizontal"
+                                android:showDividers="beginning|middle|end">
+
+                                <TextView
+                                    style="@style/TableTitle"
+                                    android:gravity="center"
+                                    android:padding="8dp"
+                                    android:text="查票类型" />
+
+                                <TextView
+                                    style="@style/TableTxt"
+                                    android:gravity="center"
+                                    android:padding="8dp"
+                                    android:text="@{StringUtil.safeString(ticketDetail.ticketkindname)}"
+                                    tools:text="wmw成人" />
+                            </TableRow>
+
+                            <TableRow
+                                android:divider="@drawable/divider_table"
+                                android:orientation="horizontal"
+                                android:showDividers="beginning|middle|end">
+
+                                <TextView
+                                    style="@style/TableTitle"
+                                    android:gravity="center"
+                                    android:padding="8dp"
+                                    android:text="票型名称" />
+
+                                <TextView
+                                    style="@style/TableTxt"
+                                    android:gravity="center"
+                                    android:padding="8dp"
+                                    android:text="@{StringUtil.safeString(ticketDetail.tktModelName)}"
+                                    tools:text="wmw票型名称001" />
+                            </TableRow>
+
+                            <TableRow
+                                android:divider="@drawable/divider_table"
+                                android:orientation="horizontal"
+                                android:showDividers="beginning|middle|end">
+
+                                <TextView
+                                    style="@style/TableTitle"
+                                    android:gravity="center"
+                                    android:padding="8dp"
+                                    android:text="使用时间" />
+
+                                <TextView
+                                    style="@style/TableTxt"
+                                    android:gravity="center"
+                                    android:padding="8dp"
+                                    android:text="@{StringUtil.safeString(ticketDetail.useTime)}"
+                                    tools:text="2022-09-23 14:27:49" />
+                            </TableRow>
+
+                            <TableRow
+                                android:divider="@drawable/divider_table"
+                                android:orientation="horizontal"
+                                android:showDividers="beginning|middle|end">
+
+                                <TextView
+                                    style="@style/TableTitle"
+                                    android:gravity="center"
+                                    android:padding="8dp"
+                                    android:text="使用状态" />
+
+                                <TextView
+                                    style="@style/TableTxt"
+                                    android:gravity="center"
+                                    android:padding="8dp"
+                                    android:text="@{StringUtil.safeString(ticketDetail.useflagStr)}"
+                                    tools:text="已使用" />
+                            </TableRow>
+
+                            <TableRow
+                                android:divider="@drawable/divider_table"
+                                android:orientation="horizontal"
+                                android:showDividers="beginning|middle|end">
+
+                                <TextView
+                                    style="@style/TableTitle"
+                                    android:gravity="center"
+                                    android:padding="8dp"
+                                    android:text="是否授权" />
+
+                                <TextView
+                                    style="@style/TableTxt"
+                                    android:gravity="center"
+                                    android:padding="8dp"
+                                    android:text="@{StringUtil.string2bool(ticketDetail.auditMode) ? @string/not_power : @string/need_power}"
+                                    tools:text="需要授权" />
+                            </TableRow>
+
+                            <TableRow
+                                android:divider="@drawable/divider_table"
+                                android:orientation="horizontal"
+                                android:showDividers="beginning|middle|end">
+
+                                <TextView
+                                    style="@style/TableTitle"
+                                    android:gravity="center"
+                                    android:padding="8dp"
+                                    android:text="校验核酸" />
+
+                                <TextView
+                                    style="@style/TableTxt"
+                                    android:gravity="center"
+                                    android:padding="8dp"
+                                    android:text="@{StringUtil.string2bool(ticketDetail.nucleinShow) ? @string/not_check_health : @string/need_check_health}"
+                                    tools:text="需要校验" />
+                            </TableRow>
+
+                            <TableRow
+                                android:divider="@drawable/divider_table"
+                                android:orientation="horizontal"
+                                android:showDividers="beginning|middle|end">
+
+                                <TextView
+                                    style="@style/TableTitle"
+                                    android:gravity="center"
+                                    android:padding="8dp"
+                                    android:text="核酸信息" />
+
+                                <TextView
+                                    style="@style/TableTxt"
+                                    binding:bacColor="@{StringUtil.nucleinColor(ticketDetail.nucleinResult)}"
+                                    android:gravity="center"
+                                    android:padding="8dp"
+                                    android:text="@{StringUtil.nucleinInfo(ticketDetail.nucleinResult)}"
+                                    android:textColor="@color/white"
+                                    tools:background="@android:color/holo_green_dark"
+                                    tools:text="校验通过" />
+                            </TableRow>
+
+                            <TableRow
+                                android:divider="@drawable/divider_table"
+                                android:orientation="horizontal"
+                                android:showDividers="beginning|middle|end">
+
+                                <TextView
+                                    style="@style/TableTitle"
+                                    android:gravity="center"
+                                    android:padding="8dp"
+                                    android:text="校验疫苗" />
+
+                                <TextView
+                                    style="@style/TableTxt"
+                                    android:gravity="center"
+                                    android:padding="8dp"
+                                    android:text="@{StringUtil.string2bool(ticketDetail.vaccinumShow) ? @string/not_check_health : @string/need_check_health}"
+                                    tools:text="需要校验" />
+                            </TableRow>
+
+                            <TableRow
+                                android:divider="@drawable/divider_table"
+                                android:orientation="horizontal"
+                                android:showDividers="beginning|middle|end">
+
+                                <TextView
+                                    style="@style/TableTitle"
+                                    android:gravity="center"
+                                    android:padding="8dp"
+                                    android:text="疫苗信息" />
+
+                                <TextView
+                                    style="@style/TableTxt"
+                                    android:gravity="center"
+                                    android:padding="8dp"
+                                    android:text='@{ticketDetail.vaccinumResult + @string/zhen}'
+                                    tools:text="1针" />
+                            </TableRow>
+                        </TableLayout>
+
+                    </LinearLayout>
+
                 </LinearLayout>
-
-            </LinearLayout>
-
-            <TextView
-                binding:visible="@{context.checkTickerFiled}"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:textSize="16sp"
-                tools:text="检票成功"
-                android:textColor="@{context.checkTickerFiled ? @color/green : @color/red}"
-                tools:textColor="@color/black" />
-
-        </LinearLayout>
+            </androidx.core.widget.NestedScrollView>
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"

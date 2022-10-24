@@ -105,15 +105,15 @@ public class ScanDetailActivity extends BaseActivity<ActivityScanDetailBinding> 
         }
     }
 
-    //处理二维码/条形码返回结果
+    //处理二维码/条形码返回结果  MP221024093236000002
     private void dealERCode(String data) {
         scanTypeFiled.set("二维码/条形码");
         userModel = new UserModel();
-        userModel.setType("测试票");
+//        userModel.setType("测试票");
 //            userModel.setName("张三");
-        userModel.setName(data);
+//        userModel.setName(data);
         userModel.setCheckType(1);
-        userModel.setCardNumber("330121311012091293");
+        userModel.setCardNumber(data);
 
         searchTicket();
     }
@@ -122,7 +122,7 @@ public class ScanDetailActivity extends BaseActivity<ActivityScanDetailBinding> 
 
     //查票
     private void searchTicket() {
-        new RxOHCUtils(ScanDetailActivity.this).executeApi(BaseApplication.apiService.searchTicket(BuildConfig.DEBUG ? "MP220923105345000394" : userModel.getCardNumber(), userModel.getCheckType(), userModel.getName(), DefaultUtils.getDoorID(), false, DefaultUtils.getUser().getId()), new BaseSubscriber<Integer>(ScanDetailActivity.this) {
+        new RxOHCUtils(ScanDetailActivity.this).executeApi(BaseApplication.apiService.searchTicket(userModel.getCardNumber(), userModel.getCheckType(), userModel.getName(), DefaultUtils.getDoorID(), false, DefaultUtils.getUser().getId()), new BaseSubscriber<Integer>(ScanDetailActivity.this) {
             @Override
             public void success(Integer data) {
 
@@ -140,6 +140,7 @@ public class ScanDetailActivity extends BaseActivity<ActivityScanDetailBinding> 
                     mBinding.setTicketDetail(ticketDetail);
                     ticketID = mBinding.getTicketDetail().getId();
                     communicationId = mBinding.getTicketDetail().getCommunicationId();
+                    extend= mBinding.getTicketDetail().getExtend();
                 }
             }
 
@@ -159,31 +160,29 @@ public class ScanDetailActivity extends BaseActivity<ActivityScanDetailBinding> 
 
     String ticketID;//检票接口调用得到检票类型识别号
     String communicationId;//检票接口调用得到通信 ID
+    String extend;
+
     public ObservableBoolean checkTickerFiled = new ObservableBoolean(false);//检票是否成功
     //检票
     public OnClickAdapter.onClickCommand clickUseTicket = new OnClickAdapter.onClickCommand() {
         @Override
         public void click() {
             new RxOHCUtils(ScanDetailActivity.this).executeApi(BaseApplication.apiService.checkTicket(userModel.getCardNumber(), userModel.getCheckType(), DefaultUtils.getDoorID(), false,
-                    ticketID, communicationId,
-                    DefaultUtils.getUser().getId()), new BaseSubscriber<UserModel>(ScanDetailActivity.this) {
+                    ticketID, extend,
+                    DefaultUtils.getUser().getId()), new BaseSubscriber<Integer>(ScanDetailActivity.this) {
                 @Override
-                public void success(UserModel data) {
+                public void success(Integer data) {
                     System.out.println("检票成功");
                     checkTickerFiled.set(true);
+                    DialogUtils.showSingleDialog("检票成功", new DialogUtils.DialogButtonModule("确定"));
                 }
 
-                @Override
-                public void onRfRxNext(BaseModule<UserModel> baseModule) {
-                    super.onRfRxNext(baseModule);
-                    if (baseModule.getMsg() != null) {
-                        DialogUtils.showSingleDialog("检票失败", baseModule.getMsg(), new DialogUtils.DialogButtonModule("确定"));
-                    }
-                }
 
                 @Override
-                protected void fail(BaseModule<UserModel> baseModule) {
+                protected void fail(BaseModule<Integer> baseModule) {
                     super.fail(baseModule);
+
+                    DialogUtils.showSingleDialog("检票失败", baseModule.getMsg(), new DialogUtils.DialogButtonModule("确定"));
                 }
 
                 @Override

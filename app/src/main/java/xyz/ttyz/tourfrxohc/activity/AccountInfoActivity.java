@@ -2,6 +2,9 @@ package xyz.ttyz.tourfrxohc.activity;
 
 import android.content.Intent;
 
+import androidx.databinding.ObservableBoolean;
+import androidx.databinding.ObservableField;
+
 import xyz.ttyz.mylibrary.method.RxOHCUtils;
 import xyz.ttyz.tou_example.ActivityManager;
 import xyz.ttyz.toubasemvvm.adapter.OnClickAdapter;
@@ -19,6 +22,9 @@ public class AccountInfoActivity extends BaseActivity<ActivityAccountInfoBinding
         Intent intent = new Intent(ActivityManager.getInstance(), AccountInfoActivity.class);
         ActivityManager.getInstance().startActivity(intent);
     }
+
+    public ObservableBoolean isEditDoorFiled = new ObservableBoolean(false);
+    public ObservableField<String> doorIDFiled = new ObservableField<String>(DefaultUtils.getDoorID());
 
     ToolBarViewModel toolBarViewModel;
     @Override
@@ -60,6 +66,16 @@ public class AccountInfoActivity extends BaseActivity<ActivityAccountInfoBinding
                 }
 
             });
+        }
+    };
+
+    public OnClickAdapter.onClickCommand dealDoor = new OnClickAdapter.onClickCommand() {
+        @Override
+        public void click() {
+            isEditDoorFiled.set(!isEditDoorFiled.get());
+            if(!isEditDoorFiled.get()){
+                DefaultUtils.setDoorID(doorIDFiled.get());
+            }
         }
     };
 }
