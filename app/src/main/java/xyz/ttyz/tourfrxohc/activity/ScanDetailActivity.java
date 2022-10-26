@@ -89,7 +89,7 @@ public class ScanDetailActivity extends BaseActivity<ActivityScanDetailBinding> 
                     /* 扫的是身份证*/
                     scanTypeFiled.set("身份证");
                     userModel = new Gson().fromJson(data, UserModel.class);
-                    userModel.setCardNumber(userModel.getCardNumber());
+//                    userModel.setCardNumber("330102198903071119");
                     userModel.setCheckType(2);
                     searchTicket();
                 } catch (JSONException e) {
