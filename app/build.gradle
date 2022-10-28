@@ -66,7 +66,8 @@ dependencies {
     implementation project(':RfRxOHC')
     implementation project(':toubasemvvm')
 
-
+    /*身份证NFC*/
+    implementation(name: 'nfc_wm_1.3', ext: 'aar')
     /* 二维码 条形码*/
     implementation 'com.github.jenly1314:zxing-lite:2.1.1'
 //    implementation 'io.github.devilsen:czxing:1.1.0'

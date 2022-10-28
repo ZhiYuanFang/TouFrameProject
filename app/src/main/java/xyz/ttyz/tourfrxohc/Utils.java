@@ -15,6 +15,7 @@ import com.king.zxing.CaptureActivity;
 
 import xyz.ttyz.tou_example.ActivityManager;
 import xyz.ttyz.tourfrxohc.activity.CaptureNextActivity;
+import xyz.ttyz.tourfrxohc.activity.CardActivity;
 import xyz.ttyz.tourfrxohc.activity.IDCardScanActivity;
 import xyz.ttyz.tourfrxohc.activity.ScanDetailActivity;
 import xyz.ttyz.tourfrxohc.activity.TicketScanActivity;
@@ -51,6 +52,7 @@ public class Utils {
     public static final int SCAN_IDCARD_REQUEST = 1;/* 身份证识别 返回码*/
 
     public static void scanIDCard(){
-        IDCardScanActivity.show();
+//        IDCardScanActivity.show();
+        CardActivity.show();
     }
 }

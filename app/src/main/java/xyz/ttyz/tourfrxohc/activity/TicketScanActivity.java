@@ -2,13 +2,19 @@ package xyz.ttyz.tourfrxohc.activity;
 
 import android.Manifest;
 import android.content.Intent;
+import android.nfc.NfcAdapter;
 
 import androidx.annotation.Nullable;
 
+import com.google.gson.Gson;
 import com.king.zxing.CameraScan;
+import com.nfc.NFCardReaderByRx;
+import com.nfc.ReadCallBack;
+import com.nfc.UserInfo;
 
 import xyz.ttyz.tou_example.ActivityManager;
 import xyz.ttyz.toubasemvvm.adapter.OnClickAdapter;
+import xyz.ttyz.toubasemvvm.utils.ToastUtil;
 import xyz.ttyz.tourfrxohc.R;
 import xyz.ttyz.tourfrxohc.Utils;
 import xyz.ttyz.tourfrxohc.databinding.ActivityTicketScanBinding;
@@ -28,11 +34,6 @@ public class TicketScanActivity extends BaseActivity<ActivityTicketScanBinding> 
     @Override
     protected String[] initPermission() {
         return new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
     }
 
     @Override

@@ -483,7 +483,7 @@
                 android:foreground="?selectableItemBackground"
                 android:gravity="center"
                 android:padding="15dp"
-                android:text="扫描身份证"
+                android:text="感应身份证"
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 binding:onClickCommand="@{context.clickContinueScanIDCard}" />

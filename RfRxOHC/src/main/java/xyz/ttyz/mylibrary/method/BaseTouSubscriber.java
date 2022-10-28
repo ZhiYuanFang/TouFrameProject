@@ -81,7 +81,9 @@ public abstract class BaseTouSubscriber<D> extends BaseObserver<BaseModule<D>> {
      */
     protected void fail(BaseModule<D> baseModule){
         System.out.println("message: " + baseModule.getMsg());
-        Toast.makeText(ActivityManager.getInstance(), baseModule.getMsg(), Toast.LENGTH_LONG).show();
+        if(baseModule.getMsg() != null){
+            Toast.makeText(ActivityManager.getInstance(), baseModule.getMsg(), Toast.LENGTH_LONG).show();
+        }
     }
 
     //region public
