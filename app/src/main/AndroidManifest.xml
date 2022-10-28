@@ -46,8 +46,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
-        <activity android:name=".activity.CardActivity"
-            android:launchMode="singleTop">
+        <activity android:name=".activity.CardActivity">
             <intent-filter>
                 <action android:name="android.nfc.action.TECH_DISCOVERED" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -71,7 +70,13 @@
             <!--            </intent-filter>-->
         </activity>
         <activity android:name=".activity.TicketScanActivity" />
-        <activity android:name=".activity.ScanDetailActivity" />
+        <activity android:name=".activity.ScanDetailActivity">
+            <intent-filter>
+                <action android:name="android.nfc.action.TECH_DISCOVERED" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".activity.AccountInfoActivity" />
         <activity android:name=".activity.IDCardScanActivity" />
 <!--        <activity android:name="com.king.zxing.CaptureActivity" />-->

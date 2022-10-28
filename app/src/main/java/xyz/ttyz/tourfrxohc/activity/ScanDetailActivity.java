@@ -11,6 +11,9 @@ import androidx.databinding.ObservableInt;
 
 import com.google.gson.Gson;
 import com.king.zxing.CameraScan;
+import com.nfc.NFCardReaderByRx;
+import com.nfc.ReadCallBack;
+import com.nfc.UserInfo;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -55,6 +58,8 @@ public class ScanDetailActivity extends BaseActivity<ActivityScanDetailBinding> 
     public ObservableField<String> scanTypeFiled = new ObservableField<>("");
     public UserModel userModel;//用户信息
 
+    public ObservableField<String> tipFiled = new ObservableField<>("将身份证贴和设备识别");
+
     @Override
     protected int initLayoutId() {
         return R.layout.activity_scan_detail;
@@ -69,8 +74,67 @@ public class ScanDetailActivity extends BaseActivity<ActivityScanDetailBinding> 
     }
 
     @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        NFCardReaderByRx.getInstance().readCardCore(intent, new ReadCallBack() {
+            @Override
+            public void processBack(String s) {
+                System.out.println(s);
+                tipFiled.set(s);
+                if (userModel.getName() != null) {
+                    tipFiled.set(s + ":" + userModel.getName());
+                }
+            }
+
+            @Override
+            public void errorBack(String s) {
+                System.out.println(s);
+                tipFiled.set(s);
+
+            }
+
+            @Override
+            public void successRead(UserInfo userInfo) {
+                String str = new Gson().toJson(userInfo);
+                System.out.println("successRead=====> " + str);
+                UserModel userModel = new UserModel();
+                userModel.setCardNumber(userInfo.id);
+                userModel.setName(userInfo.name);
+                dealIDCard(new Gson().toJson(userModel));
+            }
+
+            @Override
+            public void headMsg(String s) {
+                System.out.println(s);
+
+            }
+        });
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        try {
+            NFCardReaderByRx.getInstance().onPause();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        try {
+            NFCardReaderByRx.getInstance().onResume();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     protected void initData() {
         mBinding.setContext(this);
+        NFCardReaderByRx.getInstance().init(this, DefaultUtils.key, DefaultUtils.secret, false);
     }
 
     @Override
@@ -84,25 +148,29 @@ public class ScanDetailActivity extends BaseActivity<ActivityScanDetailBinding> 
                 break;
             case 2:
                 /*根据扫码得到的数据类型，区分扫码类型*/
-                try {
-                    JSONObject json = new JSONObject(data);
-                    /* 扫的是身份证*/
-                    scanTypeFiled.set("身份证");
-                    userModel = new Gson().fromJson(data, UserModel.class);
-                    userModel.setCardNumber(userModel.getCardNumber());
-                    userModel.setCheckType(2);
-                    searchTicket();
-                } catch (JSONException e) {
-                    /* 扫的是二维码*/
-                    e.printStackTrace();
-                    ToastUtil.showToast(e.getMessage());
-                }
+                dealIDCard(data);
                 break;
             case 3:
                 // 市名卡
                 break;
             default:
         }
+    }
+
+    private void dealIDCard(String data) {
+        try {
+            JSONObject json = new JSONObject(data);
+            /* 扫的是身份证*/
+            scanTypeFiled.set("身份证");
+            userModel = new Gson().fromJson(data, UserModel.class);
+            userModel.setCheckType(2);
+            searchTicket();
+        } catch (JSONException e) {
+            /* 扫的是二维码*/
+            e.printStackTrace();
+            ToastUtil.showToast(e.getMessage());
+        }
+
     }
 
     //处理二维码/条形码返回结果  MP221024093236000002
@@ -136,11 +204,11 @@ public class ScanDetailActivity extends BaseActivity<ActivityScanDetailBinding> 
                 String json = new Gson().toJson(data);
                 Log.i(TAG, "onRfRxNext: " + json);
                 TicketDetail ticketDetail = new Gson().fromJson(json, TicketDetail.class);
-                if(null != ticketDetail){
+                if (null != ticketDetail) {
                     mBinding.setTicketDetail(ticketDetail);
                     ticketID = mBinding.getTicketDetail().getId();
                     communicationId = mBinding.getTicketDetail().getCommunicationId();
-                    extend= mBinding.getTicketDetail().getExtend();
+                    extend = mBinding.getTicketDetail().getExtend();
                 }
             }
 
@@ -196,6 +264,7 @@ public class ScanDetailActivity extends BaseActivity<ActivityScanDetailBinding> 
     public OnClickAdapter.onClickCommand clickContinueScanERCode = new OnClickAdapter.onClickCommand() {
         @Override
         public void click() {
+            tipFiled.set("");
             Utils.scanERCode();
         }
     };
@@ -203,18 +272,19 @@ public class ScanDetailActivity extends BaseActivity<ActivityScanDetailBinding> 
     public OnClickAdapter.onClickCommand clickContinueScanIDCard = new OnClickAdapter.onClickCommand() {
         @Override
         public void click() {
+            tipFiled.set("");
             Utils.scanIDCard();
         }
     };
 
-    public String dealIDCard(String idCardNum) {
-        if (idCardNum != null && idCardNum.length() > 6) {
-            Pattern credentialsPattern = Pattern.compile("(\\d{3})\\d*([0-9a-zA-Z]{4})");
-            Matcher credentialsMatch = credentialsPattern.matcher(idCardNum);
-            idCardNum = credentialsMatch.replaceAll("$1****$2");
-            return idCardNum;
-        } else return idCardNum;
-    }
+//    public String dealIDCard(String idCardNum) {
+//        if (idCardNum != null && idCardNum.length() > 6) {
+//            Pattern credentialsPattern = Pattern.compile("(\\d{3})\\d*([0-9a-zA-Z]{4})");
+//            Matcher credentialsMatch = credentialsPattern.matcher(idCardNum);
+//            idCardNum = credentialsMatch.replaceAll("$1****$2");
+//            return idCardNum;
+//        } else return idCardNum;
+//    }
 
 
     @Override

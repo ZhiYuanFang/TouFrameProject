@@ -3,6 +3,8 @@ package xyz.ttyz.tourfrxohc.activity;
 import android.Manifest;
 import android.content.Intent;
 
+import androidx.databinding.ObservableField;
+
 import com.google.gson.Gson;
 import com.nfc.NFCardReaderByRx;
 import com.nfc.ReadCallBack;
@@ -11,6 +13,7 @@ import com.nfc.UserInfo;
 import xyz.ttyz.tou_example.ActivityManager;
 import xyz.ttyz.toubasemvvm.adapter.OnClickAdapter;
 import xyz.ttyz.toubasemvvm.vm.ToolBarViewModel;
+import xyz.ttyz.tourfrxohc.DefaultUtils;
 import xyz.ttyz.tourfrxohc.R;
 import xyz.ttyz.tourfrxohc.Utils;
 import xyz.ttyz.tourfrxohc.databinding.ActivityCardBinding;
@@ -22,6 +25,7 @@ public class CardActivity extends BaseActivity<ActivityCardBinding>{
         Intent intent = new Intent(ActivityManager.getInstance(), CardActivity.class);
         ActivityManager.getInstance().startActivity(intent);
     }
+    public ObservableField<String> tipFiled = new ObservableField<>("将身份证贴和设备识别");
     ToolBarViewModel toolBarViewModel;
     @Override
     protected int initLayoutId() {
@@ -38,7 +42,7 @@ public class CardActivity extends BaseActivity<ActivityCardBinding>{
         toolBarViewModel = new ToolBarViewModel.Builder().title("身份证识别").build();
         mBinding.setToolBarViewModel(toolBarViewModel);
         mBinding.setContext(this);
-        NFCardReaderByRx.getInstance().init(this, "", "", false);
+        NFCardReaderByRx.getInstance().init(this, DefaultUtils.key, DefaultUtils.secret, false);
     }
 
     @Override
@@ -52,11 +56,13 @@ public class CardActivity extends BaseActivity<ActivityCardBinding>{
             @Override
             public void processBack(String s) {
                 System.out.println(s);
+                tipFiled.set(s);
             }
 
             @Override
             public void errorBack(String s) {
                 System.out.println(s);
+                tipFiled.set(s);
 
             }
 
@@ -65,13 +71,14 @@ public class CardActivity extends BaseActivity<ActivityCardBinding>{
                 String str = new Gson().toJson(userInfo);
                 System.out.println("successRead=====> "+ str);
                 UserModel userModel = new UserModel();
-                userModel.setCardNumber("");
+                userModel.setCardNumber(userInfo.id);
                 ScanDetailActivity.show(new Gson().toJson(userModel), 2);
             }
 
             @Override
             public void headMsg(String s) {
                 System.out.println(s);
+                tipFiled.set(s);
             }
         });
     }
@@ -86,13 +93,21 @@ public class CardActivity extends BaseActivity<ActivityCardBinding>{
     @Override
     protected void onPause() {
         super.onPause();
-        NFCardReaderByRx.getInstance().onPause();
+        try {
+            NFCardReaderByRx.getInstance().onPause();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        NFCardReaderByRx.getInstance().onResume();
+        try {
+            NFCardReaderByRx.getInstance().onResume();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

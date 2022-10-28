@@ -75,7 +75,15 @@
                         android:textColor="@{context.checkTickerFiled ? @color/green : @color/red}"
                         android:textSize="16sp"
                         binding:visible="@{context.checkTickerFiled}"
-                        tools:text="检票成功"
+                        android:text="检票成功"
+                        tools:textColor="@color/black" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:text="@{context.tipFiled}"
+                        android:textSize="16sp"
+                        tools:text="读卡进度72%,请勿移动身份证"
                         tools:textColor="@color/black" />
                     <LinearLayout
                         android:layout_width="match_parent"

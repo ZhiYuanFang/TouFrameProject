@@ -16,6 +16,9 @@ import xyz.ttyz.tou_example.ActivityManager;
 import xyz.ttyz.tourfrxohc.models.UserModel;
 
 public class DefaultUtils {
+    public static final String key = "340475209711";
+    public static final String secret = "S2022102818123462446803142";
+
     public static void setCookie(HashSet<String> cookies){
         SharedPreferences.Editor config = BaseApplication.ctx.getSharedPreferences("config", BaseApplication.ctx.MODE_PRIVATE)
                 .edit();
