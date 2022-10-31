@@ -91,7 +91,7 @@
                 tools:text="修改"
                 android:text="@{context.isEditDoorFiled ? @string/save : @string/xiugai}"
                 android:textColor="@color/white"
-                android:textSize="10sp"
+                android:textSize="12sp"
                 binding:onClickCommand="@{context.dealDoor}"/>
         </LinearLayout>
         <LinearLayout

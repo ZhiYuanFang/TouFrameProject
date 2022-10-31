@@ -15,9 +15,11 @@ import com.nfc.UserInfo;
 import xyz.ttyz.tou_example.ActivityManager;
 import xyz.ttyz.toubasemvvm.adapter.OnClickAdapter;
 import xyz.ttyz.toubasemvvm.utils.ToastUtil;
+import xyz.ttyz.tourfrxohc.DefaultUtils;
 import xyz.ttyz.tourfrxohc.R;
 import xyz.ttyz.tourfrxohc.Utils;
 import xyz.ttyz.tourfrxohc.databinding.ActivityTicketScanBinding;
+import xyz.ttyz.tourfrxohc.models.UserModel;
 
 public class TicketScanActivity extends BaseActivity<ActivityTicketScanBinding> {
     public static void show() {
@@ -39,6 +41,8 @@ public class TicketScanActivity extends BaseActivity<ActivityTicketScanBinding> 
     @Override
     protected void initData() {
         mBinding.setContext(this);
+
+        NFCardReaderByRx.getInstance().init(this, DefaultUtils.key, DefaultUtils.secret, false);
     }
 
     @Override
@@ -67,6 +71,57 @@ public class TicketScanActivity extends BaseActivity<ActivityTicketScanBinding> 
             String scanResult = data.getStringExtra(CameraScan.SCAN_RESULT);
             ScanDetailActivity.show(scanResult, 1);
             finish();
+        }
+    }
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        NFCardReaderByRx.getInstance().readCardCore(intent, new ReadCallBack() {
+            @Override
+            public void processBack(String s) {
+                System.out.println(s);
+            }
+
+            @Override
+            public void errorBack(String s) {
+                System.out.println(s);
+            }
+
+            @Override
+            public void successRead(UserInfo userInfo) {
+                String str = new Gson().toJson(userInfo);
+                System.out.println("successRead=====> " + str);
+                UserModel userModel = new UserModel();
+                userModel.setCardNumber(userInfo.id);
+                userModel.setName(userInfo.name);
+                ScanDetailActivity.show(new Gson().toJson(userModel), 2);
+            }
+
+            @Override
+            public void headMsg(String s) {
+                System.out.println(s);
+
+            }
+        });
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        try {
+            NFCardReaderByRx.getInstance().onPause();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        try {
+            NFCardReaderByRx.getInstance().onResume();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

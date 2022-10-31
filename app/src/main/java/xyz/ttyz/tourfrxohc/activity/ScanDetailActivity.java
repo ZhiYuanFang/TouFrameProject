@@ -46,6 +46,7 @@ public class ScanDetailActivity extends BaseActivity<ActivityScanDetailBinding> 
     int type;//1:条码 2:身份证 3:IC 卡
 
     public static void show(String data, int type) {
+        if(data == null) return;
         Intent intent = new Intent(ActivityManager.getInstance(), ScanDetailActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra("data", data);
@@ -90,6 +91,7 @@ public class ScanDetailActivity extends BaseActivity<ActivityScanDetailBinding> 
             public void errorBack(String s) {
                 System.out.println(s);
                 tipFiled.set(s);
+                tipMessageFiled.set("");
 
             }
 
@@ -150,10 +152,11 @@ public class ScanDetailActivity extends BaseActivity<ActivityScanDetailBinding> 
                 /*根据扫码得到的数据类型，区分扫码类型*/
                 dealIDCard(data);
                 break;
-            case 3:
-                // 市名卡
-                break;
+//            case 3:
+//                // 市名卡
+//                break;
             default:
+                System.out.println("意外");
         }
     }
 
@@ -265,6 +268,7 @@ public class ScanDetailActivity extends BaseActivity<ActivityScanDetailBinding> 
         @Override
         public void click() {
             tipFiled.set("");
+            tipMessageFiled.set("");
             Utils.scanERCode();
         }
     };
@@ -273,6 +277,7 @@ public class ScanDetailActivity extends BaseActivity<ActivityScanDetailBinding> 
         @Override
         public void click() {
             tipFiled.set("");
+            tipMessageFiled.set("");
             Utils.scanIDCard();
         }
     };

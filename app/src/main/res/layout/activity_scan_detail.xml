@@ -165,6 +165,7 @@
                             </TableRow>
 
                             <TableRow
+                                android:visibility="gone"
                                 android:divider="@drawable/divider_table"
                                 android:orientation="horizontal"
                                 android:showDividers="beginning|middle|end">
@@ -184,6 +185,7 @@
                             </TableRow>
 
                             <TableRow
+                                android:visibility="gone"
                                 android:divider="@drawable/divider_table"
                                 android:orientation="horizontal"
                                 android:showDividers="beginning|middle|end">
@@ -508,7 +510,7 @@
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 binding:onClickCommand="@{context.clickUseTicket}"
-                binding:visible="@{!context.checkTickerFiled &amp;&amp; StringUtil.convertStr2Long(ticketDetail.useflag) == 0 }" />
+                binding:visible="@{!context.checkTickerFiled &amp;&amp; !context.tipMessageFiled.empty &amp;&amp; StringUtil.convertStr2Long(ticketDetail.useflag) == 0 }" />
         </LinearLayout>
 
     </LinearLayout>

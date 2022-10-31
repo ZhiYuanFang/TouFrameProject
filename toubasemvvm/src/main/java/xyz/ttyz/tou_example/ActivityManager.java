@@ -47,7 +47,7 @@ public class ActivityManager {
     }
 
     public static void popOtherActivity(Class cla){
-        if(activityList.size() > 1){
+        if(activityList.size() >= 1){
             List<Activity> exitActivityList = new ArrayList<>();
             for(Activity ac : activityList){
                 if(!ac.getClass().getSimpleName().equals(cla.getSimpleName())){
