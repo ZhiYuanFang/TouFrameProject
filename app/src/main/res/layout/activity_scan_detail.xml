@@ -64,7 +64,7 @@
                         android:textColor="@color/red"
                         android:textSize="18sp"
                         android:textStyle="bold"
-                        binding:visible="@{context.tipMessageFiled != null}"
+                        binding:visible="@{!StringUtil.safeString(context.tipMessageFiled).empty}"
                         tools:text="无门" />
 
 
@@ -78,6 +78,7 @@
                         android:text="检票成功"
                         tools:textColor="@color/black" />
                     <TextView
+                        binding:visible="@{!StringUtil.safeString(context.tipFiled).empty}"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="15dp"
@@ -90,7 +91,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center_horizontal"
                         android:orientation="vertical"
-                        binding:visible="@{context.tipMessageFiled == null}">
+                        binding:visible="@{ticketDetail != null}">
 
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -507,7 +508,7 @@
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 binding:onClickCommand="@{context.clickUseTicket}"
-                binding:visible="@{context.tipMessageFiled == null &amp;&amp; !context.checkTickerFiled}" />
+                binding:visible="@{!context.checkTickerFiled &amp;&amp; StringUtil.convertStr2Long(ticketDetail.useflag) == 0 }" />
         </LinearLayout>
 
     </LinearLayout>

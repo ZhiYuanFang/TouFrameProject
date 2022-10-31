@@ -15,6 +15,7 @@
     <style name="TableTxt">
         <item name="android:textSize">12sp</item>
         <item name="android:singleLine">true</item>
+        <item name="android:width">180dp</item>
     </style>
 
 </resources>

@@ -33,7 +33,7 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding> {
 
     public ObservableField<String> accountFiled = new ObservableField<>("000000");
     public ObservableField<String> password = new ObservableField<>("Pz@123456");
-    public ObservableField<String> doorID = new ObservableField<>("1001");
+    public ObservableField<String> doorID = new ObservableField<>(DefaultUtils.getDoorID());
     public ObservableField<String> ip = new ObservableField<>(DefaultUtils.getIp());
     public ObservableBoolean useSMS = new ObservableBoolean(false);
     public ObservableField<String> smsFiled = new ObservableField<>("");

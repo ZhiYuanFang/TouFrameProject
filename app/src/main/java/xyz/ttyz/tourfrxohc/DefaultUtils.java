@@ -19,22 +19,25 @@ public class DefaultUtils {
     public static final String key = "340475209711";
     public static final String secret = "S2022102818123462446803142";
 
-    public static void setCookie(HashSet<String> cookies){
+    public static void setCookie(HashSet<String> cookies) {
         SharedPreferences.Editor config = BaseApplication.ctx.getSharedPreferences("config", BaseApplication.ctx.MODE_PRIVATE)
                 .edit();
         config.putStringSet("cookie", cookies);
         config.apply();
     }
-    public static HashSet<String> getCookie(){
+
+    public static HashSet<String> getCookie() {
         return (HashSet) BaseApplication.ctx.getSharedPreferences("config",
                 BaseApplication.ctx.MODE_PRIVATE).getStringSet("cookie", null);
     }
-    public static void removeCookie(){
+
+    public static void removeCookie() {
         SharedPreferences.Editor config = BaseApplication.ctx.getSharedPreferences("config", BaseApplication.ctx.MODE_PRIVATE)
                 .edit();
         config.clear();
         config.apply();
     }
+
     public static void setUser(UserModel user) {
         if (user == null) {
             SharedPreferenceUtil.setShareString(ActivityManager.getInstance(), "user", null);
@@ -45,35 +48,39 @@ public class DefaultUtils {
 
     public static UserModel getUser() {
         String userStr = SharedPreferenceUtil.getShareString(ActivityManager.getInstance(), "user");
-        UserModel userModel =  new Gson().fromJson(userStr, UserModel.class);
-        if(userModel == null){
+        UserModel userModel = new Gson().fromJson(userStr, UserModel.class);
+        if (userModel == null) {
             userModel = new UserModel();
         }
         return userModel;
     }
 
-    public static void clearCache(){
+    public static void clearCache() {
         removeCookie();
         setUser(null);
     }
 
 
-
     //配置
-//    private static String doorID = "1001";
-//    private static String ip = "http://47.111.185.38:8001/";
-    public static String defaultIP = "http://47.111.185.38:8001/";
+    private static String defaultDoorID = "1001";
+    //    private static String ip = "http://47.111.185.38:8001/";
+    private static String defaultIP = "http://47.111.185.38:8001/";
 
     public static String getDoorID() {
-        return SharedPreferenceUtil.getShareString(ActivityManager.getInstance(), "doorID");
+        String doorID = SharedPreferenceUtil.getShareString(BaseApplication.ctx, "doorID");
+        if (StringUtil.safeString(doorID).isEmpty()) {
+            doorID = defaultDoorID;
+        }
+        return doorID;
     }
 
     public static String getIp() {
         return getIp(BaseApplication.ctx);
     }
+
     public static String getIp(Context context) {
         String ip = SharedPreferenceUtil.getShareString(context, "ip");
-        if(StringUtil.safeString(ip).isEmpty()){
+        if (StringUtil.safeString(ip).isEmpty()) {
             ip = defaultIP;
         }
         return ip;
