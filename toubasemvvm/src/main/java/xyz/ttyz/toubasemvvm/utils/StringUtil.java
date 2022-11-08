@@ -953,13 +953,13 @@ public class StringUtil {
 
     public static long convertStr2Long(String text) {
         if(text == null){
-            return 0;
+            return -1;
         }
         BigDecimal bigDecimal = null;
         try {
             bigDecimal = new BigDecimal(text.replace(",", "").trim());
         } catch (NumberFormatException e) {
-            return 0;
+            return -1;
         }
         String value = bigDecimal.setScale(0, RoundingMode.HALF_DOWN).toPlainString();
         return Long.parseLong(value);

@@ -20,6 +20,7 @@
     </data>
 
     <LinearLayout
+        android:background="@drawable/bac"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -476,39 +477,33 @@
 
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_conor_5_blue"
-                android:foreground="?selectableItemBackground"
-                android:gravity="center"
-                android:padding="15dp"
-                android:text="扫描二维码"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                binding:onClickCommand="@{context.clickContinueScanERCode}" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_conor_5_blue"
-                android:foreground="?selectableItemBackground"
-                android:gravity="center"
-                android:padding="15dp"
-                android:text="感应身份证"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                binding:onClickCommand="@{context.clickContinueScanIDCard}" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="120dp"
+                android:layout_height="45dp"
                 android:background="@drawable/bg_conor_btn"
                 android:foreground="?selectableItemBackground"
                 android:gravity="center"
-                android:padding="15dp"
+                android:text="扫描二维码"
+                android:textColor="@color/white"
+                binding:onClickCommand="@{context.clickContinueScanERCode}" />
+
+            <TextView
+                android:layout_width="120dp"
+                android:layout_height="45dp"
+                android:background="@drawable/bg_conor_btn"
+                android:foreground="?selectableItemBackground"
+                android:gravity="center"
+                android:text="感应身份证"
+                android:textColor="@color/white"
+                binding:onClickCommand="@{context.clickContinueScanIDCard}" />
+
+            <TextView
+                android:layout_width="55dp"
+                android:layout_height="45dp"
+                android:background="@drawable/bg_conor_btn"
+                android:foreground="?selectableItemBackground"
+                android:gravity="center"
                 android:text="检票"
                 android:textColor="@color/white"
-                android:textSize="18sp"
                 binding:onClickCommand="@{context.clickUseTicket}"
                 binding:visible="@{!context.checkTickerFiled &amp;&amp; !context.tipMessageFiled.empty &amp;&amp; StringUtil.convertStr2Long(ticketDetail.useflag) == 0 }" />
         </LinearLayout>

@@ -14,9 +14,11 @@
             name="userModel"
             type="xyz.ttyz.tourfrxohc.models.UserModel" />
         <import type="xyz.ttyz.tourfrxohc.DefaultUtils"/>
+        <import type="xyz.ttyz.tourfrxohc.BuildConfig"/>
     </data>
 
     <LinearLayout
+        android:background="@drawable/bac"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -28,70 +30,84 @@
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="38dp"
             android:layout_margin="35dp"
             android:orientation="horizontal">
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:text="账号："/>
+
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="160dp"
+                android:layout_height="match_parent"
+                android:paddingStart="15dp"
+                android:gravity="center|left"
                 tools:text="@string/app_name"
                 android:text="@{userModel.user_name}"
+                android:textStyle="bold"
                 android:textColor="@color/colorPrimary"
-                android:textSize="35sp"/>
+                android:textSize="18sp"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="38dp"
             android:layout_margin="35dp"
             android:orientation="horizontal">
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:textColor="@color/black"
+                android:gravity="center"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:text="门号："/>
             <RelativeLayout
-                android:layout_width="120dp"
-                android:layout_height="wrap_content">
+                android:layout_width="160dp"
+                android:layout_height="match_parent">
 
                 <TextView
                     tools:visibility="gone"
                     binding:visible="@{!context.isEditDoorFiled}"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     tools:text="1001"
+                    android:paddingStart="15dp"
+                    android:gravity="center|left"
                     android:text="@={context.doorIDFiled}"
+                    android:textStyle="bold"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="35sp"/>
+                    android:textSize="18sp"/>
 
                 <EditText
                     binding:visible="@{context.isEditDoorFiled}"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center|left"
+                    android:paddingStart="15dp"
                     tools:text="1001"
+                    android:textStyle="bold"
+                    android:background="@drawable/bg_edit"
                     android:text="@={context.doorIDFiled}"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="35sp"/>
+                    android:textSize="18sp"/>
             </RelativeLayout>
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
+                android:layout_width="65dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="15dp"
+                android:gravity="center"
                 android:background="@drawable/bg_conor_btn"
                 android:foreground="?selectableItemBackground"
                 tools:text="修改"
                 android:text="@{context.isEditDoorFiled ? @string/save : @string/xiugai}"
                 android:textColor="@color/white"
-                android:textSize="12sp"
+                android:textSize="16sp"
                 binding:onClickCommand="@{context.dealDoor}"/>
         </LinearLayout>
         <LinearLayout
@@ -113,6 +129,25 @@
                 android:textStyle="italic"
                 android:textSize="16sp"/>
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="35dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textStyle="italic"
+                android:text="版本："/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="1.1"
+                android:text="@{BuildConfig.VERSION_NAME}"
+                android:textStyle="italic"
+                android:textSize="16sp"/>
+        </LinearLayout>
 
         <View
             android:layout_width="0dp"
@@ -120,16 +155,16 @@
             android:layout_weight="1"/>
 
         <TextView
-            android:layout_width="120dp"
-            android:layout_height="45dp"
+            android:layout_width="260dp"
+            android:layout_height="43dp"
             android:background="@drawable/bg_conor_btn"
             android:foreground="?selectableItemBackground"
             android:gravity="center"
             android:text="退出登陆"
-            android:layout_gravity="end"
+            android:layout_gravity="center_horizontal"
             android:textColor="@color/white"
             android:textSize="18sp"
             binding:onClickCommand="@{context.reLoginClick}"
-            android:layout_margin="35dp"/>
+            android:layout_marginBottom="35dp"/>
     </LinearLayout>
 </layout>
