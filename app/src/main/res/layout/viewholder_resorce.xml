@@ -40,11 +40,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:textIsSelectable="true"
                 android:text='@{"seq: "+resorceModule.seq}'
+                android:textIsSelectable="true"
                 android:textSize="12sp"
                 android:textStyle="bold"
-                tools:text="@string/app_name" />
+                tools:text="@string/develop_text" />
         </LinearLayout>
     </LinearLayout>
 </layout>

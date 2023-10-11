@@ -1,19 +1,17 @@
-apply plugin: 'com.android.application'
+plugins {
+    id 'com.android.application'
+}
 
 android {
-    signingConfigs {
-        release {
-        }
-    }
-    compileSdkVersion 29
+//    namespace 'xyz.ttyz.tourfrxohc'
+    compileSdk 33
 
     defaultConfig {
         applicationId "xyz.ttyz.tourfrxohc"
-        minSdkVersion 21
-        targetSdkVersion 27
+        minSdk 21
+        targetSdk 33
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     signingConfigs {
         tou {
@@ -37,8 +35,8 @@ android {
             signingConfig signingConfigs.tou
         }
     }
-    dataBinding{
-        enabled true
+    buildFeatures {
+        dataBinding = true
     }
 
     compileOptions {
@@ -49,13 +47,9 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    //noinspection GradleCompatible
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    implementation 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.4@aar'
+    implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation 'com.google.android.material:material:1.5.0'
+
     implementation project(':RfRxOHC')
     implementation project(':toubasemvvm')
 }

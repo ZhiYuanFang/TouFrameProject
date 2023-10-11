@@ -10,9 +10,9 @@ import android.view.animation.TranslateAnimation;
 import androidx.databinding.BindingAdapter;
 
 
-import com.scwang.smartrefresh.layout.util.DensityUtil;
-
 import java.util.List;
+
+import xyz.ttyz.toubasemvvm.utils.DensityUtil;
 
 public class ViewAdapter {
     @BindingAdapter(value = {"maxHeight", "maxWidth", "minHeight", "minWidth"}, requireAll = false)

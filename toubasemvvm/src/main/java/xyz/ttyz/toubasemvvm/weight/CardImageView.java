@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RelativeLayout;
 
+import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableField;
@@ -27,7 +28,6 @@ public class CardImageView extends RelativeLayout {
     public ObservableField<File> imageFile  = new ObservableField<>();
     public ObservableBoolean isBlur = new ObservableBoolean(false);
     public ObservableFloat thumbnil = new ObservableFloat(0f);
-
 
     public CardImageView(Context context, AttributeSet attrs) {
         super(context, attrs);

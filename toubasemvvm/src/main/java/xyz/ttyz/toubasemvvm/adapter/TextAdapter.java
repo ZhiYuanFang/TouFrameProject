@@ -11,13 +11,12 @@ import android.widget.TextView;
 import androidx.databinding.BindingAdapter;
 
 
-import com.scwang.smartrefresh.layout.util.DensityUtil;
-
 import java.io.InputStream;
 import java.net.URL;
 
 import xyz.ttyz.tou_example.ActivityManager;
 import xyz.ttyz.toubasemvvm.utils.Constants;
+import xyz.ttyz.toubasemvvm.utils.DensityUtil;
 
 public class TextAdapter {
     @BindingAdapter("spannerText")

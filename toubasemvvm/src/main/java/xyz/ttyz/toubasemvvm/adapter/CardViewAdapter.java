@@ -3,11 +3,9 @@ package xyz.ttyz.toubasemvvm.adapter;
 import androidx.cardview.widget.CardView;
 import androidx.databinding.BindingAdapter;
 
-
-import com.scwang.smartrefresh.layout.util.DensityUtil;
-
 import java.io.File;
 
+import xyz.ttyz.toubasemvvm.utils.DensityUtil;
 import xyz.ttyz.toubasemvvm.weight.CardImageView;
 
 public class CardViewAdapter {

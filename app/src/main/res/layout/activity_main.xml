@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:binding="http://schemas.android.com/apk/res-auto">
+<layout xmlns:binding="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -17,7 +18,6 @@
     </data>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
@@ -33,7 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <com.scwang.smartrefresh.layout.SmartRefreshLayout
+            <com.scwang.smart.refresh.layout.SmartRefreshLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 binding:enableLoadMore="@{false}"
@@ -54,7 +54,7 @@
                         tools:itemCount="2"
                         tools:listitem="@layout/viewholder_resorce" />
                 </LinearLayout>
-            </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+            </com.scwang.smart.refresh.layout.SmartRefreshLayout>
 
         </RelativeLayout>
     </LinearLayout>

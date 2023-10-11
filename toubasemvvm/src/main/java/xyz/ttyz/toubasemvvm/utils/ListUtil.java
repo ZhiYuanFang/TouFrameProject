@@ -14,8 +14,6 @@ import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.ListView;
 
-import com.scwang.smartrefresh.layout.SmartRefreshLayout;
-import com.scwang.smartrefresh.layout.util.DensityUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,6 +23,8 @@ import java.util.Map;
 import xyz.ttyz.toubasemvvm.adapter.utils.BaseEmptyAdapterParent;
 
 import static androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_IDLE;
+
+import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 
 /**
  * Created by tou on 2018/12/25.

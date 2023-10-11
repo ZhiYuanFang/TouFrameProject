@@ -2,9 +2,10 @@ package xyz.ttyz.toubasemvvm.adapter;
 
 import androidx.databinding.BindingAdapter;
 
-import com.scwang.smartrefresh.layout.SmartRefreshLayout;
-import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
-import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+import com.scwang.smart.refresh.layout.SmartRefreshLayout;
+import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
+import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
+
 
 public class SmartRefreshAdapter {
     @BindingAdapter("refreshListener")

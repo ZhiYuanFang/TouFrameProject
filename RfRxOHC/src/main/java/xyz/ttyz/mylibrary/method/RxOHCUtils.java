@@ -35,6 +35,9 @@ public class RxOHCUtils<M extends RfRxOHCBaseModule> {
     @SuppressWarnings("unchecked")
     public void executeApi(Observable apiObservable,//touService.login()
                            final BaseTouSubscriber uiSubscriber) {
+        if(ActivityManager.getInstance() == null){
+            return;
+        }
         uiSubscriber.setApiObservable(apiObservable);//綁定訂閲
         HttpDefaultUtils.pushSubscriber(uiSubscriber);//進入請求隊列
         if (HttpDefaultUtils.isRequestIng) {//保证请求排队进行

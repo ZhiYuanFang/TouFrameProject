@@ -30,12 +30,10 @@ public class JSBridgeAdapter {
     public static void enableSetting(WebView webView, boolean enableSetting) {
         WebSettings settings = webView.getSettings();
         settings.setCacheMode(WebSettings.LOAD_DEFAULT);//返回不刷新LOAD_CACHE_ELSE_NETWORK
-        settings.setAppCacheEnabled(true);//有一次是因为缓存导致， 但无法复现了  直接不缓存 算了
         settings.setSupportZoom(true);
         settings.setBuiltInZoomControls(true);
         settings.setDisplayZoomControls(false);
         String appCachePath = /*webView.getContext().getCacheDir().getAbsolutePath()*/webView.getContext().getDir("cache", Context.MODE_PRIVATE).getPath();
-        settings.setAppCachePath(appCachePath);
         settings.setJavaScriptCanOpenWindowsAutomatically(true);
         //以下两条设置可以使页面适应手机屏幕的分辨率，完整的显示在屏幕上
         settings.setUseWideViewPort(true);//设置是否使用WebView推荐使用的窗口

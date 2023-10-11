@@ -12,10 +12,9 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.scwang.smartrefresh.layout.util.DensityUtil;
-
 import xyz.ttyz.toubasemvvm.R;
 import xyz.ttyz.toubasemvvm.adapter.utils.BaseEmptyAdapterParent;
+import xyz.ttyz.toubasemvvm.utils.DensityUtil;
 
 import static android.widget.NumberPicker.OnScrollListener.SCROLL_STATE_IDLE;
 
