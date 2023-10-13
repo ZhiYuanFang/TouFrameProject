@@ -83,6 +83,7 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding>{
 
                 @Override
                 public void onError(Throwable e) {
+                    e.printStackTrace();
                     onComplete();
                     ToastUtil.showToast("登录失败，用户名或密码不正确");
                 }

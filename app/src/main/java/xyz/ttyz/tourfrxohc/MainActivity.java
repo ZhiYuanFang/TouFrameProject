@@ -139,7 +139,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     public OnClickAdapter.onClickCommand clickLogout = new OnClickAdapter.onClickCommand() {
         @Override
         public void click() {
-            DefaultUtils.token = null;
+            DefaultUtils.removeCookie();
             LoginActivity.toLogin();
         }
     };

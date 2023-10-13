@@ -6,8 +6,6 @@ import xyz.ttyz.mylibrary.protect.SharedPreferenceUtil;
 import xyz.ttyz.tou_example.ActivityManager;
 
 public class DefaultUtils {
-    public static String token;
-
     public static String getIp () {
         if( BuildConfig.BUILD_TYPE.equals("release")){
             return "https://eevee.maihaoche.net/api";

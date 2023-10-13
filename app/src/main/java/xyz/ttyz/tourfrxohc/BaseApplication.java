@@ -33,7 +33,7 @@ public class BaseApplication extends Application {
         ApplicationUtils.init(this, 750, 1334, new TouDelegate() {
             @Override
             public boolean isLogin() {
-                return DefaultUtils.token != null;//当前用户是否登录
+                return DefaultUtils.getCookie() != null;//当前用户是否登录
             }
 
             @Override
@@ -69,14 +69,16 @@ public class BaseApplication extends Application {
                         httpBuilder.addInterceptor(new Interceptor() {
                             @Override
                             public Response intercept(Chain chain) throws IOException {
-                                Request originalRequest = chain.request();
-                                if (DefaultUtils.token == null) {
-                                    return chain.proceed(originalRequest);
+                                Request.Builder builder = chain.request().newBuilder();
+                                HashSet<String> preferences = DefaultUtils.getCookie();
+                                if (preferences != null) {
+                                    for (String cookie : preferences) {
+                                        builder.addHeader("Set-Cookie", cookie);
+                                        Log.v("OkHttp", "Adding Header: " + cookie); // This is done so I know which headers are being added; this interceptor is used after the normal logging of OkHttp
+                                    }
                                 }
-                                Request authorised = originalRequest.newBuilder()
-                                        .header("Authorization", "Bearer " + DefaultUtils.token)
-                                        .build();
-                                return chain.proceed(authorised);
+                                return chain.proceed(builder.build());
+
                             }
                         });
                     }
@@ -125,7 +127,7 @@ public class BaseApplication extends Application {
 
                     @Override
                     public boolean isLogin() {
-                        return DefaultUtils.token != null;
+                        return DefaultUtils.getCookie() != null;
                     }
                 });
     }
