@@ -106,6 +106,14 @@ public class RfRxOHCUtil {
 
         OkHttpClient okHttpClient = httpBuilder
                 .addInterceptor(loggingInterceptor)
+                .addInterceptor(new Interceptor() {
+                    @Override
+                    public Response intercept(Chain chain) throws IOException {
+                        Response response = chain.proceed(chain.request());
+                        touRRCDelegate.dealRebackHeader(response);
+                        return response;
+                    }
+                })
 //                .addInterceptor(new RfRxOHCIntercept(application))
                 .build();
         //返回数据格式处理
@@ -164,6 +172,7 @@ public class RfRxOHCUtil {
          * */
         void addMoreForOkHttpClient(OkHttpClient.Builder httpBuilder);
 
+        void dealRebackHeader(Response originalResponse);
         /**
          * 添加自定义header
          * logBuilder.addHeader("terminal", terminal)

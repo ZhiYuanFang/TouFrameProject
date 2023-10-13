@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import java.util.HashSet;
+
 import xyz.ttyz.mylibrary.method.LocalSaveConfig;
 
 /**
@@ -25,7 +27,17 @@ public class SharedPreferenceUtil {
         editor.putString(key, StringUtil.safeString(value));
         editor.apply();
     }
-    
+
+    public static void setShareString(Context c, String key, HashSet<String> value) {
+        if(c == null){
+            return;
+        }
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(c);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putStringSet(key, value);
+        editor.apply();
+    }
+
     /**
      * 存储String
      *
@@ -53,5 +65,21 @@ public class SharedPreferenceUtil {
         }
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(c);
         return sharedPreferences.getString(key, "");
+    }
+
+    public static HashSet<String> getShareStringSet(Context c, String key) {
+        if(c == null || key == null){
+            return null;
+        }
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(c);
+        return (HashSet<String>) sharedPreferences.getStringSet(key, null);
+    }
+
+    public static void clear(Context c, String key){
+        if(c == null || key == null){
+            return ;
+        }
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(c);
+        sharedPreferences.edit().clear().apply();
     }
 }

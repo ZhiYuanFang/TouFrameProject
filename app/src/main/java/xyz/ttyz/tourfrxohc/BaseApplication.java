@@ -6,6 +6,7 @@ import android.util.Log;
 import com.ihsanbal.logging.LoggingInterceptor;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Map;
 
 import okhttp3.Interceptor;
@@ -79,6 +80,19 @@ public class BaseApplication extends Application {
                         });
                     }
 
+                    @Override
+                    public void dealRebackHeader(Response originalResponse) {
+                        if (!originalResponse.headers("Set-Cookie").isEmpty()) {
+                            HashSet<String> cookies = new HashSet<>();
+
+                            for (String header : originalResponse.headers("Set-Cookie")) {
+                                cookies.add(header);
+                            }
+
+                            DefaultUtils.setCookie(cookies);
+                        }
+
+                    }
                     @Override
                     public void addMoreForInterceptor(LoggingInterceptor.Builder logBuilder) {
                         //静态值
