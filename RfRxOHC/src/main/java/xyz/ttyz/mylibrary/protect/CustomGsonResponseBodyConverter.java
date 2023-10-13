@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 import okhttp3.ResponseBody;
 import retrofit2.Converter;
@@ -83,6 +84,10 @@ public class CustomGsonResponseBodyConverter<T> implements Converter<ResponseBod
         try {
             json = new JSONObject(originalBody);
             // 当code不为0时，设置data为{}，这样转化就不会出错了
+            if(!(json.get("data") instanceof JSONObject)){
+                json.put("data", null);
+                Log.i(TAG, "将data改为Null");
+            }
             judgeJSONAndChange(json);
         } catch (JSONException e) {
             e.printStackTrace();

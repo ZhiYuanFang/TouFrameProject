@@ -11,8 +11,8 @@ import xyz.ttyz.toubasemvvm.ui.BaseTouActivity;
 public abstract class BaseActivity<T extends ViewDataBinding> extends BaseTouActivity<T> {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         ActivityManager.popActivity(this);
+        super.onCreate(savedInstanceState);
     }
 
     @Override

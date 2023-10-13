@@ -53,6 +53,7 @@ public abstract class BaseTouSubscriber<D> extends BaseObserver<BaseModule<D>> {
      */
     @Override
     public void onError(Throwable e) {
+        e.printStackTrace();
         Log.i(TAG, "onError: " + e.getMessage());
         Toast.makeText(ActivityManager.getInstance(), e.getMessage(), Toast.LENGTH_LONG).show();
         onComplete();

@@ -16,6 +16,7 @@ import retrofit2.Retrofit;
 import xyz.ttyz.mylibrary.RfRxOHCUtil;
 import xyz.ttyz.tou_example.init.ApplicationUtils;
 import xyz.ttyz.tou_example.init.TouDelegate;
+import xyz.ttyz.tourfrxohc.activity.LoginActivity;
 
 /**
  * Created by tou on 2019/5/20.
@@ -37,6 +38,7 @@ public class BaseApplication extends Application {
             @Override
             public void gotoLoginActivity() {
                 //前往登录界面
+                LoginActivity.toLogin();
             }
 
             @Override
@@ -57,9 +59,9 @@ public class BaseApplication extends Application {
                 //捕获主线程异常，上传bugly
             }
         });
-        RfRxOHCUtil.initApiService(this, "http://api.x16.com/", "ws://192.168.1.201:8080/tou3_war_exploded/devMessage",getPackageName() + "-cache",
+        RfRxOHCUtil.initApiService(this, DefaultUtils.getIp(), null,getPackageName() + "-cache",
                 2 * 1024 * 1024, 30, BuildConfig.BUILD_TYPE.equals("release"), BuildConfig.DEBUG, BuildConfig.VERSION_NAME,
-                "huawei", "android", 0, new RfRxOHCUtil.TouRRCDelegate() {
+                "app", "android", 200, new RfRxOHCUtil.TouRRCDelegate() {
                     @Override
                     public void addMoreForOkHttpClient(OkHttpClient.Builder httpBuilder) {
                         //动态值
@@ -72,7 +74,6 @@ public class BaseApplication extends Application {
                                 }
                                 Request authorised = originalRequest.newBuilder()
                                         .header("Authorization", "Bearer " + DefaultUtils.token)
-                                        .header("Role", "32")
                                         .build();
                                 return chain.proceed(authorised);
                             }
@@ -85,7 +86,7 @@ public class BaseApplication extends Application {
                         logBuilder.addHeader("Data-Type", "json")
                                 .addHeader("Accept", "*/*")
                                 .addHeader("Cache-Control", "no-cache")
-                                .addHeader("x-app-version", "1.0");
+                                .addHeader("x-app-version", BuildConfig.VERSION_NAME);
                     }
 
                     @Override
@@ -110,7 +111,7 @@ public class BaseApplication extends Application {
 
                     @Override
                     public boolean isLogin() {
-                        return true;
+                        return DefaultUtils.token != null;
                     }
                 });
     }

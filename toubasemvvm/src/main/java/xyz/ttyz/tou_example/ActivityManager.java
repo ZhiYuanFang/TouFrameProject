@@ -61,7 +61,7 @@ public class ActivityManager {
     public static Activity getInstance(){
         if(activityList.size() > 0){
             return activityList.get(activityList.size() - 1);
-        } else return null;
+        } else throw new NullPointerException();
     }
 
     public static boolean isOnlyActivity(Activity activity){

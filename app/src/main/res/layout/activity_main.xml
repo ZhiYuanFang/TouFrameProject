@@ -28,35 +28,197 @@
             layout="@layout/layout_toolbar"
             binding:toolBarViewModel="@{toolBarViewModel}" />
 
-        <RelativeLayout
-            android:id="@+id/container"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="摆放位置"
+                android:layout_marginLeft="25dp"
+                android:textColor="@color/black"/>
 
-            <com.scwang.smart.refresh.layout.SmartRefreshLayout
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:foreground="?selectableItemBackground"
+                binding:onClickCommand="@{context.clickLocation}"
+                android:gravity="center_vertical|end">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    tools:text="庄家翡翠1号店铺-1号区"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:text=">"
+                    android:textColor="@color/black"
+                    android:textSize="28dp"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <com.scwang.smart.refresh.layout.SmartRefreshLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            binding:enableLoadMore="@{false}"
+            binding:loadEnd="@{context.loadEnd}"
+            binding:refreshListener="@{context.refreshListener}">
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                binding:enableLoadMore="@{false}"
-                binding:loadEnd="@{context.loadEnd}"
-                binding:refreshListener="@{context.refreshListener}">
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:layout_marginStart="15dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        binding:verticalDis="@{8}"
-                        binding:adapter="@{adapter}"
-                        tools:itemCount="2"
-                        tools:listitem="@layout/viewholder_resorce" />
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="30dp"
+                    android:gravity="center_vertical">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center_horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@{context.currentNumber}"
+                            tools:text="200"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:textSize="28sp"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="16sp"
+                            android:text="在库货品个数"
+                            android:textColor="@color/black"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center_horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@{context.realNumber}"
+                            tools:text="200"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:textSize="28sp"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="16sp"
+                            android:text="实际包含件数"
+                            android:textColor="@color/black"/>
+                    </LinearLayout>
                 </LinearLayout>
-            </com.scwang.smart.refresh.layout.SmartRefreshLayout>
 
-        </RelativeLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="45dp"
+                    android:gravity="center_vertical">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:layout_weight="1"
+                        android:foreground="?selectableItemBackground"
+                        binding:onClickCommand="@{context.clickComing}"
+                        android:orientation="vertical">
+
+                        <View
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:background="@android:color/darker_gray"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:text="入库"
+                            android:textSize="21sp"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:foreground="?selectableItemBackground"
+                        binding:onClickCommand="@{context.clickFilter}"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <View
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:background="@android:color/darker_gray"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:text="盘库"
+                            android:textSize="21sp"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:foreground="?selectableItemBackground"
+                        binding:onClickCommand="@{context.clickOut}"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <View
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:background="@android:color/darker_gray"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:text="出库"
+                            android:textSize="21sp"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"/>
+                    </LinearLayout>
+                </LinearLayout>
+<!--                <androidx.recyclerview.widget.RecyclerView-->
+<!--                    android:layout_marginStart="15dp"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    binding:verticalDis="@{8}"-->
+<!--                    binding:adapter="@{adapter}"-->
+<!--                    tools:itemCount="2"-->
+<!--                    tools:listitem="@layout/viewholder_resorce" />-->
+            </LinearLayout>
+        </com.scwang.smart.refresh.layout.SmartRefreshLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="145dp"
+            android:text="退出登陆"
+            android:textColor="@color/black"
+            android:textSize="21dp"
+            android:textStyle="bold"
+            binding:onClickCommand="@{context.clickLogout}"
+            android:gravity="center"/>
     </LinearLayout>
 
 </layout>

@@ -1,8 +1,10 @@
 package xyz.ttyz.tourfrxohc;
 
 import android.Manifest;
+import android.content.Intent;
 import android.view.ViewGroup;
 
+import androidx.databinding.ObservableField;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -11,13 +13,16 @@ import java.util.Map;
 
 import xyz.ttyz.mylibrary.method.RetrofitUtils;
 import xyz.ttyz.mylibrary.method.RxOHCUtils;
+import xyz.ttyz.tou_example.ActivityManager;
 import xyz.ttyz.toubasemvvm.adapter.OnClickAdapter;
 import xyz.ttyz.toubasemvvm.adapter.utils.BaseEmptyAdapterParent;
 import xyz.ttyz.toubasemvvm.adapter.utils.BaseRecyclerAdapter;
 import xyz.ttyz.toubasemvvm.utils.DialogUtils;
 import xyz.ttyz.toubasemvvm.vm.ToolBarViewModel;
 import xyz.ttyz.tourfrxohc.activity.BaseActivity;
+import xyz.ttyz.tourfrxohc.activity.LoginActivity;
 import xyz.ttyz.tourfrxohc.databinding.ActivityMainBinding;
+import xyz.ttyz.tourfrxohc.dialog.LocationDialog;
 import xyz.ttyz.tourfrxohc.fragment.MainFragment;
 import xyz.ttyz.tourfrxohc.http.BaseSubscriber;
 import xyz.ttyz.tourfrxohc.models.Hardware;
@@ -29,6 +34,15 @@ import xyz.ttyz.tourfrxohc.viewholder.ResorceViewHolder;
 
 public class MainActivity extends BaseActivity<ActivityMainBinding> {
 
+    public static void goMain () {
+        Intent intent = new Intent(ActivityManager.getInstance(), MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        ActivityManager.getInstance().startActivity(intent);
+    }
+
+    public ObservableField<String> currentNumber = new ObservableField<String>("");
+
+    public ObservableField<String> realNumber = new ObservableField<String>("");
     @Override
     protected int initLayoutId() {
         return R.layout.activity_main;
@@ -49,11 +63,10 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     ToolBarViewModel toolBarViewModel;
     @Override
     protected void initData() {
-        hardware = new Hardware();
-        software = new Software();
         mBinding.setContext(this);
         toolBarViewModel = new ToolBarViewModel.Builder()
-                .rightTxt("图片")
+                .title(getString(R.string.app_name))
+                .backClick(null)
                 .rightClick(new OnClickAdapter.onClickCommand() {
                     @Override
                     public void click() {
@@ -95,39 +108,11 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         //同时调动两个接口，会先执行完第一个接口，再执行第二个接口，所以，虽然后一个接口需要第一个接口返回的token，但不需要在第一个接口的回调中再去执行第二个接口。
         //这是因为RfRxOHC中，做了接口顺序执行的保护
         //接口还是异步请求，但给它们做了一个执行队列。
-        login();
-        loadHistory();
-    }
-
-    private void login(){
-        //登录
-        Map map = new HashMap();
-        map.put("mobile", "17758116193");
-        map.put("code", "339999");
-        map.put("hardware", hardware);
-        map.put("software", software);
-        new RxOHCUtils<>(this).executeApi(BaseApplication.apiService.login(RetrofitUtils.getNormalBody(map)), new BaseSubscriber<UserModel>(this) {
-            @Override
-            public void success(UserModel data) {
-                if (data != null) {
-                    toolBarViewModel.title.set(data.getNickname() + " 的浏览历史");
-                    DefaultUtils.token = data.getAccessToken();
-                }
-            }
-
-            @Override
-            public String initCacheKey() {
-                return "getNormalBody";//如果该页面涉及隐私，则不传cacheKey，就不会产生缓存数据
-            }
-
-        });
     }
 
     private void loadHistory(){
         //获取历史
         Map<String, Object> map = new HashMap<>();
-        map.put("hardware", hardware);
-        map.put("software", software);
         new RxOHCUtils<>(this).executeApi(BaseApplication.apiService.getHistory(map), new BaseSubscriber<MainModel>(this, loadEnd) {
             @Override
             public void success(MainModel data) {
@@ -144,10 +129,41 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         });
     }
 
-    //region 测试接口需要，不用管
-    public Hardware hardware;
-    public Software software;
-    //endregion
+    public OnClickAdapter.onClickCommand clickLocation = new OnClickAdapter.onClickCommand() {
+        @Override
+        public void click() {
+            LocationDialog.showDialog();
+        }
+    };
+
+    public OnClickAdapter.onClickCommand clickLogout = new OnClickAdapter.onClickCommand() {
+        @Override
+        public void click() {
+            DefaultUtils.token = null;
+            LoginActivity.toLogin();
+        }
+    };
+
+    public OnClickAdapter.onClickCommand clickComing = new OnClickAdapter.onClickCommand() {
+        @Override
+        public void click() {
+            // TODO: 2023/10/12 入库
+        }
+    };
+
+    public OnClickAdapter.onClickCommand clickFilter = new OnClickAdapter.onClickCommand() {
+        @Override
+        public void click() {
+            // TODO: 2023/10/12 盘库
+        }
+    };
+
+    public OnClickAdapter.onClickCommand clickOut = new OnClickAdapter.onClickCommand() {
+        @Override
+        public void click() {
+            // TODO: 2023/10/12 出库
+        }
+    };
 }
 
 

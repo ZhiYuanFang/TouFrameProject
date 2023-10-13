@@ -52,4 +52,6 @@ dependencies {
 
     implementation project(':RfRxOHC')
     implementation project(':toubasemvvm')
+
+    implementation 'cn.aigestudio.wheelpicker:WheelPicker:1.1.3'
 }
