@@ -18,6 +18,7 @@ public class ToolBarViewModel extends BaseViewModle{
     public ObservableField<OnClickAdapter.onClickCommand> backClick;
     public ObservableField<OnClickAdapter.onClickCommand> saveClick;
     public ObservableField<OnClickAdapter.onClickCommand> shareClick;
+    public ObservableField<OnClickAdapter.onClickCommand> titleClick;
     public ObservableInt saveLikeDraResID;
     public ObservableInt saveNoLikeDraResID;
     public ObservableBoolean isFavored = new ObservableBoolean(false);
@@ -36,6 +37,7 @@ public class ToolBarViewModel extends BaseViewModle{
         backClick = builder.backClick;
         saveClick = builder.saveClick;
         shareClick = builder.shareClick;
+        titleClick = builder.titleClick;
         saveLikeDraResID = builder.saveLikeDraResID;
         saveNoLikeDraResID = builder.saveNoLikeDraResID;
         isFavored = builder.isFavored;
@@ -59,6 +61,7 @@ public class ToolBarViewModel extends BaseViewModle{
                 ActivityManager.getInstance().onBackPressed();
             }
         });
+        private ObservableField<OnClickAdapter.onClickCommand> titleClick;
         private ObservableField<OnClickAdapter.onClickCommand> saveClick;
         private ObservableField<OnClickAdapter.onClickCommand> shareClick;
         private ObservableInt saveLikeDraResID;
@@ -101,6 +104,11 @@ public class ToolBarViewModel extends BaseViewModle{
 
         public Builder shareClick(OnClickAdapter.onClickCommand val) {
             shareClick = new ObservableField<>(val);
+            return this;
+        }
+
+        public Builder titleClick(OnClickAdapter.onClickCommand val) {
+            titleClick = new ObservableField<>(val);
             return this;
         }
 

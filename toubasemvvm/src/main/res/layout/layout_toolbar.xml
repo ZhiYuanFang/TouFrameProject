@@ -45,6 +45,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    binding:onClickCommand="@{toolBarViewModel.titleClick}"
                     tools:text="啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊"
                     android:maxLength="15"
                     tools:maxLength="@{(toolBarViewModel.rightTxt.length() == 0  &amp;&amp; toolBarViewModel.saveClick == null &amp;&amp; toolBarViewModel.shareClick == null) ? 22 : 15}"

@@ -51,6 +51,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
+                    android:text='@{context.locationModelObservableField.selectOne + "-" + context.locationModelObservableField.selectTwo}'
                     tools:text="庄家翡翠1号店铺-1号区"/>
                 <TextView
                     android:layout_width="wrap_content"

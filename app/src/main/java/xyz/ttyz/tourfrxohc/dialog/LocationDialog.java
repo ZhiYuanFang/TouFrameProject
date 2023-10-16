@@ -22,6 +22,7 @@ import xyz.ttyz.toubasemvvm.adapter.OnClickAdapter;
 import xyz.ttyz.tourfrxohc.BR;
 import xyz.ttyz.tourfrxohc.R;
 import xyz.ttyz.tourfrxohc.databinding.DialogLocationBinding;
+import xyz.ttyz.tourfrxohc.models.LocationModel;
 
 
 /**
@@ -31,10 +32,15 @@ import xyz.ttyz.tourfrxohc.databinding.DialogLocationBinding;
  */
 public class LocationDialog extends Dialog implements Observable {
     private static LocationDialog locationDialog;
-    public static void showDialog(){
+    private static CallBackDelegate callBackDelegate;
+    public interface CallBackDelegate {
+        void select(LocationModel locationModel);
+    }
+    public static void showDialog(CallBackDelegate delegate){
         if(locationDialog == null){
             locationDialog = new LocationDialog(ActivityManager.getInstance());
         }
+        callBackDelegate = delegate;
         ActivityManager.getInstance().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -91,6 +97,10 @@ public class LocationDialog extends Dialog implements Observable {
         public void click() {
             dismiss();
             System.out.println("选择的项目：" + selectOne + " " + selectTwo);
+
+            if(callBackDelegate != null){
+                callBackDelegate.select(new LocationModel(0, selectOne, selectTwo));
+            }
         }
     };
 

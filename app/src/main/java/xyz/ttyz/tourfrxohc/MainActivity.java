@@ -8,11 +8,14 @@ import androidx.databinding.ObservableField;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
+
 import java.util.HashMap;
 import java.util.Map;
 
 import xyz.ttyz.mylibrary.method.RetrofitUtils;
 import xyz.ttyz.mylibrary.method.RxOHCUtils;
+import xyz.ttyz.mylibrary.protect.SharedPreferenceUtil;
 import xyz.ttyz.tou_example.ActivityManager;
 import xyz.ttyz.toubasemvvm.adapter.OnClickAdapter;
 import xyz.ttyz.toubasemvvm.adapter.utils.BaseEmptyAdapterParent;
@@ -20,12 +23,14 @@ import xyz.ttyz.toubasemvvm.adapter.utils.BaseRecyclerAdapter;
 import xyz.ttyz.toubasemvvm.utils.DialogUtils;
 import xyz.ttyz.toubasemvvm.vm.ToolBarViewModel;
 import xyz.ttyz.tourfrxohc.activity.BaseActivity;
+import xyz.ttyz.tourfrxohc.activity.ComingActivity;
 import xyz.ttyz.tourfrxohc.activity.LoginActivity;
 import xyz.ttyz.tourfrxohc.databinding.ActivityMainBinding;
 import xyz.ttyz.tourfrxohc.dialog.LocationDialog;
 import xyz.ttyz.tourfrxohc.fragment.MainFragment;
 import xyz.ttyz.tourfrxohc.http.BaseSubscriber;
 import xyz.ttyz.tourfrxohc.models.Hardware;
+import xyz.ttyz.tourfrxohc.models.LocationModel;
 import xyz.ttyz.tourfrxohc.models.MainModel;
 import xyz.ttyz.tourfrxohc.models.ResorceModel;
 import xyz.ttyz.tourfrxohc.models.Software;
@@ -43,6 +48,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     public ObservableField<String> currentNumber = new ObservableField<String>("");
 
     public ObservableField<String> realNumber = new ObservableField<String>("");
+    public ObservableField<LocationModel> locationModelObservableField = new ObservableField<>(new LocationModel(-1, "请选择", "店铺"));
     @Override
     protected int initLayoutId() {
         return R.layout.activity_main;
@@ -51,8 +57,8 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     @Override
     protected String[] initPermission() {
         return new String[]{
-                Manifest.permission.READ_PHONE_STATE,
                 Manifest.permission.INTERNET,
+                Manifest.permission.CAMERA,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.READ_EXTERNAL_STORAGE};
     }
@@ -101,6 +107,10 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
             }
         });
         mBinding.setAdapter(historyAdapter);
+        LocationModel local = new Gson().fromJson(SharedPreferenceUtil.getShareString(ActivityManager.getInstance(), "location"), LocationModel.class);
+        if(local != null){
+            locationModelObservableField.set(local);
+        }
     }
 
     @Override
@@ -132,22 +142,34 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     public OnClickAdapter.onClickCommand clickLocation = new OnClickAdapter.onClickCommand() {
         @Override
         public void click() {
-            LocationDialog.showDialog();
+            LocationDialog.showDialog(new LocationDialog.CallBackDelegate() {
+                @Override
+                public void select(LocationModel locationModel) {
+                    locationModelObservableField.set(locationModel);
+                    SharedPreferenceUtil.setShareString(ActivityManager.getInstance(), "location", new Gson().toJson(locationModel));
+                }
+            });
         }
     };
 
     public OnClickAdapter.onClickCommand clickLogout = new OnClickAdapter.onClickCommand() {
         @Override
         public void click() {
-            DefaultUtils.removeCookie();
-            LoginActivity.toLogin();
+            new RxOHCUtils<>(MainActivity.this).executeApi(BaseApplication.apiService.logout(), new BaseSubscriber<MainModel>(MainActivity.this) {
+                @Override
+                public void success(MainModel data) {
+                    DefaultUtils.removeCookie();
+                    LoginActivity.toLogin();
+                }
+            });
         }
     };
 
     public OnClickAdapter.onClickCommand clickComing = new OnClickAdapter.onClickCommand() {
         @Override
         public void click() {
-            // TODO: 2023/10/12 入库
+            // 入库
+            ComingActivity.show(locationModelObservableField.get());
         }
     };
 

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:binding="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="context"
+            type="xyz.ttyz.tourfrxohc.activity.ComSuccessActivity" />
+        <variable
+            name="toolBarViewModel"
+            type="xyz.ttyz.toubasemvvm.vm.ToolBarViewModel" />
+    </data>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal">
+        <include
+            layout="@layout/layout_toolbar"
+            binding:toolBarViewModel="@{toolBarViewModel}" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="240dp"
+            android:textColor="@color/black"
+            android:textSize="48sp"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:text="入库成功"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:background="@color/black"
+            android:text="继续扫一扫入库"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:foreground="?selectableItemBackground"
+            binding:onClickCommand="@{context.clickContinue}"
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="25dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="45dp"/>
+    </LinearLayout>
+</layout>

@@ -22,6 +22,8 @@ import xyz.ttyz.tourfrxohc.models.UserModel;
 public interface ApiService {
     @POST("/warehouse/login/login")
     Observable<BaseModule<UserModel>> login(@QueryMap Map<String, Object> map);
+    @POST("/warehouse/login/logout")
+    Observable<BaseModule<UserModel>> logout();
 //    Observable<BaseModule<UserModel>> login(@Body RequestBody data);
 
     @GET("msr/v1/app/personal/index")
