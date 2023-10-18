@@ -75,7 +75,6 @@ public class GoodsDetailActivity extends BaseActivity<ActivityGoodsDetailBinding
             // 入库
             ComSuccessActivity.show();
             finish();
-            System.out.println("件数:" + goodsModel.getNumber());
         }
     };
 }

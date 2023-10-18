@@ -11,6 +11,7 @@ import retrofit2.http.POST;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 import xyz.ttyz.mylibrary.method.BaseModule;
+import xyz.ttyz.tourfrxohc.models.GoodsModel;
 import xyz.ttyz.tourfrxohc.models.MainModel;
 import xyz.ttyz.tourfrxohc.models.UserModel;
 
@@ -24,7 +25,10 @@ public interface ApiService {
     Observable<BaseModule<UserModel>> login(@QueryMap Map<String, Object> map);
     @POST("/warehouse/login/logout")
     Observable<BaseModule<UserModel>> logout();
-//    Observable<BaseModule<UserModel>> login(@Body RequestBody data);
+
+
+    @POST("/warehouse/goods/pda/page")
+    Observable<BaseModule<GoodsModel>> goodsList(@Body RequestBody data);
 
     @GET("msr/v1/app/personal/index")
     Observable<BaseModule<MainModel>> getHistory(@QueryMap Map<String, Object> map);

@@ -3,8 +3,10 @@ package xyz.ttyz.tourfrxohc.viewholder;
 import android.content.Context;
 import android.view.ViewGroup;
 
+import xyz.ttyz.toubasemvvm.adapter.OnClickAdapter;
 import xyz.ttyz.toubasemvvm.adapter.utils.viewholder.BaseNormalViewHolder;
 import xyz.ttyz.tourfrxohc.R;
+import xyz.ttyz.tourfrxohc.activity.GoodsDetailOperatorActivity;
 import xyz.ttyz.tourfrxohc.databinding.ViewholderGoodsDetailBinding;
 import xyz.ttyz.tourfrxohc.models.GoodsModel;
 
@@ -14,10 +16,8 @@ import xyz.ttyz.tourfrxohc.models.GoodsModel;
  * @email 343315792@qq.com
  */
 public class GoodsDetailViewHolder extends BaseNormalViewHolder<GoodsModel, ViewholderGoodsDetailBinding> {
-    public boolean isComming = false;
-    public GoodsDetailViewHolder(Context context,boolean isComming, ViewGroup parent) {
+    public GoodsDetailViewHolder(Context context,ViewGroup parent) {
         super(context, R.layout.viewholder_goods_detail, parent);
-        this.isComming = isComming;
     }
 
     @Override
@@ -29,4 +29,12 @@ public class GoodsDetailViewHolder extends BaseNormalViewHolder<GoodsModel, View
     public void bindData(GoodsModel data) {
         mBinding.setGoodsModel(data);
     }
+
+    public OnClickAdapter.onClickCommand clickToDetail = new OnClickAdapter.onClickCommand() {
+        @Override
+        public void click() {
+            //去详情
+            GoodsDetailOperatorActivity.show(mBinding.getGoodsModel().getId());
+        }
+    };
 }

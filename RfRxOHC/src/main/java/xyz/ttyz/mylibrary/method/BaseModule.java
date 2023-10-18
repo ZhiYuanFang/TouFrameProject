@@ -9,6 +9,12 @@ public class BaseModule<D> extends RfRxOHCBaseModule {
     String message;
     D data;
 
+    Page paging;
+
+    public Page getPaging() {
+        return paging;
+    }
+
     public int getCode() {
         return code;
     }
@@ -19,5 +25,17 @@ public class BaseModule<D> extends RfRxOHCBaseModule {
 
     public D getData() {
         return data;
+    }
+
+    public static class Page {
+        int totalCount;
+
+        public int getTotalCount() {
+            return totalCount;
+        }
+
+        public void setTotalCount(int totalCount) {
+            this.totalCount = totalCount;
+        }
     }
 }
