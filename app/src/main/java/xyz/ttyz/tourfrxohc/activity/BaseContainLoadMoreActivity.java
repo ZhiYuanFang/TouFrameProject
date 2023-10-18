@@ -50,7 +50,7 @@ public abstract class BaseContainLoadMoreActivity<T extends ViewDataBinding, B> 
         loadPageInfo(true);
     }
 
-    protected abstract Observable<B> initApiService();
+    protected abstract Observable<B> initApiService(Map map);
     protected void loadPageInfo(boolean refresh) {
         if (!refresh) {
             int p = pageIndex.get();
@@ -64,34 +64,26 @@ public abstract class BaseContainLoadMoreActivity<T extends ViewDataBinding, B> 
             map.put("currentPage", pageIndex.get());
             map.put("page", pageIndex.get());
         }
-        if (initApiService() != null) {
-            new RxOHCUtils<>(this).executeApi(initApiService(), new BaseSubscriber<B>(this) {
+        new RxOHCUtils<>(this).executeApi(initApiService(map), new BaseSubscriber<B>(this) {
 
-                @Override
-                public void onRfRxNext(BaseModule<B> baseModule) {
-                    super.onRfRxNext(baseModule);
-                    if (baseModule.getPaging() != null) {
-                        initLoadPageInfoAdapter().setNoMore(ListUtil.isFinish(pageIndex.get(), pageCount.get(), baseModule.getPaging().getTotalCount()));
-                    } else {
-                        initLoadPageInfoAdapter().setNoMore(baseModule.getData() == null);
-                    }
+            @Override
+            public void onRfRxNext(BaseModule<B> baseModule) {
+                super.onRfRxNext(baseModule);
+                if (baseModule.getPaging() != null) {
+                    initLoadPageInfoAdapter().setNoMore(ListUtil.isFinish(pageIndex.get(), pageCount.get(), baseModule.getPaging().getTotalCount()));
+                } else {
+                    initLoadPageInfoAdapter().setNoMore(baseModule.getData() == null);
                 }
-
-                @Override
-                public void success(B data) {
-                    if (refresh) {
-                        clearData();
-                    }
-                    dealLoadMoreSuccess(data);
-                }
-            });
-        } else {
-            if (initLoadPageInfoAdapter() != null) {
-                initLoadPageInfoAdapter().setNoMore(true);
             }
-            loadEnd.set(true);
-            dealLoadMoreSuccess(null);//注意返回空容易闪退
-        }
+
+            @Override
+            public void success(B data) {
+                if (refresh) {
+                    clearData();
+                }
+                dealLoadMoreSuccess(data);
+            }
+        });
 
     }
     protected void clearData(){
