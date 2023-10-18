@@ -131,7 +131,7 @@ public class RfRxOHCUtil {
 
             @Override
             public void onActivityStarted(@NonNull Activity activity) {
-                if(touRRCDelegate.isLogin()){
+                if(touRRCDelegate.isLogin() && socketUrl != null){
                     SocketUtils.openMinaReceiver(application);
                 }
             }

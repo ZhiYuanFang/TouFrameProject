@@ -25,6 +25,7 @@ import xyz.ttyz.toubasemvvm.vm.ToolBarViewModel;
 import xyz.ttyz.tourfrxohc.activity.BaseActivity;
 import xyz.ttyz.tourfrxohc.activity.ComingActivity;
 import xyz.ttyz.tourfrxohc.activity.LoginActivity;
+import xyz.ttyz.tourfrxohc.activity.PandingActivity;
 import xyz.ttyz.tourfrxohc.databinding.ActivityMainBinding;
 import xyz.ttyz.tourfrxohc.dialog.LocationDialog;
 import xyz.ttyz.tourfrxohc.fragment.MainFragment;
@@ -169,21 +170,23 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         @Override
         public void click() {
             // 入库
-            ComingActivity.show(locationModelObservableField.get());
+            ComingActivity.show(locationModelObservableField.get(), ComingActivity.Type_in);
         }
     };
 
     public OnClickAdapter.onClickCommand clickFilter = new OnClickAdapter.onClickCommand() {
         @Override
         public void click() {
-            // TODO: 2023/10/12 盘库
+            // 盘库
+            PandingActivity.show(locationModelObservableField.get());
         }
     };
 
     public OnClickAdapter.onClickCommand clickOut = new OnClickAdapter.onClickCommand() {
         @Override
         public void click() {
-            // TODO: 2023/10/12 出库
+            // 出库
+            ComingActivity.show(locationModelObservableField.get(), ComingActivity.Type_Out);
         }
     };
 }

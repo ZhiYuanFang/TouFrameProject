@@ -54,5 +54,5 @@ dependencies {
     implementation project(':toubasemvvm')
 
     implementation 'cn.aigestudio.wheelpicker:WheelPicker:1.1.3'
-    implementation files('libs/sleduhf-v1.0.3.jar')
+    implementation files('libs/uhf.jar')
 }

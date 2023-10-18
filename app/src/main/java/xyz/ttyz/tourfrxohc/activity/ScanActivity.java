@@ -1,12 +1,32 @@
 package xyz.ttyz.tourfrxohc.activity;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import android.util.Log;
+import android.view.View;
+import android.widget.CompoundButton;
 
+import androidx.core.app.ActivityCompat;
+import androidx.databinding.Observable;
 import androidx.databinding.ObservableBoolean;
 
+
+import com.seuic.uhf.EPC;
+import com.seuic.uhf.UHFService;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+import xyz.ttyz.mylibrary.protect.StringUtil;
 import xyz.ttyz.tou_example.ActivityManager;
 import xyz.ttyz.toubasemvvm.adapter.OnClickAdapter;
 import xyz.ttyz.toubasemvvm.vm.ToolBarViewModel;
@@ -26,9 +46,10 @@ public class ScanActivity extends BaseActivity<ActivityScanBinding> {
         Intent intent = new Intent(ActivityManager.getInstance(), ScanActivity.class);
         ActivityManager.getInstance().startActivity(intent);
     }
+
     private static final String SCANACTION = "com.android.server.scannerservice.broadcast";
     ToolBarViewModel toolBarViewModel;
-
+    // 扫描条形码
     BroadcastReceiver scanReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -49,7 +70,11 @@ public class ScanActivity extends BaseActivity<ActivityScanBinding> {
 
     @Override
     protected String[] initPermission() {
-        return new String[0];
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            return new String[]{Manifest.permission.BLUETOOTH_CONNECT};
+        } else {
+            return new String[]{Manifest.permission.BLUETOOTH};
+        }
     }
 
     @Override
@@ -74,12 +99,10 @@ public class ScanActivity extends BaseActivity<ActivityScanBinding> {
                 .title("请扫描")
                 .build();
         mBinding.setToolBarViewModel(toolBarViewModel);
-
     }
 
     @Override
     protected void initServer() {
 
     }
-
 }

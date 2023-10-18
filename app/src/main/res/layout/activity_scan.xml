@@ -21,14 +21,22 @@
             layout="@layout/layout_toolbar"
             binding:toolBarViewModel="@{toolBarViewModel}" />
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="请扫描"
-            android:textSize="48sp"
-            android:textColor="@color/black"
-            android:background="@color/white"/>
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                tools:text="请扫描"
+                android:text="请扫描"
+                android:textSize="48sp"
+                android:textColor="@color/black"/>
+        </LinearLayout>
+
+
 
     </LinearLayout>
 </layout>

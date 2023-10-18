@@ -55,6 +55,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             style="@style/form_content"
+                            android:text="@{goodsModel.barcodeNo}"
                             tools:text="M02222212121i2"/>
                     </LinearLayout>
                     <LinearLayout
@@ -95,6 +96,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 style="@style/form_content"
+                                android:text="@={goodsModel.goodsActualNo}"
                                 android:hint="请输入"/>
                             <TextView
                                 android:layout_width="wrap_content"
@@ -119,7 +121,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             style="@style/form_content"
-                            android:text="@={goodsModel.number}"
+                            android:text="@={goodsModel.quantity}"
                             android:hint="请输入"/>
                     </LinearLayout>
                     <LinearLayout
@@ -137,6 +139,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             style="@style/form_content"
+                            android:text="@={goodsModel.remark}"
                             android:hint="请输入"/>
                     </LinearLayout>
                     <LinearLayout
@@ -148,12 +151,13 @@
                             android:layout_width="120dp"
                             android:layout_height="wrap_content"
                             style="@style/form_title"
-                            android:text="货品价格"/>
+                            android:text="货品价格(元)"/>
 
                         <EditText
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             style="@style/form_content"
+                            android:text="@={goodsModel.priceMinStr}"
                             android:hint="请输入"/>
                     </LinearLayout>
                     <LinearLayout

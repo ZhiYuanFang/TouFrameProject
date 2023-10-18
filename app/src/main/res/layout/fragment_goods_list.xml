@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:binding="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="context"
+            type="xyz.ttyz.tourfrxohc.fragment.GoodsListFragment" />
+        <variable
+            name="adapter"
+            type="xyz.ttyz.toubasemvvm.adapter.utils.BaseEmptyAdapterParent" />
+
+    </data>
+
+    <com.scwang.smart.refresh.layout.SmartRefreshLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        binding:enableRefresh="@{true}"
+        binding:loadEnd="@{context.loadEnd}"
+        binding:enableLoadMore="@{!adapter.noMore}"
+        binding:loadMoreListener="@{context.loadMoreListener}"
+        binding:refreshListener="@{context.refreshListener}">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:listitem="@layout/viewholder_goods_detail"
+            binding:adapter="@{adapter}"/>
+    </com.scwang.smart.refresh.layout.SmartRefreshLayout>
+</layout>
