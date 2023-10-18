@@ -23,6 +23,11 @@ public abstract class BaseSubscriber<D> extends BaseTouSubscriber<D> {
     }
 
     @Override
+    public String initCacheKey() {
+        return null;
+    }
+
+    @Override
     public void onComplete() {
         super.onComplete();
         if(loadEnd != null)
