@@ -75,6 +75,12 @@ public class GoodsListFragment extends BaseInViewPagerFragment<FragmentGoodsList
     }
 
     @Override
+    protected void initVariable(FragmentGoodsListBinding mBinding) {
+        mBinding.setContext(this);
+        mBinding.setAdapter(initLoadPageInfoAdapter());
+    }
+
+    @Override
     protected int initLayoutId() {
         return R.layout.fragment_goods_list;
     }
@@ -87,7 +93,6 @@ public class GoodsListFragment extends BaseInViewPagerFragment<FragmentGoodsList
     @Nullable
     @Override
     protected Observable initApiService(Map map) {
-        mBinding.setContext(this);
         return BaseApplication.apiService.goodsList(RetrofitUtils.getNormalBody(map));
     }
 
@@ -121,7 +126,6 @@ public class GoodsListFragment extends BaseInViewPagerFragment<FragmentGoodsList
             }
         });
 
-        mBinding.setAdapter(adapterParent);
         return adapterParent;
     }
 

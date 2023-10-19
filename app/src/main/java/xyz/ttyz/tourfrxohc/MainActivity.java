@@ -29,7 +29,6 @@ import xyz.ttyz.tourfrxohc.activity.LoginActivity;
 import xyz.ttyz.tourfrxohc.activity.PandingActivity;
 import xyz.ttyz.tourfrxohc.databinding.ActivityMainBinding;
 import xyz.ttyz.tourfrxohc.dialog.LocationDialog;
-import xyz.ttyz.tourfrxohc.fragment.MainFragment;
 import xyz.ttyz.tourfrxohc.http.BaseSubscriber;
 import xyz.ttyz.tourfrxohc.models.Hardware;
 import xyz.ttyz.tourfrxohc.models.LocationModel;
@@ -74,21 +73,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         toolBarViewModel = new ToolBarViewModel.Builder()
                 .title(getString(R.string.app_name))
                 .backClick(null)
-                .rightClick(new OnClickAdapter.onClickCommand() {
-                    @Override
-                    public void click() {
-                        DialogUtils.showDialog("点击返回按钮可以关闭图片", new DialogUtils.DialogButtonModule("显示图片", new DialogUtils.DialogClickDelegate() {
-                            @Override
-                            public void click(DialogUtils.DialogButtonModule dialogButtonModule) {
-                                MainFragment mainFragment = new MainFragment();
-                                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                                fragmentTransaction.add(R.id.container, mainFragment);
-                                fragmentTransaction.commitAllowingStateLoss();
-                                fragmentTransaction.addToBackStack("");
-                            }
-                        }));
-                    }
-                })
                 .build();
         mBinding.setToolBarViewModel(toolBarViewModel);
         historyAdapter = new BaseEmptyAdapterParent(this, new BaseRecyclerAdapter.NormalAdapterDelegate() {
