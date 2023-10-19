@@ -103,8 +103,10 @@ public abstract class BaseContainLoadMoreFragment<T extends ViewDataBinding, B> 
             new Handler().postDelayed(new Runnable() {//页面里切换混乱，会先触发initData 再触发onCreateView  或许这就是删除setUserVisibleHint的原因 误差不超过50， 安全起见 300稳稳的
                 @Override
                 public void run() {
-                    if (getContext() != null)
+                    if (getContext() != null){
                         initData();
+                        initServer();
+                    }
                 }
             }, 0);//不是页面内切换， 这里对速度要求极高，所以不做延迟
         }
