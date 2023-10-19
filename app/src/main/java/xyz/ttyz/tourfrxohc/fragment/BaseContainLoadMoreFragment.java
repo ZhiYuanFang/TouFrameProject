@@ -29,6 +29,10 @@ public abstract class BaseContainLoadMoreFragment<T extends ViewDataBinding, B> 
 
     @Override
     protected void initData() {
+    }
+
+    @Override
+    protected void initServer() {
         loadPageInfo(true);
     }
 
