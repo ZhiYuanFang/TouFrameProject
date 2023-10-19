@@ -157,7 +157,6 @@ public class PandingActivity extends BaseActivity<ActivityPandingBinding> {
 
     // region 寻卡
     private void openUfh() {
-        // TODO: 2023/10/17 貌似很耗时，把回调写完在看日志
         uhfService.open();
         isPandingFiled.set(uhfService.inventoryStart());
     }

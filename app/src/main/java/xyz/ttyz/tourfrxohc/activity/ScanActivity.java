@@ -31,7 +31,7 @@ public class ScanActivity extends BaseActivity<ActivityScanBinding> {
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(SCANACTION)) {
                 String code = intent.getStringExtra("scannerdata");
-                System.out.println("扫描结果：" + code);
+                System.out.println("扫描结果：" + code + "有没有换行");
                 GoodsDetailActivity.show( new GoodsModel(code), false);
                 finish();
             }

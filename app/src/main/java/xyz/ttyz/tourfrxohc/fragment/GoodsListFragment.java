@@ -43,19 +43,13 @@ public class GoodsListFragment extends BaseInViewPagerFragment<FragmentGoodsList
 
     BaseEmptyAdapterParent adapterParent;
 
-    //设置分区地址
-    public void reSetLocationModel(LocationModel locationModel) {
+    //设置分区地址模糊查询字段
+    public void reSetLocationModel(LocationModel locationModel,String searchStr) {
         this.locationModel = locationModel;
         // 已经加载的情况下，刷新
-        if(isUIVisible && isViewCreated){
-            loadPageInfo(true);
-        }
-    }
-    //设置模糊查询字段
-    public void reSetSearchStr(String searchStr) {
         this.searchStr = searchStr;
         // 已经加载的情况下，刷新
-        if(isUIVisible && isViewCreated){
+        if(adapterParent != null) {
             loadPageInfo(true);
         }
     }

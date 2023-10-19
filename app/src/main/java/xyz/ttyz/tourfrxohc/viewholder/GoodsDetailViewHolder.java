@@ -9,6 +9,7 @@ import xyz.ttyz.tourfrxohc.R;
 import xyz.ttyz.tourfrxohc.activity.GoodsDetailOperatorActivity;
 import xyz.ttyz.tourfrxohc.databinding.ViewholderGoodsDetailBinding;
 import xyz.ttyz.tourfrxohc.models.GoodsModel;
+import xyz.ttyz.tourfrxohc.utils.Constans;
 
 /**
  * @author 投投
@@ -34,7 +35,9 @@ public class GoodsDetailViewHolder extends BaseNormalViewHolder<GoodsModel, View
         @Override
         public void click() {
             //去详情
-            GoodsDetailOperatorActivity.show(mBinding.getGoodsModel().getId());
+            if (mBinding.getGoodsModel().getStatus() == Constans.NowIn){
+                GoodsDetailOperatorActivity.show(mBinding.getGoodsModel().getId());
+            }
         }
     };
 }

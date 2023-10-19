@@ -4,6 +4,7 @@ import static androidx.fragment.app.FragmentPagerAdapter.BEHAVIOR_SET_USER_VISIB
 
 import android.content.Intent;
 import android.location.Location;
+import android.os.Handler;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,6 +19,7 @@ import java.util.List;
 import xyz.ttyz.mylibrary.method.RetrofitUtils;
 import xyz.ttyz.mylibrary.method.RxOHCUtils;
 import xyz.ttyz.tou_example.ActivityManager;
+import xyz.ttyz.toubasemvvm.adapter.EditAdapter;
 import xyz.ttyz.toubasemvvm.adapter.OnClickAdapter;
 import xyz.ttyz.toubasemvvm.event.NetEvent;
 import xyz.ttyz.toubasemvvm.utils.ToastUtil;
@@ -92,6 +94,7 @@ public class ComingActivity extends BaseActivity<ActivityComingBinding>{
                             @Override
                             public void select(LocationModel locationModel) {
                                 DefaultUtils.setLocationModel(locationModel);
+                                toolBarViewModel.title.set(DefaultUtils.getLocalLocationModel().selectOne + " - " + DefaultUtils.getLocalLocationModel().selectTwo);
                                 fragmentRefresh();
                             }
                         });
@@ -123,20 +126,12 @@ public class ComingActivity extends BaseActivity<ActivityComingBinding>{
         });
         mBinding.recyclerTabLayout.setupWithViewPager(mBinding.vpager);
 
-        inputCodeFiled.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
-            @Override
-            public void onPropertyChanged(Observable sender, int propertyId) {
-                fragmentRefresh();
-            }
-        });
         fragmentRefresh();
     }
 
     private void fragmentRefresh(){
-        inFragment.reSetLocationModel(DefaultUtils.getLocalLocationModel());
-        outFragment.reSetLocationModel(DefaultUtils.getLocalLocationModel());
-        inFragment.reSetSearchStr(inputCodeFiled.get());
-        outFragment.reSetSearchStr(inputCodeFiled.get());
+        inFragment.reSetLocationModel(DefaultUtils.getLocalLocationModel(),inputCodeFiled.get());
+        outFragment.reSetLocationModel(DefaultUtils.getLocalLocationModel(),inputCodeFiled.get());
     }
 
     @Override
@@ -148,6 +143,14 @@ public class ComingActivity extends BaseActivity<ActivityComingBinding>{
         @Override
         public void click() {
             ScanActivity.show();
+        }
+    };
+
+    public EditAdapter.EditDelegate editSearch = new EditAdapter.EditDelegate() {
+        @Override
+        public void send(String str) {
+            hideInput(getCurrentFocus());
+            fragmentRefresh();
         }
     };
 }

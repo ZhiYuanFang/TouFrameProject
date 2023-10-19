@@ -18,6 +18,7 @@ import xyz.ttyz.mylibrary.method.RxOHCUtils;
 import xyz.ttyz.mylibrary.protect.SharedPreferenceUtil;
 import xyz.ttyz.tou_example.ActivityManager;
 import xyz.ttyz.toubasemvvm.adapter.OnClickAdapter;
+import xyz.ttyz.toubasemvvm.utils.StringUtil;
 import xyz.ttyz.toubasemvvm.vm.ToolBarViewModel;
 import xyz.ttyz.tourfrxohc.BaseApplication;
 import xyz.ttyz.tourfrxohc.DefaultUtils;
@@ -91,7 +92,7 @@ public class GoodsDetailActivity extends BaseActivity<ActivityGoodsDetailBinding
             map.put("goodsActualNo", goodsModel.getGoodsActualNo());
             map.put("quantity", goodsModel.getQuantity());
             map.put("remark", goodsModel.getRemark());
-            map.put("goodsPriceMin", goodsModel.getPriceMinStr());
+            map.put("goodsPriceMin", StringUtil.convertStr2Long(goodsModel.getPriceMinStr()));
             map.put("warehouseAreaId", DefaultUtils.getLocalLocationModel().warehouseAreaId);
             map.put("warehouseId", DefaultUtils.getLocalLocationModel().warehouseId);
             if(isEdit.get()){

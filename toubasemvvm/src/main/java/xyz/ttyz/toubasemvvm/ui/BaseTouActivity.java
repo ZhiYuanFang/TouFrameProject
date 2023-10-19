@@ -330,17 +330,21 @@ public abstract class BaseTouActivity<T extends ViewDataBinding> extends SwipeBa
         if (ev.getAction() == MotionEvent.ACTION_DOWN) {
             View v = getCurrentFocus();
             if (isShouldHideInput(v, ev)) {
-                imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                if (imm != null) {
-                    if (v != null) {
-                        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                    }
-                    EventBus.getDefault().post(new InputHideEvent());
-                }
+                hideInput(v);
             }
             return super.dispatchTouchEvent(ev);
         }
         return getWindow().superDispatchTouchEvent(ev) || onTouchEvent(ev);
+    }
+
+    protected void hideInput(View v){
+        imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            if (v != null) {
+                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+            }
+            EventBus.getDefault().post(new InputHideEvent());
+        }
     }
 
     protected boolean isShouldHideInput(View v, MotionEvent event) {

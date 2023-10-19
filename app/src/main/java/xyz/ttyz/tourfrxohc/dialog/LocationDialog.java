@@ -15,6 +15,8 @@ import androidx.databinding.PropertyChangeRegistry;
 import com.aigestudio.wheelpicker.WheelPicker;
 import com.trello.rxlifecycle2.LifecycleProvider;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +31,7 @@ import xyz.ttyz.tourfrxohc.MainActivity;
 import xyz.ttyz.tourfrxohc.R;
 import xyz.ttyz.tourfrxohc.activity.LoginActivity;
 import xyz.ttyz.tourfrxohc.databinding.DialogLocationBinding;
+import xyz.ttyz.tourfrxohc.event.LocationSelectEvent;
 import xyz.ttyz.tourfrxohc.http.BaseSubscriber;
 import xyz.ttyz.tourfrxohc.models.LocationModel;
 import xyz.ttyz.tourfrxohc.models.WareHouseChildModel;
@@ -47,9 +50,9 @@ public class LocationDialog extends Dialog implements Observable {
         void select(LocationModel locationModel);
     }
     public static void showDialog(CallBackDelegate delegate){
-        if(locationDialog == null){
+//        if(locationDialog == null){
             locationDialog = new LocationDialog(ActivityManager.getInstance());
-        }
+//        }
         callBackDelegate = delegate;
         ActivityManager.getInstance().runOnUiThread(new Runnable() {
             @Override
@@ -88,6 +91,10 @@ public class LocationDialog extends Dialog implements Observable {
                 }
                 notifyChange(BR.firstList);
 
+
+                //视觉上面，不修改数据
+                mBinding.wheelFirst.setSelectedItemPosition(0);
+                selectFirst(firstList.get(0));
             }
         });
 
@@ -96,23 +103,27 @@ public class LocationDialog extends Dialog implements Observable {
     public WheelPicker.OnItemSelectedListener firstSelect = new WheelPicker.OnItemSelectedListener() {
         @Override
         public void onItemSelected(WheelPicker picker, Object data, int position) {
-            selectOne = (String) data;
-            WareHouseModel selectWareHouseModel = wareHouseModelList.get(firstList.indexOf(selectOne));
-
-            new RxOHCUtils<>(getContext()).executeApi(BaseApplication.apiService.getWarehouseChildList(selectWareHouseModel.getId()), new BaseSubscriber<List<WareHouseChildModel>>((LifecycleProvider) ActivityManager.getInstance()) {
-                @Override
-                public void success(List<WareHouseChildModel> data) {
-                    wareHouseChildModelList = data;
-                    secondList.clear();
-                    for (WareHouseChildModel model: data) {
-                        secondList.add(model.getAreaName());
-                    }
-                    notifyChange(BR.secondList);
-
-                }
-            });
+            selectFirst((String) data);
         }
     };
+
+    private void selectFirst(String selectOne){
+        this.selectOne = selectOne;
+
+        WareHouseModel selectWareHouseModel = wareHouseModelList.get(firstList.indexOf(selectOne));
+
+        new RxOHCUtils<>(getContext()).executeApi(BaseApplication.apiService.getWarehouseChildList(selectWareHouseModel.getId()), new BaseSubscriber<List<WareHouseChildModel>>((LifecycleProvider) ActivityManager.getInstance()) {
+            @Override
+            public void success(List<WareHouseChildModel> data) {
+                wareHouseChildModelList = data;
+                secondList.clear();
+                for (WareHouseChildModel model: data) {
+                    secondList.add(model.getAreaName());
+                }
+                notifyChange(BR.secondList);
+            }
+        });
+    }
     public WheelPicker.OnItemSelectedListener secondSelect = new WheelPicker.OnItemSelectedListener() {
         @Override
         public void onItemSelected(WheelPicker picker, Object data, int position) {
@@ -140,6 +151,7 @@ public class LocationDialog extends Dialog implements Observable {
             if(callBackDelegate != null){
                 callBackDelegate.select(new LocationModel(selectWareHouseChildModel.getId(),selectWareHouseChildModel.getWarehouseId(), selectOne, selectTwo));
             }
+            EventBus.getDefault().post(new LocationSelectEvent());
         }
     };
 

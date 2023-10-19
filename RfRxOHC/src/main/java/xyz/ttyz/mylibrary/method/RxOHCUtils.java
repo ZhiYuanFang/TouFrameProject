@@ -46,6 +46,9 @@ public class RxOHCUtils<M extends RfRxOHCBaseModule> {
         //绑定网络被观察者和观察者
         if(NetworkUtil.isNetWorkConnected(ActivityManager.getInstance().getApplication())){
             Log.i(TAG, "executeApi: 请求接口");
+            if(!uiSubscriber.notShowProgress){
+                ProgressUtil.showCircleProgress(ActivityManager.getInstance());
+            }
             uiSubscriber.setLocalObserver(false);//网络数据获取，可以做本地数据缓存
             apiObservable
                     .compose(uiSubscriber.lifeCycle == null ? new ObservableTransformer() {

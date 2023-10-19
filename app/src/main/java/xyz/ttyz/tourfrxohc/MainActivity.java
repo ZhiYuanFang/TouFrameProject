@@ -11,9 +11,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.HashMap;
 import java.util.Map;
 
+import xyz.ttyz.mylibrary.method.BaseModule;
 import xyz.ttyz.mylibrary.method.RetrofitUtils;
 import xyz.ttyz.mylibrary.method.RxOHCUtils;
 import xyz.ttyz.mylibrary.protect.SharedPreferenceUtil;
@@ -21,6 +25,7 @@ import xyz.ttyz.tou_example.ActivityManager;
 import xyz.ttyz.toubasemvvm.adapter.OnClickAdapter;
 import xyz.ttyz.toubasemvvm.adapter.utils.BaseEmptyAdapterParent;
 import xyz.ttyz.toubasemvvm.adapter.utils.BaseRecyclerAdapter;
+import xyz.ttyz.toubasemvvm.event.NetEvent;
 import xyz.ttyz.toubasemvvm.utils.DialogUtils;
 import xyz.ttyz.toubasemvvm.vm.ToolBarViewModel;
 import xyz.ttyz.tourfrxohc.activity.BaseActivity;
@@ -29,6 +34,7 @@ import xyz.ttyz.tourfrxohc.activity.LoginActivity;
 import xyz.ttyz.tourfrxohc.activity.PandingActivity;
 import xyz.ttyz.tourfrxohc.databinding.ActivityMainBinding;
 import xyz.ttyz.tourfrxohc.dialog.LocationDialog;
+import xyz.ttyz.tourfrxohc.event.LocationSelectEvent;
 import xyz.ttyz.tourfrxohc.http.BaseSubscriber;
 import xyz.ttyz.tourfrxohc.models.Hardware;
 import xyz.ttyz.tourfrxohc.models.LocationModel;
@@ -46,6 +52,10 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         Intent intent = new Intent(ActivityManager.getInstance(), MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         ActivityManager.getInstance().startActivity(intent);
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void locationChange(LocationSelectEvent locationSelectEvent){
+        locationModelObservableField.set(DefaultUtils.getLocalLocationModel());
     }
 
     public ObservableField<LocationModel> locationModelObservableField = new ObservableField<>(new LocationModel());
@@ -139,10 +149,17 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     public OnClickAdapter.onClickCommand clickLogout = new OnClickAdapter.onClickCommand() {
         @Override
         public void click() {
-            new RxOHCUtils<>(MainActivity.this).executeApi(BaseApplication.apiService.logout(), new BaseSubscriber<MainModel>(MainActivity.this) {
+            new RxOHCUtils<>(MainActivity.this).executeApi(BaseApplication.apiService.logout(), new BaseSubscriber<Boolean>(MainActivity.this) {
                 @Override
-                public void success(MainModel data) {
+                public void success(Boolean data) {
                     LoginActivity.toLogin();
+                }
+
+                @Override
+                protected void fail(BaseModule<Boolean> baseModule) {
+                    if(baseModule.getCode() == 302){
+                        LoginActivity.toLogin();
+                    } else super.fail(baseModule);
                 }
             });
         }

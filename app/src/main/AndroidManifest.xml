@@ -45,7 +45,10 @@
         <activity android:name=".activity.LoginActivity"
             android:launchMode="singleTop"
             android:screenOrientation="fullSensor"/>
-        <activity android:name=".activity.ComingActivity"/>
+        <activity android:name=".activity.ComingActivity"
+            android:windowSoftInputMode="adjustNothing">
+
+        </activity>
         <activity android:name=".activity.ScanActivity"/>
         <activity android:name=".activity.ComSuccessActivity"/>
         <activity android:name=".activity.GoodsDetailActivity"/>

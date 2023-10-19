@@ -123,6 +123,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             style="@style/form_content"
+                            android:inputType="numberSigned"
                             android:text="@={goodsModel.quantity}"
                             android:hint="请输入"/>
                     </LinearLayout>
@@ -159,6 +160,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             style="@style/form_content"
+                            android:inputType="numberSigned"
                             android:text="@={goodsModel.priceMinStr}"
                             android:hint="请输入"/>
                     </LinearLayout>

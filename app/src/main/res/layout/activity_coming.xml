@@ -29,6 +29,9 @@
             android:layout_marginStart="25dp"
             android:layout_marginEnd="25dp"
             android:gravity="center"
+            android:singleLine="true"
+            android:imeOptions="actionSearch"
+            binding:editDelegate="@{context.editSearch}"
             android:text="@={context.inputCodeFiled}"
             android:hint="输入货品码查询" />
 

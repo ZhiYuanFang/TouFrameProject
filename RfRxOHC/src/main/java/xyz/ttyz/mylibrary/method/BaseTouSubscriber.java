@@ -18,7 +18,7 @@ import xyz.ttyz.mylibrary.method.ProgressUtil;
 public abstract class BaseTouSubscriber<D> extends BaseObserver<BaseModule<D>> {
     private static final String TAG = "BaseTouSubscriber";
     Observable apiObservable;//与它绑定的观察者
-    private boolean notShowProgress;
+    public boolean notShowProgress;
 
     public BaseTouSubscriber(LifecycleProvider lifeCycle) {
         super(lifeCycle);
@@ -27,11 +27,6 @@ public abstract class BaseTouSubscriber<D> extends BaseObserver<BaseModule<D>> {
     @Override
     public Context initContext() {
         return ActivityManager.getInstance();
-    }
-
-    public void onStart() {
-        if (!notShowProgress)
-            ProgressUtil.showCircleProgress(ActivityManager.getInstance());
     }
 
     //如果当前接口对应页面已经关闭，会直接走onComplete，不会执行接口请求
@@ -61,7 +56,6 @@ public abstract class BaseTouSubscriber<D> extends BaseObserver<BaseModule<D>> {
 
     @Override
     public void onRfRxNext(BaseModule<D> baseModule) {
-        onStart();
         if (baseModule.getCode() == RfRxOHCUtil.successCode) {
             success(baseModule.getData());
         } else {
