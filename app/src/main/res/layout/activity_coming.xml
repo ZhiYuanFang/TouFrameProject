@@ -10,6 +10,7 @@
         <variable
             name="toolBarViewModel"
             type="xyz.ttyz.toubasemvvm.vm.ToolBarViewModel" />
+        <import type="xyz.ttyz.tourfrxohc.utils.Constans"/>
     </data>
 
     <LinearLayout
@@ -57,7 +58,7 @@
         </LinearLayout>
 
         <TextView
-            binding:visible="@{context.type == context.Type_in}"
+            binding:visible="@{context.type == Constans.NowIn}"
             android:layout_width="match_parent"
             android:layout_height="55dp"
             android:background="@color/black"

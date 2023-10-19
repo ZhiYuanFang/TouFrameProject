@@ -8,9 +8,14 @@ import java.io.Serializable;
  * @email 343315792@qq.com
  */
 public class LocationModel implements Serializable {
+    public long warehouseAreaId;
+    public long warehouseId;
     public long id;
     public String selectOne;
     public String selectTwo;
+
+    public LocationModel() {
+    }
 
     public LocationModel(long id, String selectOne, String selectTwo) {
         this.id = id;

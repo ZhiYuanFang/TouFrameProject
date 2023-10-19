@@ -30,8 +30,8 @@ public interface ApiService {
     @POST("/warehouse/goods/pda/page")
     Observable<BaseModule<GoodsModel>> goodsList(@Body RequestBody data);
 
-    @GET("msr/v1/app/personal/index")
-    Observable<BaseModule<MainModel>> getHistory(@QueryMap Map<String, Object> map);
+    @GET("/warehouse/goods/pda/detail/{warehouseGoodsId}")
+    Observable<BaseModule<MainModel>> getGoodsDetail();
 
 
 //    @Headers("Content-type:text/x-plain-rsa-json")

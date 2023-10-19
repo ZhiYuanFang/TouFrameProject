@@ -80,13 +80,6 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding>{
                     SharedPreferenceUtil.setShareString(LoginActivity.this, "password", password.get());
                    MainActivity.goMain();
                 }
-
-                @Override
-                public void onError(Throwable e) {
-                    e.printStackTrace();
-                    onComplete();
-                    ToastUtil.showToast("登录失败，用户名或密码不正确");
-                }
             });
         }
     };

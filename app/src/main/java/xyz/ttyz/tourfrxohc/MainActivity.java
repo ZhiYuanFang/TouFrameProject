@@ -36,6 +36,7 @@ import xyz.ttyz.tourfrxohc.models.MainModel;
 import xyz.ttyz.tourfrxohc.models.ResorceModel;
 import xyz.ttyz.tourfrxohc.models.Software;
 import xyz.ttyz.tourfrxohc.models.UserModel;
+import xyz.ttyz.tourfrxohc.utils.Constans;
 import xyz.ttyz.tourfrxohc.viewholder.ResorceViewHolder;
 
 public class MainActivity extends BaseActivity<ActivityMainBinding> {
@@ -121,25 +122,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         //接口还是异步请求，但给它们做了一个执行队列。
     }
 
-    private void loadHistory(){
-        //获取历史
-        Map<String, Object> map = new HashMap<>();
-        new RxOHCUtils<>(this).executeApi(BaseApplication.apiService.getHistory(map), new BaseSubscriber<MainModel>(this, loadEnd) {
-            @Override
-            public void success(MainModel data) {
-                if (data != null) {
-                    historyAdapter.setList(data.getReadHistory());
-                }
-            }
-
-            @Override
-            public String initCacheKey() {
-                return "getHistory";//如果该页面涉及隐私，则不传cacheKey，就不会产生缓存数据
-            }
-
-        });
-    }
-
     public OnClickAdapter.onClickCommand clickLocation = new OnClickAdapter.onClickCommand() {
         @Override
         public void click() {
@@ -170,7 +152,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         @Override
         public void click() {
             // 入库
-            ComingActivity.show(locationModelObservableField.get(), ComingActivity.Type_in);
+            ComingActivity.show(locationModelObservableField.get(), Constans.NowIn);
         }
     };
 
@@ -186,7 +168,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         @Override
         public void click() {
             // 出库
-            ComingActivity.show(locationModelObservableField.get(), ComingActivity.Type_Out);
+            ComingActivity.show(locationModelObservableField.get(), Constans.NowOut);
         }
     };
 }

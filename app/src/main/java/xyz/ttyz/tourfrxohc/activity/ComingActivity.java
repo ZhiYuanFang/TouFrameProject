@@ -1,10 +1,15 @@
 package xyz.ttyz.tourfrxohc.activity;
 
+import static androidx.fragment.app.FragmentPagerAdapter.BEHAVIOR_SET_USER_VISIBLE_HINT;
+
 import android.content.Intent;
 import android.location.Location;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.ObservableField;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentPagerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,14 +24,14 @@ import xyz.ttyz.tourfrxohc.fragment.BaseInViewPagerFragment;
 import xyz.ttyz.tourfrxohc.fragment.GoodsListFragment;
 import xyz.ttyz.tourfrxohc.models.LocationModel;
 
+import static xyz.ttyz.tourfrxohc.utils.Constans.*;
 /**
  * @author 投投
  * @date 2023/10/16
  * @email 343315792@qq.com
  */
 public class ComingActivity extends BaseActivity<ActivityComingBinding>{
-    public static int Type_in = 0;
-    public static int Type_Out = 0;
+
     public static void show(@Nullable LocationModel locationModel, int type){
         Intent intent = new Intent(ActivityManager.getInstance(), ComingActivity.class);
         intent.putExtra("type", type);
@@ -36,12 +41,12 @@ public class ComingActivity extends BaseActivity<ActivityComingBinding>{
     ToolBarViewModel toolBarViewModel;
     LocationModel locationModel;
     public int type;
-    public ObservableField<String> inputCodeFiled =  new ObservableField<>("");
+    public ObservableField<String> inputCodeFiled =  new ObservableField<>("");//输入的货品码
 
-    List<BaseInViewPagerFragment> fragmentList = new ArrayList<BaseInViewPagerFragment>(){{
-        add(new GoodsListFragment());
-        add(new GoodsListFragment());
-    }};
+    List<GoodsListFragment> fragmentList = new ArrayList<GoodsListFragment>(){};
+    GoodsListFragment inFragment = new GoodsListFragment(NowIn);
+    GoodsListFragment outFragment = new GoodsListFragment(NowOut);
+
     @Override
     protected int initLayoutId() {
         return R.layout.activity_coming;
@@ -55,7 +60,7 @@ public class ComingActivity extends BaseActivity<ActivityComingBinding>{
     @Override
     protected void initData() {
         locationModel = (LocationModel) getIntent().getSerializableExtra("locationModel");
-        type = getIntent().getIntExtra("type", Type_in);
+        type = getIntent().getIntExtra("type", 0);
         mBinding.setContext(this);
         toolBarViewModel = new ToolBarViewModel.Builder()
                 .title(locationModel.selectOne + " - " + locationModel.selectTwo)
@@ -66,13 +71,37 @@ public class ComingActivity extends BaseActivity<ActivityComingBinding>{
                             @Override
                             public void select(LocationModel locationModel) {
 
-                                initServer();
+                                inFragment.reSetLocationModel(locationModel);
+                                outFragment.reSetLocationModel(locationModel);
+
                             }
                         });
                     }
                 })
                 .build();
         mBinding.setToolBarViewModel(toolBarViewModel);
+
+        fragmentList.add(inFragment);
+        fragmentList.add(outFragment);
+        mBinding.vpager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager(), BEHAVIOR_SET_USER_VISIBLE_HINT) {
+            @NonNull
+            @Override
+            public Fragment getItem(int position) {
+                return fragmentList.get(position);
+            }
+
+            @Override
+            public int getCount() {
+                return fragmentList.size();
+            }
+
+            @Nullable
+            @Override
+            public CharSequence getPageTitle(int position) {
+                return fragmentList.get(position).initTitle();
+            }
+        });
+        mBinding.recyclerTabLayout.setupWithViewPager(mBinding.vpager);
     }
 
     @Override

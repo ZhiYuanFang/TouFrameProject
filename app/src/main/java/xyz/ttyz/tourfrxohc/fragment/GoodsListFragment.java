@@ -1,20 +1,27 @@
 package xyz.ttyz.tourfrxohc.fragment;
 
+import static xyz.ttyz.tourfrxohc.utils.Constans.*;
+
 import android.view.ViewGroup;
 
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.trello.rxlifecycle2.LifecycleTransformer;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observable;
+import xyz.ttyz.mylibrary.method.RetrofitUtils;
 import xyz.ttyz.toubasemvvm.adapter.utils.BaseEmptyAdapterParent;
 import xyz.ttyz.toubasemvvm.adapter.utils.BaseRecyclerAdapter;
 import xyz.ttyz.tourfrxohc.BaseApplication;
 import xyz.ttyz.tourfrxohc.R;
 import xyz.ttyz.tourfrxohc.databinding.FragmentGoodsListBinding;
 import xyz.ttyz.tourfrxohc.models.GoodsModel;
+import xyz.ttyz.tourfrxohc.models.LocationModel;
 import xyz.ttyz.tourfrxohc.viewholder.GoodsDetailViewHolder;
 
 /**
@@ -22,21 +29,27 @@ import xyz.ttyz.tourfrxohc.viewholder.GoodsDetailViewHolder;
  * @date 2023/10/18
  * @email 343315792@qq.com
  */
-public class GoodsListFragment extends BaseInViewPagerFragment<FragmentGoodsListBinding> {
+public class GoodsListFragment extends BaseInViewPagerFragment<FragmentGoodsListBinding, List<GoodsModel>> {
     int type;//表示 在库、已出库、待盘点、已盘点
 
-    public final static int NowIn = 1;
-    public final static int NowOut = 12;
-    public final static int NowWait = 13;
-    public final static int NowPant = 14;
 
-
+    LocationModel locationModel = new LocationModel();
 
     public GoodsListFragment(int type) {
        this.type = type;
     }
 
     BaseEmptyAdapterParent adapterParent;
+
+    //设置分区地址
+    public void reSetLocationModel(LocationModel locationModel) {
+        this.locationModel = locationModel;
+        // 已经加载的情况下，刷新
+        if(isUIVisible && isViewCreated){
+            loadPageInfo(true);
+        }
+    }
+
     @Override
     public String initTitle() {
         switch (type){
@@ -62,8 +75,23 @@ public class GoodsListFragment extends BaseInViewPagerFragment<FragmentGoodsList
         return new String[0];
     }
 
+    @Nullable
     @Override
-    protected void initData() {
+    protected Observable initApiService(Map map) {
+        return BaseApplication.apiService.goodsList(RetrofitUtils.getNormalBody(map));
+    }
+
+    @Override
+    protected Map<String, Object> initLoadMoreParam() {
+        Map map = new HashMap();
+        map.put("status", type);
+        map.put("warehouseAreaId", locationModel.warehouseAreaId);
+        map.put("warehouseId", locationModel.warehouseId);
+        return map;
+    }
+
+    @Override
+    protected BaseEmptyAdapterParent initLoadPageInfoAdapter() {
         adapterParent = new BaseEmptyAdapterParent(getContext(), new BaseRecyclerAdapter.NormalAdapterDelegate() {
             @Override
             public int getItemViewType(int position) {
@@ -81,36 +109,18 @@ public class GoodsListFragment extends BaseInViewPagerFragment<FragmentGoodsList
                 ((GoodsDetailViewHolder)holder).bindData((GoodsModel) adapterParent.getItem(position));
             }
         });
+
         mBinding.setAdapter(adapterParent);
+        return adapterParent;
     }
 
     @Override
-    protected Observable initApiService() {
-        return BaseApplication.apiService.goodsList();
+    protected void dealLoadMoreSuccess(List<GoodsModel> data) {
+        adapterParent.addAll(data);
     }
-
-    @Override
-    protected Map<String, Object> initLoadMoreParam() {
-        return null;
-    }
-
-    @Override
-    protected BaseEmptyAdapterParent initLoadPageInfoAdapter() {
-        return null;
-    }
-
-    @Override
-    protected void dealLoadMoreSuccess(Object data) {
-
-    }
-
     @Override
     protected void initServer() {
 
     }
 
-    @Override
-    public LifecycleTransformer bindUntilEvent(Object event) {
-        return null;
-    }
 }
