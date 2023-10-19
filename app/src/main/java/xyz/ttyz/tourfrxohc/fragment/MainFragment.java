@@ -9,6 +9,12 @@ import xyz.ttyz.tourfrxohc.databinding.FragmentMainBinding;
 public class MainFragment extends BaseFragment<FragmentMainBinding>{
 
     public ObservableField<String> imageFiled = new ObservableField<>("");
+
+    @Override
+    protected void initVariable(FragmentMainBinding mBinding) {
+        mBinding.setContext(this);
+    }
+
     @Override
     protected boolean isInViewPager() {
         return false;
@@ -26,7 +32,6 @@ public class MainFragment extends BaseFragment<FragmentMainBinding>{
 
     @Override
     protected void initData() {
-        mBinding.setContext(this);
     }
 
     @Override

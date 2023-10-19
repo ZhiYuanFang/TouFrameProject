@@ -59,6 +59,8 @@ public abstract class BaseTouFragment<T extends ViewDataBinding> extends Fragmen
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(initLayoutId(), container, false);
         mBinding = DataBindingUtil.bind(view);
+        initVariable(mBinding);
+
         isViewCreated = true;
         lazyLoad();
         return view;
@@ -71,6 +73,7 @@ public abstract class BaseTouFragment<T extends ViewDataBinding> extends Fragmen
         lazyLoad();//猜测这个方法之所以被删除， 因为系统在修改字体后， 重新打开APP 会走这个方法， 但是此时的fragment是丢弃的，它走完这个方法之后 会重新走创建fragment， 所以在lazyLoad中，加了判空保护
     }
 
+    protected abstract void initVariable(T mBinding);
     protected void lazyLoad() {
         if (!isInViewPager() || (isUIVisible && isViewCreated)) {
             isUIVisible = false;
