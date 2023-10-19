@@ -60,7 +60,7 @@ public abstract class BaseContainLoadMoreFragment<T extends ViewDataBinding, B> 
     protected abstract @Nullable Observable<B> initApiService(Map map);
 
     protected void requestUrl(boolean refresh, Map map){
-        new RxOHCUtils<>(getContext()).executeApi(initApiService(map), new BaseSubscriber<B>(this) {
+        new RxOHCUtils<>(getContext()).executeApi(initApiService(map), new BaseSubscriber<B>(this, loadEnd) {
             @Override
             public void onRfRxNext(BaseModule<B> baseModule) {
                 super.onRfRxNext(baseModule);
