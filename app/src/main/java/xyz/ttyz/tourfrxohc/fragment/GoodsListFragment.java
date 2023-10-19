@@ -133,9 +133,4 @@ public class GoodsListFragment extends BaseInViewPagerFragment<FragmentGoodsList
     protected void dealLoadMoreSuccess(List<GoodsModel> data) {
         adapterParent.addAll(data);
     }
-    @Override
-    protected void initServer() {
-
-    }
-
 }
