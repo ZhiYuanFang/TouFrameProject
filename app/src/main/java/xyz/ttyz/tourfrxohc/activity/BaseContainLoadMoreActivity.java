@@ -65,7 +65,7 @@ public abstract class BaseContainLoadMoreActivity<T extends ViewDataBinding,D, B
             map.put("current", pageIndex.get());
             map.put("page", pageIndex.get());
         }
-        new RxOHCUtils<>(this).executeApi(initApiService(map), new BaseSubscriber<B>(this) {
+        new RxOHCUtils<>(this).executeApi(initApiService(map), new BaseSubscriber<B>(this, loadEnd) {
 
             @Override
             public void onRfRxNext(BaseModule<B> baseModule) {
