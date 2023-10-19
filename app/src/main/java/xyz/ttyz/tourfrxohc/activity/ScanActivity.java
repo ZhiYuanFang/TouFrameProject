@@ -1,40 +1,16 @@
 package xyz.ttyz.tourfrxohc.activity;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.os.Build;
-import android.util.Log;
-import android.view.View;
-import android.widget.CompoundButton;
-
-import androidx.core.app.ActivityCompat;
-import androidx.databinding.Observable;
-import androidx.databinding.ObservableBoolean;
-
-
-import com.seuic.uhf.EPC;
-import com.seuic.uhf.UHFService;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
-import xyz.ttyz.mylibrary.protect.StringUtil;
 import xyz.ttyz.tou_example.ActivityManager;
-import xyz.ttyz.toubasemvvm.adapter.OnClickAdapter;
 import xyz.ttyz.toubasemvvm.vm.ToolBarViewModel;
 import xyz.ttyz.tourfrxohc.R;
 import xyz.ttyz.tourfrxohc.databinding.ActivityScanBinding;
-import xyz.ttyz.tourfrxohc.dialog.LocationDialog;
 import xyz.ttyz.tourfrxohc.models.GoodsModel;
-import xyz.ttyz.tourfrxohc.models.LocationModel;
 
 /**
  * @author 投投
@@ -56,8 +32,7 @@ public class ScanActivity extends BaseActivity<ActivityScanBinding> {
             if (intent.getAction().equals(SCANACTION)) {
                 String code = intent.getStringExtra("scannerdata");
                 System.out.println("扫描结果：" + code);
-                // TODO: 2023/10/16 转变成model
-                GoodsDetailActivity.show(new GoodsModel(), false);
+                GoodsDetailActivity.show( new GoodsModel(code), false);
                 finish();
             }
         }

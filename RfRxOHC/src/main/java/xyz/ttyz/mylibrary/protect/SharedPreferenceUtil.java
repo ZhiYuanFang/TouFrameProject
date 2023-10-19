@@ -12,6 +12,15 @@ import xyz.ttyz.mylibrary.method.LocalSaveConfig;
  * SP相关工具类
  */
 public class SharedPreferenceUtil {
+    public static void setShareBool(Context c, String key, boolean value) {
+        if(c == null){
+            return;
+        }
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(c);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(key, value);
+        editor.apply();
+    }
     /**
      * 存储String
      *
@@ -65,6 +74,13 @@ public class SharedPreferenceUtil {
         }
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(c);
         return sharedPreferences.getString(key, "");
+    }
+    public static boolean getShareBool(Context c, String key) {
+        if(c == null || key == null){
+            return false;
+        }
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(c);
+        return sharedPreferences.getBoolean(key, false);
     }
 
     public static HashSet<String> getShareStringSet(Context c, String key) {

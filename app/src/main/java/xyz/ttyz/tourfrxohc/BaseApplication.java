@@ -73,7 +73,7 @@ public class BaseApplication extends Application {
                                 HashSet<String> preferences = DefaultUtils.getCookie();
                                 if (preferences != null) {
                                     for (String cookie : preferences) {
-                                        builder.addHeader("Set-Cookie", cookie);
+                                        builder.addHeader("Cookie", cookie);
                                         Log.v("OkHttp", "Adding Header: " + cookie); // This is done so I know which headers are being added; this interceptor is used after the normal logging of OkHttp
                                     }
                                 }

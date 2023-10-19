@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observable;
+import xyz.ttyz.mylibrary.method.RecordsModule;
 import xyz.ttyz.mylibrary.method.RetrofitUtils;
 import xyz.ttyz.toubasemvvm.adapter.utils.BaseEmptyAdapterParent;
 import xyz.ttyz.toubasemvvm.adapter.utils.BaseRecyclerAdapter;
@@ -29,11 +30,12 @@ import xyz.ttyz.tourfrxohc.viewholder.GoodsDetailViewHolder;
  * @date 2023/10/18
  * @email 343315792@qq.com
  */
-public class GoodsListFragment extends BaseInViewPagerFragment<FragmentGoodsListBinding, List<GoodsModel>> {
+public class GoodsListFragment extends BaseInViewPagerFragment<FragmentGoodsListBinding,List<GoodsModel>, RecordsModule<List<GoodsModel>>> {
     int type;//表示 在库、已出库、待盘点、已盘点
 
 
     LocationModel locationModel = new LocationModel();
+    String searchStr = "";
 
     public GoodsListFragment(int type) {
        this.type = type;
@@ -49,7 +51,14 @@ public class GoodsListFragment extends BaseInViewPagerFragment<FragmentGoodsList
             loadPageInfo(true);
         }
     }
-
+    //设置模糊查询字段
+    public void reSetSearchStr(String searchStr) {
+        this.searchStr = searchStr;
+        // 已经加载的情况下，刷新
+        if(isUIVisible && isViewCreated){
+            loadPageInfo(true);
+        }
+    }
     @Override
     public String initTitle() {
         switch (type){
@@ -78,6 +87,7 @@ public class GoodsListFragment extends BaseInViewPagerFragment<FragmentGoodsList
     @Nullable
     @Override
     protected Observable initApiService(Map map) {
+        mBinding.setContext(this);
         return BaseApplication.apiService.goodsList(RetrofitUtils.getNormalBody(map));
     }
 
@@ -85,6 +95,7 @@ public class GoodsListFragment extends BaseInViewPagerFragment<FragmentGoodsList
     protected Map<String, Object> initLoadMoreParam() {
         Map map = new HashMap();
         map.put("status", type);
+        map.put("fuzzyGoodsActualNo", searchStr);
         map.put("warehouseAreaId", locationModel.warehouseAreaId);
         map.put("warehouseId", locationModel.warehouseId);
         return map;

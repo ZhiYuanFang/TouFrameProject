@@ -10,15 +10,15 @@ import java.io.Serializable;
 public class LocationModel implements Serializable {
     public long warehouseAreaId;
     public long warehouseId;
-    public long id;
     public String selectOne;
     public String selectTwo;
 
     public LocationModel() {
     }
 
-    public LocationModel(long id, String selectOne, String selectTwo) {
-        this.id = id;
+    public LocationModel(long warehouseAreaId, long warehouseId,String selectOne, String selectTwo) {
+        this.warehouseAreaId = warehouseAreaId;
+        this.warehouseId = warehouseId;
         this.selectOne = selectOne;
         this.selectTwo = selectTwo;
     }

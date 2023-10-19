@@ -13,16 +13,26 @@ import androidx.databinding.ObservableField;
 import androidx.databinding.PropertyChangeRegistry;
 
 import com.aigestudio.wheelpicker.WheelPicker;
+import com.trello.rxlifecycle2.LifecycleProvider;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import xyz.ttyz.mylibrary.method.RxOHCUtils;
+import xyz.ttyz.mylibrary.protect.SharedPreferenceUtil;
 import xyz.ttyz.tou_example.ActivityManager;
 import xyz.ttyz.toubasemvvm.adapter.OnClickAdapter;
+import xyz.ttyz.toubasemvvm.utils.ToastUtil;
 import xyz.ttyz.tourfrxohc.BR;
+import xyz.ttyz.tourfrxohc.BaseApplication;
+import xyz.ttyz.tourfrxohc.MainActivity;
 import xyz.ttyz.tourfrxohc.R;
+import xyz.ttyz.tourfrxohc.activity.LoginActivity;
 import xyz.ttyz.tourfrxohc.databinding.DialogLocationBinding;
+import xyz.ttyz.tourfrxohc.http.BaseSubscriber;
 import xyz.ttyz.tourfrxohc.models.LocationModel;
+import xyz.ttyz.tourfrxohc.models.WareHouseChildModel;
+import xyz.ttyz.tourfrxohc.models.WareHouseModel;
 
 
 /**
@@ -55,6 +65,9 @@ public class LocationDialog extends Dialog implements Observable {
     public  List<String> firstList = new ArrayList<>();
     @Bindable
     public  List<String> secondList = new ArrayList<>();
+    List<WareHouseModel> wareHouseModelList;
+    List<WareHouseChildModel> wareHouseChildModelList;
+    WareHouseChildModel selectWareHouseChildModel;
     private String selectOne, selectTwo;
     public LocationDialog(@NonNull Context context) {
         super(context, R.style.DialogLocationTheme);
@@ -65,24 +78,47 @@ public class LocationDialog extends Dialog implements Observable {
         setCancelable(true);
         setCanceledOnTouchOutside(true);
 
-        for (int i = 0; i < 10; i++) {
-            firstList.add("first_" + i);
-            secondList.add("second_" + i);
-        }
-        notifyChange(BR.firstList);
-        notifyChange(BR.secondList);
+        new RxOHCUtils<>(context).executeApi(BaseApplication.apiService.getWarehouseList(), new BaseSubscriber<List<WareHouseModel>>((LifecycleProvider) ActivityManager.getInstance()) {
+            @Override
+            public void success(List<WareHouseModel> data) {
+                wareHouseModelList = data;
+                firstList.clear();
+                for (WareHouseModel model: data) {
+                    firstList.add(model.getWarehouseName());
+                }
+                notifyChange(BR.firstList);
+
+            }
+        });
+
     }
 
     public WheelPicker.OnItemSelectedListener firstSelect = new WheelPicker.OnItemSelectedListener() {
         @Override
         public void onItemSelected(WheelPicker picker, Object data, int position) {
             selectOne = (String) data;
+            WareHouseModel selectWareHouseModel = wareHouseModelList.get(firstList.indexOf(selectOne));
+
+            new RxOHCUtils<>(getContext()).executeApi(BaseApplication.apiService.getWarehouseChildList(selectWareHouseModel.getId()), new BaseSubscriber<List<WareHouseChildModel>>((LifecycleProvider) ActivityManager.getInstance()) {
+                @Override
+                public void success(List<WareHouseChildModel> data) {
+                    wareHouseChildModelList = data;
+                    secondList.clear();
+                    for (WareHouseChildModel model: data) {
+                        secondList.add(model.getAreaName());
+                    }
+                    notifyChange(BR.secondList);
+
+                }
+            });
         }
     };
     public WheelPicker.OnItemSelectedListener secondSelect = new WheelPicker.OnItemSelectedListener() {
         @Override
         public void onItemSelected(WheelPicker picker, Object data, int position) {
             selectTwo = (String) data;
+            selectWareHouseChildModel = wareHouseChildModelList.get(secondList.indexOf(selectTwo));
+
         }
     };
 
@@ -95,11 +131,14 @@ public class LocationDialog extends Dialog implements Observable {
     public OnClickAdapter.onClickCommand confirmClick = new OnClickAdapter.onClickCommand() {
         @Override
         public void click() {
+            if(selectWareHouseChildModel == null) {
+                ToastUtil.showToast("请选择");
+                return;
+            }
             dismiss();
-            System.out.println("选择的项目：" + selectOne + " " + selectTwo);
 
             if(callBackDelegate != null){
-                callBackDelegate.select(new LocationModel(0, selectOne, selectTwo));
+                callBackDelegate.select(new LocationModel(selectWareHouseChildModel.getId(),selectWareHouseChildModel.getWarehouseId(), selectOne, selectTwo));
             }
         }
     };

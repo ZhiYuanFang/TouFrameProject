@@ -14,6 +14,7 @@ import java.util.Map;
 import io.reactivex.Observable;
 import xyz.ttyz.mylibrary.method.BaseModule;
 import xyz.ttyz.mylibrary.method.BaseTouSubscriber;
+import xyz.ttyz.mylibrary.method.RecordsModule;
 import xyz.ttyz.mylibrary.method.RxOHCUtils;
 import xyz.ttyz.toubasemvvm.adapter.BaseGridAdapter;
 import xyz.ttyz.toubasemvvm.adapter.utils.BaseEmptyAdapterParent;
@@ -22,7 +23,7 @@ import xyz.ttyz.toubasemvvm.utils.ListUtil;
 import xyz.ttyz.toubasemvvm.utils.ToastUtil;
 import xyz.ttyz.tourfrxohc.http.BaseSubscriber;
 
-public abstract class BaseContainLoadMoreActivity<T extends ViewDataBinding, B> extends BaseTouActivity<T> {
+public abstract class BaseContainLoadMoreActivity<T extends ViewDataBinding,D, B extends RecordsModule<D>> extends BaseTouActivity<T> {
     public final int START_PAGE = 1;
     public ObservableInt pageIndex = new ObservableInt(START_PAGE);
     public ObservableInt pageCount = new ObservableInt(10);
@@ -60,8 +61,8 @@ public abstract class BaseContainLoadMoreActivity<T extends ViewDataBinding, B> 
         }
         Map<String, Object> map = initLoadMoreParam();
         if (map != null) {
-            map.put("pageSize", pageCount.get());
-            map.put("currentPage", pageIndex.get());
+            map.put("size", pageCount.get());
+            map.put("current", pageIndex.get());
             map.put("page", pageIndex.get());
         }
         new RxOHCUtils<>(this).executeApi(initApiService(map), new BaseSubscriber<B>(this) {
@@ -69,10 +70,10 @@ public abstract class BaseContainLoadMoreActivity<T extends ViewDataBinding, B> 
             @Override
             public void onRfRxNext(BaseModule<B> baseModule) {
                 super.onRfRxNext(baseModule);
-                if (baseModule.getPaging() != null) {
-                    initLoadPageInfoAdapter().setNoMore(ListUtil.isFinish(pageIndex.get(), pageCount.get(), baseModule.getPaging().getTotalCount()));
+                if (baseModule.getData() != null) {
+                    initLoadPageInfoAdapter().setNoMore(ListUtil.isFinish(pageIndex.get(), pageCount.get(),baseModule.getData().getTotal()));
                 } else {
-                    initLoadPageInfoAdapter().setNoMore(baseModule.getData() == null);
+                    initLoadPageInfoAdapter().setNoMore(true);
                 }
             }
 
@@ -81,7 +82,7 @@ public abstract class BaseContainLoadMoreActivity<T extends ViewDataBinding, B> 
                 if (refresh) {
                     clearData();
                 }
-                dealLoadMoreSuccess(data);
+                dealLoadMoreSuccess(data.getRecords());
             }
         });
 
@@ -96,7 +97,7 @@ public abstract class BaseContainLoadMoreActivity<T extends ViewDataBinding, B> 
 
     protected abstract BaseEmptyAdapterParent initLoadPageInfoAdapter();
 
-    protected abstract void dealLoadMoreSuccess(B data);
+    protected abstract void dealLoadMoreSuccess(D data);
 
     public OnRefreshListener refreshListener = new OnRefreshListener() {
         @Override

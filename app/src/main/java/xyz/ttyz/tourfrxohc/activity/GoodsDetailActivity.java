@@ -8,12 +8,26 @@ import android.content.IntentFilter;
 import androidx.annotation.Nullable;
 import androidx.databinding.ObservableBoolean;
 
+import org.greenrobot.eventbus.EventBus;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import xyz.ttyz.mylibrary.method.RetrofitUtils;
+import xyz.ttyz.mylibrary.method.RxOHCUtils;
+import xyz.ttyz.mylibrary.protect.SharedPreferenceUtil;
 import xyz.ttyz.tou_example.ActivityManager;
 import xyz.ttyz.toubasemvvm.adapter.OnClickAdapter;
 import xyz.ttyz.toubasemvvm.vm.ToolBarViewModel;
+import xyz.ttyz.tourfrxohc.BaseApplication;
+import xyz.ttyz.tourfrxohc.DefaultUtils;
+import xyz.ttyz.tourfrxohc.MainActivity;
 import xyz.ttyz.tourfrxohc.R;
 import xyz.ttyz.tourfrxohc.databinding.ActivityGoodsDetailBinding;
+import xyz.ttyz.tourfrxohc.event.GoodsOperatorEvent;
+import xyz.ttyz.tourfrxohc.http.BaseSubscriber;
 import xyz.ttyz.tourfrxohc.models.GoodsModel;
+import xyz.ttyz.tourfrxohc.models.LocationModel;
 
 /**
  * @author 投投
@@ -31,7 +45,6 @@ public class GoodsDetailActivity extends BaseActivity<ActivityGoodsDetailBinding
 
     ToolBarViewModel toolBarViewModel;
     public GoodsModel goodsModel;
-
     public ObservableBoolean isEdit = new ObservableBoolean(false);
 
     @Override
@@ -73,8 +86,34 @@ public class GoodsDetailActivity extends BaseActivity<ActivityGoodsDetailBinding
         @Override
         public void click() {
             // 入库
-            ComSuccessActivity.show();
-            finish();
+            Map map = new HashMap();
+            map.put("barcodeNo", goodsModel.getBarcodeNo());
+            map.put("goodsActualNo", goodsModel.getGoodsActualNo());
+            map.put("quantity", goodsModel.getQuantity());
+            map.put("remark", goodsModel.getRemark());
+            map.put("goodsPriceMin", goodsModel.getPriceMinStr());
+            map.put("warehouseAreaId", DefaultUtils.getLocalLocationModel().warehouseAreaId);
+            map.put("warehouseId", DefaultUtils.getLocalLocationModel().warehouseId);
+            if(isEdit.get()){
+                map.put("id", goodsModel.getId());
+                new RxOHCUtils<>(GoodsDetailActivity.this).executeApi(BaseApplication.apiService.updateGoods(RetrofitUtils.getNormalBody(map)), new BaseSubscriber<Boolean>(GoodsDetailActivity.this) {
+                    @Override
+                    public void success(Boolean data) {
+                        EventBus.getDefault().post(new GoodsOperatorEvent());
+                        finish();
+
+                    }
+                });
+            } else {
+                new RxOHCUtils<>(GoodsDetailActivity.this).executeApi(BaseApplication.apiService.saveAndEntering(RetrofitUtils.getNormalBody(map)), new BaseSubscriber<Boolean>(GoodsDetailActivity.this) {
+                    @Override
+                    public void success(Boolean data) {
+
+                        ComSuccessActivity.show();
+                        finish();
+                    }
+                });
+            }
         }
     };
 }

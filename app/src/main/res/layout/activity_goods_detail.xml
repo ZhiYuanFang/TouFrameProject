@@ -13,6 +13,7 @@
         <variable
             name="goodsModel"
             type="xyz.ttyz.tourfrxohc.models.GoodsModel" />
+        <import type="xyz.ttyz.tourfrxohc.DefaultUtils"/>
     </data>
 
     <LinearLayout
@@ -72,6 +73,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             style="@style/form_content"
+                            android:text='@{DefaultUtils.locationModel.selectOne + "-" + DefaultUtils.locationModel.selectTwo}'
                             tools:text="庄家翡翠-一号区"/>
                     </LinearLayout>
                     <LinearLayout

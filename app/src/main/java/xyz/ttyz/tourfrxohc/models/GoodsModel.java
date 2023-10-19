@@ -23,6 +23,13 @@ public class GoodsModel implements Serializable {
     long warehouseAreaId;
     long warehouseId;
 
+    public GoodsModel() {
+    }
+
+    public GoodsModel(String barcodeNo) {
+        this.barcodeNo = barcodeNo;
+    }
+
     public String getBarcodeNo() {
         return barcodeNo;
     }

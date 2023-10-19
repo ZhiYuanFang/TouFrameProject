@@ -45,6 +45,13 @@
             android:inputType="textPassword"
             android:text="@={context.password}"
             android:hint="请输入密码"/>
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="自动登陆"
+            android:checked="@={context.autoLogin}"
+            android:layout_gravity="start"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="45dp"

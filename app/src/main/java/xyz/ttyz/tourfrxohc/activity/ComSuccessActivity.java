@@ -2,12 +2,15 @@ package xyz.ttyz.tourfrxohc.activity;
 
 import android.content.Intent;
 
+import org.greenrobot.eventbus.EventBus;
+
 import xyz.ttyz.tou_example.ActivityManager;
 import xyz.ttyz.toubasemvvm.adapter.OnClickAdapter;
 import xyz.ttyz.toubasemvvm.vm.ToolBarViewModel;
 import xyz.ttyz.tourfrxohc.R;
 import xyz.ttyz.tourfrxohc.databinding.ActivityComsucessBinding;
 import xyz.ttyz.tourfrxohc.dialog.LocationDialog;
+import xyz.ttyz.tourfrxohc.event.GoodsOperatorEvent;
 import xyz.ttyz.tourfrxohc.models.LocationModel;
 
 /**
@@ -50,6 +53,7 @@ public class ComSuccessActivity extends BaseActivity<ActivityComsucessBinding>{
         @Override
         public void click() {
             ScanActivity.show();
+            EventBus.getDefault().post(new GoodsOperatorEvent());
             finish();
         }
     };

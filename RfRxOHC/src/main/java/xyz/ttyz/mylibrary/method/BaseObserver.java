@@ -12,7 +12,7 @@ import xyz.ttyz.mylibrary.protect.StringUtil;
 
 public abstract class BaseObserver<T extends RfRxOHCBaseModule> implements Observer<T> {
     boolean isLocalObserver;
-    LifecycleProvider lifeCycle;
+    protected LifecycleProvider lifeCycle;
 
     public BaseObserver(LifecycleProvider lifeCycle) {
         this.lifeCycle = lifeCycle;

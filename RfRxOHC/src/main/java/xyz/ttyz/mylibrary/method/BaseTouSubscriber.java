@@ -63,7 +63,7 @@ public abstract class BaseTouSubscriber<D> extends BaseObserver<BaseModule<D>> {
     public void onRfRxNext(BaseModule<D> baseModule) {
         onStart();
         if (baseModule.getCode() == RfRxOHCUtil.successCode) {
-            success((D) baseModule.getData());
+            success(baseModule.getData());
         } else {
             fail(baseModule);
         }
@@ -80,7 +80,7 @@ public abstract class BaseTouSubscriber<D> extends BaseObserver<BaseModule<D>> {
      * @param baseModule int code 自定义
      */
     protected void fail(BaseModule<D> baseModule){
-        Toast.makeText(ActivityManager.getInstance(), baseModule.getMsg(), Toast.LENGTH_LONG).show();
+        Toast.makeText(ActivityManager.getInstance(), baseModule.getMessage(), Toast.LENGTH_LONG).show();
     }
 
     //region public

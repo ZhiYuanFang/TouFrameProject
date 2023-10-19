@@ -84,10 +84,10 @@ public class CustomGsonResponseBodyConverter<T> implements Converter<ResponseBod
         try {
             json = new JSONObject(originalBody);
             // 当code不为0时，设置data为{}，这样转化就不会出错了
-            if(!(json.get("data") instanceof JSONObject)){
-                json.put("data", null);
-                Log.i(TAG, "将data改为Null");
-            }
+//            if(!(json.get("data") instanceof JSONObject || JSONArray)){
+//                json.put("data", null);
+//                Log.i(TAG, "将data改为Null");
+//            }
             judgeJSONAndChange(json);
         } catch (JSONException e) {
             e.printStackTrace();

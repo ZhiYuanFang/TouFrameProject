@@ -26,6 +26,7 @@ import xyz.ttyz.toubasemvvm.adapter.utils.BaseEmptyAdapterParent;
 import xyz.ttyz.toubasemvvm.adapter.utils.BaseRecyclerAdapter;
 import xyz.ttyz.toubasemvvm.utils.ToastUtil;
 import xyz.ttyz.toubasemvvm.vm.ToolBarViewModel;
+import xyz.ttyz.tourfrxohc.DefaultUtils;
 import xyz.ttyz.tourfrxohc.R;
 import xyz.ttyz.tourfrxohc.databinding.ActivityPandingBinding;
 import xyz.ttyz.tourfrxohc.dialog.LocationDialog;
@@ -40,12 +41,15 @@ import xyz.ttyz.tourfrxohc.viewholder.PandingViewHolder;
  */
 public class PandingActivity extends BaseActivity<ActivityPandingBinding> {
 
-    public static void show(@Nullable LocationModel locationModel) {
+    public static void show() {
+
+        if (DefaultUtils.getLocalLocationModel().warehouseAreaId < 0){
+            ToastUtil.showToast("请先选择仓库区域");
+            return;
+        }
         Intent intent = new Intent(ActivityManager.getInstance(), PandingActivity.class);
-        intent.putExtra("locationModel", locationModel);
         ActivityManager.getInstance().startActivity(intent);
     }
-    LocationModel locationModel;
 
     UHFService uhfService;
     ToolBarViewModel toolBarViewModel;
@@ -76,19 +80,18 @@ public class PandingActivity extends BaseActivity<ActivityPandingBinding> {
 
     @Override
     protected void initData() {
-        locationModel = (LocationModel) getIntent().getSerializableExtra("locationModel");
 
         mBinding.setContext(this);
         toolBarViewModel = new ToolBarViewModel.Builder()
-                .title(locationModel.selectOne + "-" + locationModel.selectTwo)
+                .title(DefaultUtils.getLocalLocationModel().selectOne + "-" + DefaultUtils.getLocalLocationModel().selectTwo)
                 .titleClick(new OnClickAdapter.onClickCommand() {
                     @Override
                     public void click() {
                         LocationDialog.showDialog(new LocationDialog.CallBackDelegate() {
                             @Override
                             public void select(LocationModel model) {
-                                locationModel = model;
-                                toolBarViewModel.title.set(locationModel.selectOne + "-" + locationModel.selectTwo);
+                                DefaultUtils.setLocationModel(model);
+                                toolBarViewModel.title.set(DefaultUtils.getLocalLocationModel().selectOne + "-" + DefaultUtils.getLocalLocationModel().selectTwo);
                             }
                         });
                     }

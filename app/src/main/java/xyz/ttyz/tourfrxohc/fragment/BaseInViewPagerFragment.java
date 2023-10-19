@@ -2,7 +2,9 @@ package xyz.ttyz.tourfrxohc.fragment;
 
 import androidx.databinding.ViewDataBinding;
 
-public abstract class BaseInViewPagerFragment<T extends ViewDataBinding, B> extends BaseContainLoadMoreFragment<T, B> {
+import xyz.ttyz.mylibrary.method.RecordsModule;
+
+public abstract class BaseInViewPagerFragment<T extends ViewDataBinding,D, B extends RecordsModule<D>> extends BaseContainLoadMoreFragment<T, D, B> {
 
 
    public BaseInViewPagerFragment() {

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.widget.Toast;
 
+import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableField;
 
 import java.util.HashMap;
@@ -39,12 +40,14 @@ import xyz.ttyz.tourfrxohc.models.UserModel;
  */
 public class LoginActivity extends BaseActivity<ActivityLoginBinding>{
     public static void toLogin(){
+        DefaultUtils.removeCookie();
         Intent intent = new Intent(ActivityManager.getInstance(), LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         ActivityManager.getInstance().startActivity(intent);
     }
     public ObservableField<String> account = new ObservableField<>("mahe");
     public ObservableField<String> password = new ObservableField<>("111111");
+    public ObservableBoolean autoLogin = new ObservableBoolean(true);
 
     @Override
     protected int initLayoutId() {
@@ -69,16 +72,15 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding>{
     public OnClickAdapter.onClickCommand loginClick = new OnClickAdapter.onClickCommand() {
         @Override
         public void click() {
+            System.out.println("自动登陆：" + autoLogin.get());
             //登录
-            Map map = new HashMap();
-            map.put("username", account.get());
-            map.put("password", password.get());
-            new RxOHCUtils<>(LoginActivity.this).executeApi(BaseApplication.apiService.login(map), new BaseSubscriber<Boolean>(LoginActivity.this) {
+            new RxOHCUtils<>(LoginActivity.this).executeApi(BaseApplication.apiService.login(account.get(), password.get()), new BaseSubscriber<Boolean>(LoginActivity.this) {
                 @Override
                 public void success(Boolean data) {
+                    SharedPreferenceUtil.setShareBool(LoginActivity.this, "autoLogin", autoLogin.get());
                     SharedPreferenceUtil.setShareString(LoginActivity.this, "account", account.get());
                     SharedPreferenceUtil.setShareString(LoginActivity.this, "password", password.get());
-                   MainActivity.goMain();
+                    MainActivity.goMain();
                 }
             });
         }

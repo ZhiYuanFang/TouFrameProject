@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.view.ViewGroup;
 
+import androidx.databinding.Observable;
 import androidx.databinding.ObservableField;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
@@ -35,6 +36,7 @@ import xyz.ttyz.tourfrxohc.models.LocationModel;
 import xyz.ttyz.tourfrxohc.models.MainModel;
 import xyz.ttyz.tourfrxohc.models.ResorceModel;
 import xyz.ttyz.tourfrxohc.models.Software;
+import xyz.ttyz.tourfrxohc.models.StatisticsModel;
 import xyz.ttyz.tourfrxohc.models.UserModel;
 import xyz.ttyz.tourfrxohc.utils.Constans;
 import xyz.ttyz.tourfrxohc.viewholder.ResorceViewHolder;
@@ -47,10 +49,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         ActivityManager.getInstance().startActivity(intent);
     }
 
-    public ObservableField<String> currentNumber = new ObservableField<String>("");
-
-    public ObservableField<String> realNumber = new ObservableField<String>("");
-    public ObservableField<LocationModel> locationModelObservableField = new ObservableField<>(new LocationModel(-1, "请选择", "店铺"));
+    public ObservableField<LocationModel> locationModelObservableField = new ObservableField<>(new LocationModel());
     @Override
     protected int initLayoutId() {
         return R.layout.activity_main;
@@ -109,17 +108,35 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
             }
         });
         mBinding.setAdapter(historyAdapter);
-        LocationModel local = new Gson().fromJson(SharedPreferenceUtil.getShareString(ActivityManager.getInstance(), "location"), LocationModel.class);
-        if(local != null){
-            locationModelObservableField.set(local);
-        }
+        locationModelObservableField.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
+            @Override
+            public void onPropertyChanged(Observable sender, int propertyId) {
+                //地址发生改变，获取最新数据
+                refreshStatistics();
+            }
+        });
+        locationModelObservableField.set(DefaultUtils.getLocalLocationModel());
+
+        mBinding.setStatisticsModel(new StatisticsModel());
     }
 
     @Override
     protected void initServer() {
-        //同时调动两个接口，会先执行完第一个接口，再执行第二个接口，所以，虽然后一个接口需要第一个接口返回的token，但不需要在第一个接口的回调中再去执行第二个接口。
-        //这是因为RfRxOHC中，做了接口顺序执行的保护
-        //接口还是异步请求，但给它们做了一个执行队列。
+
+    }
+
+    private void refreshStatistics(){
+        if(locationModelObservableField.get().warehouseAreaId < 0) return;
+        //首屏的在库货品统计信息
+        Map map = new HashMap();
+        map.put("warehouseAreaId", locationModelObservableField.get().warehouseAreaId);
+        map.put("warehouseId", locationModelObservableField.get().warehouseId);
+        new RxOHCUtils<>(this).executeApi(BaseApplication.apiService.stockedStatistics(RetrofitUtils.getNormalBody(map)), new BaseSubscriber<StatisticsModel>(this) {
+            @Override
+            public void success(StatisticsModel data) {
+                mBinding.setStatisticsModel(data);
+            }
+        });
     }
 
     public OnClickAdapter.onClickCommand clickLocation = new OnClickAdapter.onClickCommand() {
@@ -129,7 +146,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
                 @Override
                 public void select(LocationModel locationModel) {
                     locationModelObservableField.set(locationModel);
-                    SharedPreferenceUtil.setShareString(ActivityManager.getInstance(), "location", new Gson().toJson(locationModel));
+                    DefaultUtils.setLocationModel(locationModel);
                 }
             });
         }
@@ -141,7 +158,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
             new RxOHCUtils<>(MainActivity.this).executeApi(BaseApplication.apiService.logout(), new BaseSubscriber<MainModel>(MainActivity.this) {
                 @Override
                 public void success(MainModel data) {
-                    DefaultUtils.removeCookie();
                     LoginActivity.toLogin();
                 }
             });
@@ -152,7 +168,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         @Override
         public void click() {
             // 入库
-            ComingActivity.show(locationModelObservableField.get(), Constans.NowIn);
+            ComingActivity.show(Constans.NowIn);
         }
     };
 
@@ -160,7 +176,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         @Override
         public void click() {
             // 盘库
-            PandingActivity.show(locationModelObservableField.get());
+            PandingActivity.show();
         }
     };
 
@@ -168,7 +184,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         @Override
         public void click() {
             // 出库
-            ComingActivity.show(locationModelObservableField.get(), Constans.NowOut);
+            ComingActivity.show(Constans.NowOut);
         }
     };
 }
