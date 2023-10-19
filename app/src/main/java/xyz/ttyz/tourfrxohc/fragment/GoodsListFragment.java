@@ -77,7 +77,24 @@ public class GoodsListFragment extends BaseInViewPagerFragment<FragmentGoodsList
     @Override
     protected void initVariable(FragmentGoodsListBinding mBinding) {
         mBinding.setContext(this);
-        mBinding.setAdapter(initLoadPageInfoAdapter());
+        adapterParent = new BaseEmptyAdapterParent(getContext(), new BaseRecyclerAdapter.NormalAdapterDelegate() {
+            @Override
+            public int getItemViewType(int position) {
+                return 0;
+            }
+
+            @Override
+            public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+                return new GoodsDetailViewHolder(getContext(), parent);
+            }
+
+            @Override
+            public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+
+                ((GoodsDetailViewHolder)holder).bindData((GoodsModel) adapterParent.getItem(position));
+            }
+        });
+        mBinding.setAdapter(adapterParent);
     }
 
     @Override
@@ -108,23 +125,7 @@ public class GoodsListFragment extends BaseInViewPagerFragment<FragmentGoodsList
 
     @Override
     protected BaseEmptyAdapterParent initLoadPageInfoAdapter() {
-        adapterParent = new BaseEmptyAdapterParent(getContext(), new BaseRecyclerAdapter.NormalAdapterDelegate() {
-            @Override
-            public int getItemViewType(int position) {
-                return 0;
-            }
 
-            @Override
-            public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                return new GoodsDetailViewHolder(getContext(), parent);
-            }
-
-            @Override
-            public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-
-                ((GoodsDetailViewHolder)holder).bindData((GoodsModel) adapterParent.getItem(position));
-            }
-        });
 
         return adapterParent;
     }
