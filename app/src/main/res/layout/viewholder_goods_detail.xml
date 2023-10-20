@@ -29,6 +29,12 @@
             <xyz.ttyz.toubasemvvm.weight.CardImageView
                 android:layout_width="120dp"
                 android:layout_height="120dp"/>
+            <TextView
+                binding:visible="@{context.isPantFiled}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                tools:text="异常"/>
         </LinearLayout>
 
         <LinearLayout

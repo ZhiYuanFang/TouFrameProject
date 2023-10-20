@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:binding="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
         <variable
@@ -8,6 +10,9 @@
         <variable
             name="toolBarViewModel"
             type="xyz.ttyz.toubasemvvm.vm.ToolBarViewModel" />
+        <variable
+            name="adapter"
+            type="xyz.ttyz.toubasemvvm.adapter.utils.BaseEmptyAdapterParent" />
     </data>
 
     <LinearLayout
@@ -17,5 +22,21 @@
         <include
             layout="@layout/layout_toolbar"
             binding:toolBarViewModel="@{toolBarViewModel}" />
+        <com.scwang.smart.refresh.layout.SmartRefreshLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            binding:enableRefresh="@{true}"
+            binding:loadEnd="@{context.loadEnd}"
+            binding:enableLoadMore="@{!adapter.noMore}"
+            binding:loadMoreListener="@{context.loadMoreListener}"
+            binding:refreshListener="@{context.refreshListener}">
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                binding:adapter="@{adapter}"
+                binding:verticalDis="@{15}"
+                tools:itemCount="1"
+                tools:listitem="@layout/viewholder_pand_record"/>
+        </com.scwang.smart.refresh.layout.SmartRefreshLayout>
     </LinearLayout>
 </layout>

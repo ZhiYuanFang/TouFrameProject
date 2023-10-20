@@ -3,10 +3,10 @@
 buildscript {
     
     repositories {
-        mavenCentral()
         maven { url 'https://maven.aliyun.com/repository/public' }
         maven { url 'https://maven.aliyun.com/repository/google' }
         maven { url "https://www.jitpack.io" }
+        mavenCentral()
         google()
 
     }
@@ -21,11 +21,11 @@ buildscript {
 
 allprojects {
     repositories {
-        mavenCentral()
         maven { url 'https://maven.aliyun.com/repository/public' }
         maven { url 'https://maven.aliyun.com/repository/google' }
         maven { url "https://www.jitpack.io" }
         mavenLocal()
+        mavenCentral()
         google()
 
         flatDir {

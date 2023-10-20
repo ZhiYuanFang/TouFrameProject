@@ -55,6 +55,7 @@
         <activity android:name=".activity.PandingActivity"/>
         <activity android:name=".activity.HistoryActivity"/>
         <activity android:name=".activity.GoodsDetailOperatorActivity"/>
+        <activity android:name=".activity.PantDetailListActivity"/>
 
     </application>
 

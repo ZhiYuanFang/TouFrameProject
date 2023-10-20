@@ -17,6 +17,7 @@ import xyz.ttyz.mylibrary.method.RecordsModule;
 import xyz.ttyz.tourfrxohc.models.GoodsModel;
 import xyz.ttyz.tourfrxohc.models.MainModel;
 import xyz.ttyz.tourfrxohc.models.StatisticsModel;
+import xyz.ttyz.tourfrxohc.models.TokenResponse;
 import xyz.ttyz.tourfrxohc.models.UserModel;
 import xyz.ttyz.tourfrxohc.models.WareHouseChildModel;
 import xyz.ttyz.tourfrxohc.models.WareHouseModel;
@@ -55,6 +56,11 @@ public interface ApiService {
     Observable<BaseModule<List<WareHouseChildModel>>> getWarehouseChildList(@Path("warehouseId") long warehouseId);//查询仓库分区列表
 
 
+    /**
+     * 获取七牛存储凭证，非私有
+     */
+    @POST("/v1/common/qiniuAuthInfo.json")
+    Observable<TokenResponse> getToken(@Body RequestBody data);
 //    @Headers("Content-type:text/x-plain-rsa-json")
 //    @POST("api/Account/phoneCode")
 //    Observable<BaseModule<PhoneCodeModule>> phoneCode(@Body RequestBody data);

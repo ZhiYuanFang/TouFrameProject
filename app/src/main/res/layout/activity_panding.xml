@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:binding="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -38,7 +39,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
-
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/recycler_tab_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="38dp"
+                    app:tabMaxWidth="0dp"
+                    app:tabIndicatorFullWidth="false"
+                    app:tabIndicatorColor="#4B8EFF"
+                    app:tabSelectedTextColor="#333333"
+                    app:tabTextColor="#CCCCCC"
+                    app:tabTextAppearance="@style/MyTabLayoutText"
+                    app:tabGravity="fill"
+                    app:tabMode="fixed"/>
+                <androidx.viewpager.widget.ViewPager
+                    android:id="@+id/vpager"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
             </LinearLayout>
 
             <LinearLayout

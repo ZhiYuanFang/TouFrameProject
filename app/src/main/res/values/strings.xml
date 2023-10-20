@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">得玉库管</string>
     <string name="develop_text">测试数据</string>
+
+    <string name="haiketianjia">还可添加</string>
+    <string name="zhang">张</string>
 </resources>

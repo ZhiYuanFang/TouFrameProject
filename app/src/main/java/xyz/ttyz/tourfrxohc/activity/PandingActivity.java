@@ -1,5 +1,11 @@
 package xyz.ttyz.tourfrxohc.activity;
 
+import static androidx.fragment.app.FragmentPagerAdapter.BEHAVIOR_SET_USER_VISIBLE_HINT;
+import static xyz.ttyz.tourfrxohc.utils.Constans.NowIn;
+import static xyz.ttyz.tourfrxohc.utils.Constans.NowOut;
+import static xyz.ttyz.tourfrxohc.utils.Constans.NowPant;
+import static xyz.ttyz.tourfrxohc.utils.Constans.NowWait;
+
 import android.Manifest;
 import android.content.Intent;
 import android.os.Build;
@@ -12,6 +18,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.Observable;
 import androidx.databinding.ObservableBoolean;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.seuic.uhf.EPC;
@@ -30,6 +38,7 @@ import xyz.ttyz.tourfrxohc.DefaultUtils;
 import xyz.ttyz.tourfrxohc.R;
 import xyz.ttyz.tourfrxohc.databinding.ActivityPandingBinding;
 import xyz.ttyz.tourfrxohc.dialog.LocationDialog;
+import xyz.ttyz.tourfrxohc.fragment.GoodsListFragment;
 import xyz.ttyz.tourfrxohc.models.LocationModel;
 import xyz.ttyz.tourfrxohc.viewholder.PandingViewHolder;
 
@@ -54,7 +63,9 @@ public class PandingActivity extends BaseActivity<ActivityPandingBinding> {
     UHFService uhfService;
     ToolBarViewModel toolBarViewModel;
     BaseEmptyAdapterParent pandingEndAdapter;
-
+    List<GoodsListFragment> fragmentList;
+    GoodsListFragment pantFragment = new GoodsListFragment(NowPant);
+    GoodsListFragment waitFragment = new GoodsListFragment(NowWait);
 
     //连续寻卡回调
     private List<EPC> epcList = new ArrayList<>();
@@ -148,6 +159,35 @@ public class PandingActivity extends BaseActivity<ActivityPandingBinding> {
                 }
             }
         });
+        fragmentList = new ArrayList<>();
+        fragmentList.add(waitFragment);
+        fragmentList.add(pantFragment);
+        mBinding.vpager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager(), BEHAVIOR_SET_USER_VISIBLE_HINT) {
+            @NonNull
+            @Override
+            public Fragment getItem(int position) {
+                return fragmentList.get(position);
+            }
+
+            @Override
+            public int getCount() {
+                return fragmentList.size();
+            }
+
+            @Nullable
+            @Override
+            public CharSequence getPageTitle(int position) {
+                return fragmentList.get(position).initTitle();
+            }
+        });
+        mBinding.recyclerTabLayout.setupWithViewPager(mBinding.vpager);
+
+        fragmentRefresh();
+    }
+
+    private void fragmentRefresh(){
+        waitFragment.reSetLocationModel(DefaultUtils.getLocalLocationModel(),"");
+        pantFragment.reSetLocationModel(DefaultUtils.getLocalLocationModel(),"");
     }
 
     @Override
@@ -179,6 +219,7 @@ public class PandingActivity extends BaseActivity<ActivityPandingBinding> {
                 for (EPC epc : epcList) {
                     System.out.println("提交服务-寻卡地址: " + epc.getId());
                 }
+                fragmentRefresh();
             } else {
                 openUfh();
             }

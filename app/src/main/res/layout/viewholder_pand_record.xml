@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="pantRecordModule"
+            type="xyz.ttyz.tourfrxohc.models.PantRecordModel" />
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="#80E5E5E5"
+        android:divider="@drawable/divider_form"
+        android:orientation="vertical"
+        android:padding="15dp"
+        android:showDividers="middle">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/pant_record_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="盘点日期" />
+
+            <TextView
+                style="@style/pant_record_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="盘点日期" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/pant_record_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="全部货品" />
+
+            <TextView
+                style="@style/pant_record_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="100" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/pant_record_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="成功盘点" />
+
+            <TextView
+                style="@style/pant_record_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="98" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+    </LinearLayout>
+</layout>

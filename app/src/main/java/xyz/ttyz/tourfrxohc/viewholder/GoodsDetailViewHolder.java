@@ -3,6 +3,8 @@ package xyz.ttyz.tourfrxohc.viewholder;
 import android.content.Context;
 import android.view.ViewGroup;
 
+import androidx.databinding.ObservableBoolean;
+
 import xyz.ttyz.toubasemvvm.adapter.OnClickAdapter;
 import xyz.ttyz.toubasemvvm.adapter.utils.viewholder.BaseNormalViewHolder;
 import xyz.ttyz.tourfrxohc.R;
@@ -21,14 +23,21 @@ public class GoodsDetailViewHolder extends BaseNormalViewHolder<GoodsModel, View
         super(context, R.layout.viewholder_goods_detail, parent);
     }
 
+    public ObservableBoolean isPantFiled = new ObservableBoolean(false);
+
     @Override
     protected void initVariable(ViewholderGoodsDetailBinding mBinding) {
         mBinding.setContext(this);
     }
 
     @Override
+    @Deprecated
     public void bindData(GoodsModel data) {
+        bindData(data, false);
+    }
+    public void bindData(GoodsModel data, boolean isPant) {
         mBinding.setGoodsModel(data);
+        isPantFiled.set(isPant);
     }
 
     public OnClickAdapter.onClickCommand clickToDetail = new OnClickAdapter.onClickCommand() {
