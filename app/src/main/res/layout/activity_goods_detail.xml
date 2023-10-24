@@ -216,11 +216,7 @@
                                     android:textSize="28sp"
                                     binding:onClickCommand="@{context.clickUpImg}" />
 
-<!--                                <cn.bingoogolapple.photopicker.widget.BGANinePhotoLayout-->
-<!--                                    android:id="@+id/bgaNine"-->
-<!--                                    android:layout_width="wrap_content"-->
-<!--                                    android:layout_height="wrap_content"-->
-<!--                                    android:layout_marginTop="5dp" />-->
+
                             </LinearLayout>
 
                             <TextView

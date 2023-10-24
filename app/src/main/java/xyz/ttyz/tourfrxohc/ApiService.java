@@ -16,6 +16,7 @@ import xyz.ttyz.mylibrary.method.BaseModule;
 import xyz.ttyz.mylibrary.method.RecordsModule;
 import xyz.ttyz.tourfrxohc.models.GoodsModel;
 import xyz.ttyz.tourfrxohc.models.MainModel;
+import xyz.ttyz.tourfrxohc.models.PantRecordModel;
 import xyz.ttyz.tourfrxohc.models.StatisticsModel;
 import xyz.ttyz.tourfrxohc.models.TokenResponse;
 import xyz.ttyz.tourfrxohc.models.UserModel;
@@ -36,6 +37,18 @@ public interface ApiService {
 
     @POST("/warehouse/goods/pda/page")
     Observable<BaseModule<RecordsModule<List<GoodsModel>>>> goodsList(@Body RequestBody data);//分页查询仓库货品
+
+    @POST("/warehouse/stocktake/pda/pageCurrentDetails")
+    Observable<BaseModule<RecordsModule<List<GoodsModel>>>> pageCurrentDetails(@Body RequestBody data);//分页查询待盘点
+
+    @POST("/warehouse/stocktake/pda/pageDetails")
+    Observable<BaseModule<RecordsModule<List<GoodsModel>>>> pageDetails(@Body RequestBody data);//分页查询某盘点任务的明细
+
+    @POST("/warehouse/stocktake/pda/pageDone")
+    Observable<BaseModule<RecordsModule<List<PantRecordModel>>>> pageDone(@Body RequestBody data);//分页查询已完成的盘点任务
+
+    @POST("/warehouse/stocktake/pda/stocktaking")
+    Observable<BaseModule<Boolean>> stocktaking(@Body RequestBody data);//盘点
 
     @POST("/warehouse/goods/pda/exiting")
     Observable<BaseModule<Boolean>> goodsOut(@Body RequestBody data);//出库货品

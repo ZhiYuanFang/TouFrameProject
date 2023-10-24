@@ -1,7 +1,9 @@
 package jsbridge;
 
 import android.graphics.Bitmap;
+import android.net.http.SslError;
 import android.os.Build;
+import android.webkit.SslErrorHandler;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -37,6 +39,11 @@ public class BridgeWebViewClient extends WebViewClient {
         } else {
             return this.onCustomShouldOverrideUrlLoading(url)?true:super.shouldOverrideUrlLoading(view, url);
         }
+    }
+
+    @Override
+    public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+        handler.proceed();
     }
 
     // 增加shouldOverrideUrlLoading在api》=24时

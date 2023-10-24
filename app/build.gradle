@@ -57,7 +57,9 @@ dependencies {
     implementation 'com.qiniu:qiniu-android-sdk:7.3.13'
     //九宫图
 //    implementation 'cn.bingoogolapple:bga-photopicker:2.0.2@aar'
-    implementation 'com.github.bingoogolapple:BGAPhotoPicker-Android:latestVersion'
+//    implementation 'com.github.bingoogolapple:BGAPhotoPicker-Android:latestVersion'
+//    https://github.com/ZhiYuanFang/BGAPhotoPicker-Android
     implementation 'com.github.bingoogolapple:BGABaseAdapter-Android:2.0.1'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation files('libs/uhf.jar')
 }

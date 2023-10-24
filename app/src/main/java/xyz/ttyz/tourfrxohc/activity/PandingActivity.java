@@ -1,8 +1,6 @@
 package xyz.ttyz.tourfrxohc.activity;
 
 import static androidx.fragment.app.FragmentPagerAdapter.BEHAVIOR_SET_USER_VISIBLE_HINT;
-import static xyz.ttyz.tourfrxohc.utils.Constans.NowIn;
-import static xyz.ttyz.tourfrxohc.utils.Constans.NowOut;
 import static xyz.ttyz.tourfrxohc.utils.Constans.NowPant;
 import static xyz.ttyz.tourfrxohc.utils.Constans.NowWait;
 
@@ -11,7 +9,6 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.Message;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -26,19 +23,27 @@ import com.seuic.uhf.EPC;
 import com.seuic.uhf.UHFService;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import xyz.ttyz.mylibrary.method.RetrofitUtils;
+import xyz.ttyz.mylibrary.method.RxOHCUtils;
+import xyz.ttyz.mylibrary.protect.SharedPreferenceUtil;
 import xyz.ttyz.tou_example.ActivityManager;
 import xyz.ttyz.toubasemvvm.adapter.OnClickAdapter;
 import xyz.ttyz.toubasemvvm.adapter.utils.BaseEmptyAdapterParent;
 import xyz.ttyz.toubasemvvm.adapter.utils.BaseRecyclerAdapter;
 import xyz.ttyz.toubasemvvm.utils.ToastUtil;
 import xyz.ttyz.toubasemvvm.vm.ToolBarViewModel;
+import xyz.ttyz.tourfrxohc.BaseApplication;
 import xyz.ttyz.tourfrxohc.DefaultUtils;
+import xyz.ttyz.tourfrxohc.MainActivity;
 import xyz.ttyz.tourfrxohc.R;
 import xyz.ttyz.tourfrxohc.databinding.ActivityPandingBinding;
 import xyz.ttyz.tourfrxohc.dialog.LocationDialog;
 import xyz.ttyz.tourfrxohc.fragment.GoodsListFragment;
+import xyz.ttyz.tourfrxohc.http.BaseSubscriber;
 import xyz.ttyz.tourfrxohc.models.LocationModel;
 import xyz.ttyz.tourfrxohc.viewholder.PandingViewHolder;
 
@@ -64,8 +69,8 @@ public class PandingActivity extends BaseActivity<ActivityPandingBinding> {
     ToolBarViewModel toolBarViewModel;
     BaseEmptyAdapterParent pandingEndAdapter;
     List<GoodsListFragment> fragmentList;
-    GoodsListFragment pantFragment = new GoodsListFragment(NowPant);
-    GoodsListFragment waitFragment = new GoodsListFragment(NowWait);
+    GoodsListFragment pantFragment = new GoodsListFragment(NowPant, true);
+    GoodsListFragment waitFragment = new GoodsListFragment(NowWait, true);
 
     //连续寻卡回调
     private List<EPC> epcList = new ArrayList<>();
@@ -215,11 +220,23 @@ public class PandingActivity extends BaseActivity<ActivityPandingBinding> {
         public void click() {
             if (isPandingFiled.get()) {
                 closeUhf();
-                // TODO: 2023/10/18 epcList 提交服务
+                // epcList 提交服务
+                List<String> barcodeNos = new ArrayList<>();
                 for (EPC epc : epcList) {
                     System.out.println("提交服务-寻卡地址: " + epc.getId());
+                    barcodeNos.add(epc.getId());
                 }
-                fragmentRefresh();
+                barcodeNos.add("6931885788995");
+                Map map = new HashMap();
+                map.put("barcodeNos", barcodeNos);
+                map.put("warehouseAreaId", DefaultUtils.locationModel.warehouseAreaId);
+                map.put("warehouseId", DefaultUtils.locationModel.warehouseId);
+                new RxOHCUtils<>(PandingActivity.this).executeApi(BaseApplication.apiService.stocktaking(RetrofitUtils.getNormalBody(map)), new BaseSubscriber<Boolean>(PandingActivity.this) {
+                    @Override
+                    public void success(Boolean data) {
+                        fragmentRefresh();
+                    }
+                });
             } else {
                 openUfh();
             }

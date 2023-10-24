@@ -10,6 +10,7 @@ import java.util.List;
  */
 public class GoodsModel implements Serializable {
     String barcodeNo;
+    String coverImageUrl;
     String enteringTimeStr;
     String exitingTimeStr;
     String goodsActualNo;
@@ -23,6 +24,9 @@ public class GoodsModel implements Serializable {
     long warehouseAreaId;
     long warehouseId;
 
+    String detailStatus;//盘点任务明细状态
+    String detailStatusDesc;//盘点任务明细状态描述
+
     public GoodsModel() {
     }
 
@@ -30,8 +34,20 @@ public class GoodsModel implements Serializable {
         this.barcodeNo = barcodeNo;
     }
 
+    public String getDetailStatus() {
+        return detailStatus;
+    }
+
+    public String getDetailStatusDesc() {
+        return detailStatusDesc;
+    }
+
     public String getBarcodeNo() {
         return barcodeNo;
+    }
+
+    public String getCoverImageUrl() {
+        return coverImageUrl;
     }
 
     public void setBarcodeNo(String barcodeNo) {

@@ -11,9 +11,13 @@ import java.util.Map;
 
 import io.reactivex.Observable;
 import xyz.ttyz.mylibrary.method.ActivityManager;
+import xyz.ttyz.mylibrary.method.BaseModule;
 import xyz.ttyz.mylibrary.method.RecordsModule;
+import xyz.ttyz.mylibrary.method.RetrofitUtils;
 import xyz.ttyz.toubasemvvm.adapter.utils.BaseEmptyAdapterParent;
 import xyz.ttyz.toubasemvvm.adapter.utils.BaseRecyclerAdapter;
+import xyz.ttyz.toubasemvvm.vm.ToolBarViewModel;
+import xyz.ttyz.tourfrxohc.BaseApplication;
 import xyz.ttyz.tourfrxohc.DefaultUtils;
 import xyz.ttyz.tourfrxohc.R;
 import xyz.ttyz.tourfrxohc.databinding.ActivityPantDetailListBinding;
@@ -26,13 +30,14 @@ import xyz.ttyz.tourfrxohc.viewholder.GoodsDetailViewHolder;
  * @email 343315792@qq.com
  */
 public class PantDetailListActivity extends BaseContainLoadMoreActivity<ActivityPantDetailListBinding, List<GoodsModel>, RecordsModule<List<GoodsModel>>>{
-    public static void show(RecordsModule recordsModule){
+    public static void show(long id){
         Intent intent = new Intent(ActivityManager.getInstance(), PantDetailListActivity.class);
-        intent.putExtra("id", 0);
+        intent.putExtra("id", id);
         ActivityManager.getInstance().startActivity(intent);
     }
     long id;
     BaseEmptyAdapterParent adapterParent;
+    ToolBarViewModel toolBarViewModel;
     @Override
     protected void initData() {
         id = getIntent().getLongExtra("id", 0);
@@ -40,22 +45,12 @@ public class PantDetailListActivity extends BaseContainLoadMoreActivity<Activity
     }
 
     @Override
-    protected Observable<RecordsModule<List<GoodsModel>>> initApiService(Map map) {
-        return null;
-    }
-
-    @Override
-    protected Map<String, Object> initLoadMoreParam() {
-        Map map = new HashMap();
-        map.put("id", id);
-        map.put("warehouseAreaId", DefaultUtils.getLocalLocationModel().warehouseAreaId);
-        map.put("warehouseId", DefaultUtils.getLocalLocationModel().warehouseId);
-        return map;
-    }
-
-    @Override
-    protected BaseEmptyAdapterParent initLoadPageInfoAdapter() {
+    protected void initBinding() {
         mBinding.setContext(this);
+        toolBarViewModel = new ToolBarViewModel.Builder()
+                .title("盘库详情")
+                .build();
+        mBinding.setToolBarViewModel(toolBarViewModel);
         adapterParent = new BaseEmptyAdapterParent(this, new BaseRecyclerAdapter.NormalAdapterDelegate() {
             @Override
             public int getItemViewType(int position) {
@@ -73,6 +68,24 @@ public class PantDetailListActivity extends BaseContainLoadMoreActivity<Activity
             }
         });
         mBinding.setAdapter(adapterParent);
+    }
+
+    @Override
+    protected Observable<BaseModule<RecordsModule<List<GoodsModel>>>> initApiService(Map map) {
+
+        return BaseApplication.apiService.pageDetails(RetrofitUtils.getNormalBody(map));
+    }
+
+    @Override
+    protected Map<String, Object> initLoadMoreParam() {
+        Map map = new HashMap();
+        map.put("stocktakeId", id);
+        return map;
+    }
+
+    @Override
+    protected BaseEmptyAdapterParent initLoadPageInfoAdapter() {
+
         return adapterParent;
     }
 

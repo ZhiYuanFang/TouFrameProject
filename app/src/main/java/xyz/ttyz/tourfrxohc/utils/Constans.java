@@ -13,7 +13,7 @@ public class Constans {
     public static final String QINIU_IMG_HEADER = "https://img.maihaoche.com/";
     public final static int NowIn = 10;
     public final static int NowOut = 20;
-    public final static int NowWait = 13;
-    public final static int NowPant = 14;
+    public final static int NowWait = 1;//待盘点
+    public final static int NowPant = 10;//已盘点10
 
 }

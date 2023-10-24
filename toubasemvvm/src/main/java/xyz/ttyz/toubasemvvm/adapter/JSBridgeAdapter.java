@@ -1,5 +1,7 @@
 package xyz.ttyz.toubasemvvm.adapter;
 
+import static android.os.Build.VERSION.SDK_INT;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
@@ -10,6 +12,8 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 
 import androidx.databinding.BindingAdapter;
+
+import java.lang.reflect.Method;
 
 public class JSBridgeAdapter {
     private static final String TAG = "JSBridgeAdapter";
@@ -48,8 +52,25 @@ public class JSBridgeAdapter {
         settings.setAllowFileAccessFromFileURLs(true);
         settings.setAllowUniversalAccessFromFileURLs(true);
         //endregion
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             settings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+        }
+    }
+    @BindingAdapter("enableKuaYu")
+    public static void enableKuaYu(WebView webView, boolean enableKuaYu) {
+        if (SDK_INT < Build.VERSION_CODES.P) {
+            return;
+        }
+        try {
+            Method forName = Class.class.getDeclaredMethod("forName", String.class);
+            Method getDeclaredMethod = Class.class.getDeclaredMethod("getDeclaredMethod", String.class, Class[].class);
+            Class<?> vmRuntimeClass = (Class<?>) forName.invoke(null, "dalvik.system.VMRuntime");
+            Method getRuntime = (Method) getDeclaredMethod.invoke(vmRuntimeClass, "getRuntime", null);
+            Method setHiddenApiExemptions = (Method) getDeclaredMethod.invoke(vmRuntimeClass, "setHiddenApiExemptions", new Class[]{String[].class});
+            Object sVmRuntime = getRuntime.invoke(null);
+            setHiddenApiExemptions.invoke(sVmRuntime, new Object[]{new String[]{"L"}});
+        } catch (Throwable e) {
+            Log.e("[error]", "reflect bootstrap failed:", e);
         }
     }
 

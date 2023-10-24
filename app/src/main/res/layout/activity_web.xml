@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:binding="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="context"
+            type="xyz.ttyz.tourfrxohc.activity.WebActivity" />
+    </data>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            binding:onClickCommand="@{context.clickWeb}"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textIsSelectable="true"
+            android:text="@{context.url}"/>
+        <jsbridge.BridgeWebView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            binding:enableSetting="@{true}"
+            binding:enableKuaYu="@{true}"
+            binding:url='@{context.url}'/>
+    </LinearLayout>
+</layout>

@@ -1,19 +1,26 @@
 package xyz.ttyz.tourfrxohc.activity;
 
+import static xyz.ttyz.tourfrxohc.utils.Constans.NowPant;
+
 import android.content.Intent;
 import android.view.ViewGroup;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observable;
+import xyz.ttyz.mylibrary.method.BaseModule;
 import xyz.ttyz.mylibrary.method.RecordsModule;
+import xyz.ttyz.mylibrary.method.RetrofitUtils;
 import xyz.ttyz.tou_example.ActivityManager;
 import xyz.ttyz.toubasemvvm.adapter.utils.BaseEmptyAdapterParent;
 import xyz.ttyz.toubasemvvm.adapter.utils.BaseRecyclerAdapter;
 import xyz.ttyz.toubasemvvm.vm.ToolBarViewModel;
+import xyz.ttyz.tourfrxohc.BaseApplication;
+import xyz.ttyz.tourfrxohc.DefaultUtils;
 import xyz.ttyz.tourfrxohc.R;
 import xyz.ttyz.tourfrxohc.databinding.ActivityHistoryBinding;
 import xyz.ttyz.tourfrxohc.models.PantRecordModel;
@@ -42,17 +49,20 @@ public class HistoryActivity extends BaseContainLoadMoreActivity<ActivityHistory
     }
 
     @Override
-    protected Observable<RecordsModule<List<PantRecordModel>>> initApiService(Map map) {
-        return null;
+    protected Observable<BaseModule<RecordsModule<List<PantRecordModel>>>> initApiService(Map map) {
+        return BaseApplication.apiService.pageDone(RetrofitUtils.getNormalBody(map));
     }
 
     @Override
     protected Map<String, Object> initLoadMoreParam() {
-        return null;
+        Map map = new HashMap();
+        map.put("warehouseAreaId", DefaultUtils.getLocalLocationModel().warehouseAreaId);
+        map.put("warehouseId", DefaultUtils.getLocalLocationModel().warehouseId);
+        return map;
     }
 
     @Override
-    protected BaseEmptyAdapterParent initLoadPageInfoAdapter() {
+    protected void initBinding() {
         mBinding.setContext(this);
         toolBarViewModel = new ToolBarViewModel.Builder()
                 .title("记录")
@@ -75,12 +85,16 @@ public class HistoryActivity extends BaseContainLoadMoreActivity<ActivityHistory
             }
         });
         mBinding.setAdapter(adapter);
+    }
+
+    @Override
+    protected BaseEmptyAdapterParent initLoadPageInfoAdapter() {
         return adapter;
     }
 
     @Override
     protected void dealLoadMoreSuccess(List<PantRecordModel> data) {
-
+        adapter.addAll(data);
     }
 
     @Override

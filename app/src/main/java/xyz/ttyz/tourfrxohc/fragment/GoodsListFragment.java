@@ -30,41 +30,51 @@ import xyz.ttyz.tourfrxohc.viewholder.GoodsDetailViewHolder;
  * @date 2023/10/18
  * @email 343315792@qq.com
  */
-public class GoodsListFragment extends BaseInViewPagerFragment<FragmentGoodsListBinding,List<GoodsModel>, RecordsModule<List<GoodsModel>>> {
-    int type;//表示 在库、已出库、待盘点、已盘点
+public class GoodsListFragment extends BaseInViewPagerFragment<FragmentGoodsListBinding, List<GoodsModel>, RecordsModule<List<GoodsModel>>> {
+    int type;//表示 在库、已出库
+    boolean isPant;
 
 
     LocationModel locationModel = new LocationModel();
     String searchStr = "";
 
-    public GoodsListFragment(int type) {
-       this.type = type;
+    public GoodsListFragment(int type, boolean isPant) {
+        this.type = type;
+        this.isPant = isPant;
     }
 
     BaseEmptyAdapterParent adapterParent;
 
     //设置分区地址模糊查询字段
-    public void reSetLocationModel(LocationModel locationModel,String searchStr) {
+    public void reSetLocationModel(LocationModel locationModel, String searchStr) {
         this.locationModel = locationModel;
         // 已经加载的情况下，刷新
         this.searchStr = searchStr;
         // 已经加载的情况下，刷新
-        if(adapterParent != null) {
+        if (adapterParent != null) {
             loadPageInfo(true);
         }
     }
+
     @Override
     public String initTitle() {
-        switch (type){
+        if(isPant){
+            switch (type) {
+                case NowWait:
+                    return "待盘点";
+                case NowPant:
+                    return "已盘点";
+                default:
+                    return "未知";
+            }
+        }
+        switch (type) {
             case NowIn:
                 return "当前在库";
             case NowOut:
                 return "已出库";
-            case NowWait:
-                return "待盘点";
-            case NowPant:
-                return "已盘点";
-            default:return "未知";
+            default:
+                return "未知";
         }
     }
 
@@ -85,7 +95,7 @@ public class GoodsListFragment extends BaseInViewPagerFragment<FragmentGoodsList
             @Override
             public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
-                ((GoodsDetailViewHolder)holder).bindData((GoodsModel) adapterParent.getItem(position));
+                ((GoodsDetailViewHolder) holder).bindData((GoodsModel) adapterParent.getItem(position), isPant);
             }
         });
         mBinding.setAdapter(adapterParent);
@@ -104,13 +114,21 @@ public class GoodsListFragment extends BaseInViewPagerFragment<FragmentGoodsList
     @Nullable
     @Override
     protected Observable initApiService(Map map) {
-        return BaseApplication.apiService.goodsList(RetrofitUtils.getNormalBody(map));
+        if (!isPant) {
+            return BaseApplication.apiService.goodsList(RetrofitUtils.getNormalBody(map));
+        } else {
+            return BaseApplication.apiService.pageCurrentDetails(RetrofitUtils.getNormalBody(map));
+        }
     }
 
     @Override
     protected Map<String, Object> initLoadMoreParam() {
         Map map = new HashMap();
-        map.put("status", type);
+        if(isPant){
+            map.put("detailStatus", type);
+        } else {
+            map.put("status",  type);
+        }
         map.put("fuzzyGoodsActualNo", searchStr);
         map.put("warehouseAreaId", locationModel.warehouseAreaId);
         map.put("warehouseId", locationModel.warehouseId);

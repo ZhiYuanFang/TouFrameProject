@@ -3,8 +3,10 @@ package xyz.ttyz.tourfrxohc.viewholder;
 import android.content.Context;
 import android.view.ViewGroup;
 
+import xyz.ttyz.toubasemvvm.adapter.OnClickAdapter;
 import xyz.ttyz.toubasemvvm.adapter.utils.viewholder.BaseNormalViewHolder;
 import xyz.ttyz.tourfrxohc.R;
+import xyz.ttyz.tourfrxohc.activity.PantDetailListActivity;
 import xyz.ttyz.tourfrxohc.databinding.ViewholderPandRecordBinding;
 import xyz.ttyz.tourfrxohc.models.PantRecordModel;
 
@@ -20,11 +22,18 @@ public class PandRecordViewHolder extends BaseNormalViewHolder<PantRecordModel, 
 
     @Override
     protected void initVariable(ViewholderPandRecordBinding mBinding) {
-
+        mBinding.setContext(this);
     }
 
     @Override
     public void bindData(PantRecordModel data) {
         mBinding.setPantRecordModule(data);
     }
+
+    public OnClickAdapter.onClickCommand clickItem = new OnClickAdapter.onClickCommand() {
+        @Override
+        public void click() {
+            PantDetailListActivity.show(mBinding.getPantRecordModule().getId());
+        }
+    };
 }

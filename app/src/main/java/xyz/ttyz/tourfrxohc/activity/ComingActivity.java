@@ -64,8 +64,8 @@ public class ComingActivity extends BaseActivity<ActivityComingBinding>{
     public ObservableField<String> inputCodeFiled =  new ObservableField<>("");//输入的货品码
 
     List<GoodsListFragment> fragmentList;
-    GoodsListFragment inFragment = new GoodsListFragment(NowIn);
-    GoodsListFragment outFragment = new GoodsListFragment(NowOut);
+    GoodsListFragment inFragment = new GoodsListFragment(NowIn, false);
+    GoodsListFragment outFragment = new GoodsListFragment(NowOut, false);
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void hasOperator(GoodsOperatorEvent goodsOperatorEvent){
         doInit();

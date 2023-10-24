@@ -30,8 +30,11 @@ public abstract class BaseContainLoadMoreActivity<T extends ViewDataBinding,D, B
 
     @Override
     protected void initData() {
+        initBinding();
         initData1();
     }
+
+    protected abstract void initBinding();
 
     private void initData1() {
         if (initLoadPageInfoAdapter() != null) {
@@ -51,7 +54,7 @@ public abstract class BaseContainLoadMoreActivity<T extends ViewDataBinding,D, B
         loadPageInfo(true);
     }
 
-    protected abstract Observable<B> initApiService(Map map);
+    protected abstract Observable<BaseModule<B>> initApiService(Map map);
     protected void loadPageInfo(boolean refresh) {
         if (!refresh) {
             int p = pageIndex.get();

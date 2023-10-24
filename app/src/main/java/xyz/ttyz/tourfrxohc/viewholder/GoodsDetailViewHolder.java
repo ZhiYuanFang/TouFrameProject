@@ -44,7 +44,7 @@ public class GoodsDetailViewHolder extends BaseNormalViewHolder<GoodsModel, View
         @Override
         public void click() {
             //去详情
-            if (mBinding.getGoodsModel().getStatus() == Constans.NowIn){
+            if (mBinding.getGoodsModel().getStatus() == Constans.NowIn && !isPantFiled.get()){
                 GoodsDetailOperatorActivity.show(mBinding.getGoodsModel().getId());
             }
         }

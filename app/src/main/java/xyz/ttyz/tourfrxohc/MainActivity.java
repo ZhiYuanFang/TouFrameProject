@@ -32,6 +32,7 @@ import xyz.ttyz.tourfrxohc.activity.BaseActivity;
 import xyz.ttyz.tourfrxohc.activity.ComingActivity;
 import xyz.ttyz.tourfrxohc.activity.LoginActivity;
 import xyz.ttyz.tourfrxohc.activity.PandingActivity;
+import xyz.ttyz.tourfrxohc.activity.WebActivity;
 import xyz.ttyz.tourfrxohc.databinding.ActivityMainBinding;
 import xyz.ttyz.tourfrxohc.dialog.LocationDialog;
 import xyz.ttyz.tourfrxohc.event.LocationSelectEvent;
