@@ -69,7 +69,7 @@
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="120dp"
+                        android:layout_height="50dp"
                         android:alpha="0.8"
                         android:background="@color/black" />
 
@@ -85,7 +85,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="35dp"
                             tools:text="盘点中:10"
-                            android:text='@{"盘点中:"+pandingEndAdapter.itemCount}'
+                            android:text='@{"盘点中:"+pandingEndAdapter.data.size()}'
                             android:textColor="@color/black"
                             android:textSize="21sp"
                             android:textStyle="bold" />
@@ -94,7 +94,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             binding:adapter="@{pandingEndAdapter}"
-                            binding:smoothScrollToPos="@{pandingEndAdapter.data.size()}"
                             tools:listitem="@layout/viewholder_panding_item" />
                     </LinearLayout>
 

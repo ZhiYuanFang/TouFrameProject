@@ -151,10 +151,23 @@ public class PandingActivity extends BaseActivity<ActivityPandingBinding> {
                         public void run() {
                             if(isPandingFiled.get()){
                                 epcList = uhfService.getTagIDs();
+                                if(epcList != null){
+                                    int errorPos = -1;
+                                    for (EPC epc: epcList) {
+                                        if(epc.getId().equals("000000000000000000000000")){
+                                            errorPos = epcList.indexOf(epc);
+                                            break;
+                                        }
+                                    }
+                                    if(errorPos > -1)
+                                        epcList.remove(errorPos);
+                                }
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        pandingEndAdapter.setList(epcList);
+                                        if(!pandingEndAdapter.getData().equals(epcList)){
+                                            pandingEndAdapter.setList(epcList);
+                                        }
                                     }
                                 });
                                 handler.postDelayed(this, 600);
