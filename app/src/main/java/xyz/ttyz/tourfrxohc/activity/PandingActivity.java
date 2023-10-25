@@ -226,7 +226,6 @@ public class PandingActivity extends BaseActivity<ActivityPandingBinding> {
                     System.out.println("提交服务-寻卡地址: " + epc.getId());
                     barcodeNos.add(epc.getId());
                 }
-                barcodeNos.add("6931885788995");
                 Map map = new HashMap();
                 map.put("barcodeNos", barcodeNos);
                 map.put("warehouseAreaId", DefaultUtils.locationModel.warehouseAreaId);

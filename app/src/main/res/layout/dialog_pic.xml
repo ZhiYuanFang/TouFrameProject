@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="context"
+            type="xyz.ttyz.tourfrxohc.dialog.PicDialog" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:background="@color/black">
+
+        <com.stx.xhb.androidx.XBanner xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/xbanner"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:isAutoPlay="false"
+            app:isShowNumberIndicator="true"
+            app:isShowIndicatorOnlyOne="false"
+            app:isClipChildrenMode="false"
+            app:pageChangeDuration="800" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_alignParentEnd="true"
+            android:orientation="horizontal">
+
+
+            <ImageButton
+                android:id="@+id/ib_close"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:padding="5dp"
+                android:onClick="@{()->context.miss()}"
+                android:src="@drawable/guanbi_white"
+                android:background="?selectableItemBackground" />
+        </LinearLayout>
+    </RelativeLayout>
+</layout>

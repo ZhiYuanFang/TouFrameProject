@@ -1,7 +1,9 @@
 package xyz.ttyz.tourfrxohc;
 
+import android.app.Activity;
 import android.app.Application;
 import android.util.Log;
+import android.widget.ImageView;
 
 import com.ihsanbal.logging.LoggingInterceptor;
 
@@ -9,6 +11,8 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Map;
 
+import cn.bingoogolapple.photopicker.imageloader.BGAImage;
+import cn.bingoogolapple.photopicker.imageloader.BGAImageLoader;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -17,6 +21,7 @@ import retrofit2.Retrofit;
 import xyz.ttyz.mylibrary.RfRxOHCUtil;
 import xyz.ttyz.tou_example.init.ApplicationUtils;
 import xyz.ttyz.tou_example.init.TouDelegate;
+import xyz.ttyz.toubasemvvm.utils.ImageLoaderUtil;
 import xyz.ttyz.tourfrxohc.activity.LoginActivity;
 
 /**
@@ -27,6 +32,29 @@ public class BaseApplication extends Application {
     private static final String TAG = "BaseApplication";
     public static ApiService apiService;
 
+    static {
+        BGAImage.setImageLoader(new BGAImageLoader() {
+            @Override
+            public void display(ImageView imageView, String path, int loadingResId, int failResId, int width, int height, DisplayDelegate delegate) {
+                ImageLoaderUtil.display(imageView, path);
+            }
+
+            @Override
+            public void download(String path, DownloadDelegate delegate) {
+
+            }
+
+            @Override
+            public void pause(Activity activity) {
+
+            }
+
+            @Override
+            public void resume(Activity activity) {
+
+            }
+        });
+    }
     @Override
     public void onCreate() {
         super.onCreate();

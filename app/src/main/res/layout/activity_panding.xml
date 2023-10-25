@@ -19,99 +19,104 @@
             type="xyz.ttyz.toubasemvvm.adapter.utils.BaseEmptyAdapterParent" />
     </data>
 
-
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <include
-            layout="@layout/layout_toolbar"
-            binding:toolBarViewModel="@{toolBarViewModel}" />
-
-        <FrameLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:orientation="vertical">
 
-            <LinearLayout
+            <include
+                layout="@layout/layout_toolbar"
+                binding:toolBarViewModel="@{toolBarViewModel}" />
+
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-                <com.google.android.material.tabs.TabLayout
-                    android:id="@+id/recycler_tab_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="38dp"
-                    app:tabMaxWidth="0dp"
-                    app:tabIndicatorFullWidth="false"
-                    app:tabIndicatorColor="#4B8EFF"
-                    app:tabSelectedTextColor="#333333"
-                    app:tabTextColor="#CCCCCC"
-                    app:tabTextAppearance="@style/MyTabLayoutText"
-                    app:tabGravity="fill"
-                    app:tabMode="fixed"/>
-                <androidx.viewpager.widget.ViewPager
-                    android:id="@+id/vpager"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                binding:visible="@{context.isPandingFiled}"
-                tools:visibility="gone">
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="120dp"
-                    android:alpha="0.8"
-                    android:background="@color/black" />
+                android:layout_height="0dp"
+                android:layout_weight="1">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/white"
-                    android:gravity="center_horizontal"
                     android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="35dp"
-                        android:text="盘点中"
-                        android:textColor="@color/black"
-                        android:textSize="21sp"
-                        android:textStyle="bold" />
-
-                    <androidx.recyclerview.widget.RecyclerView
+                    <com.google.android.material.tabs.TabLayout
+                        android:id="@+id/recycler_tab_layout"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        binding:adapter="@{pandingEndAdapter}"
-                        binding:smoothScrollToPos="@{pandingEndAdapter.data.size()}"
-                        tools:listitem="@layout/viewholder_panding_item" />
+                        android:layout_height="38dp"
+                        app:tabMaxWidth="0dp"
+                        app:tabIndicatorFullWidth="false"
+                        app:tabIndicatorColor="#000000"
+                        app:tabSelectedTextColor="#333333"
+                        app:tabTextColor="#CCCCCC"
+                        app:tabTextAppearance="@style/MyTabLayoutText"
+                        app:tabGravity="fill"
+                        app:tabMode="fixed"/>
+                    <androidx.viewpager.widget.ViewPager
+                        android:id="@+id/vpager"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
                 </LinearLayout>
 
-            </LinearLayout>
-        </FrameLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    binding:visible="@{context.isPandingFiled}"
+                    tools:visibility="visible">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="120dp"
+                        android:alpha="0.8"
+                        android:background="@color/black" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/white"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="35dp"
+                            tools:text="盘点中:10"
+                            android:text='@{"盘点中:"+pandingEndAdapter.itemCount}'
+                            android:textColor="@color/black"
+                            android:textSize="21sp"
+                            android:textStyle="bold" />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            binding:adapter="@{pandingEndAdapter}"
+                            binding:smoothScrollToPos="@{pandingEndAdapter.data.size()}"
+                            tools:listitem="@layout/viewholder_panding_item" />
+                    </LinearLayout>
+
+                </LinearLayout>
+            </FrameLayout>
+        </LinearLayout>
 
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:layout_marginStart="25dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginEnd="25dp"
-            android:layout_marginBottom="45dp"
-            android:background="@color/black"
-            android:foreground="?selectableItemBackground"
-            android:gravity="center"
             android:text='@{context.isPandingFiled ? "结束盘点" : "开始盘点"}'
+            android:layout_width="137dp"
+            android:layout_height="50dp"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="25dp"
+            android:background="@drawable/shape_btn_conor"
             android:textColor="@color/white"
             android:textSize="18sp"
+            android:gravity="center"
+            android:foreground="?selectableItemBackground"
             binding:onClickCommand="@{context.clickPand}"
             tools:text="开始盘点" />
-    </LinearLayout>
+    </RelativeLayout>
+
 </layout>

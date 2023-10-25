@@ -45,8 +45,10 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding>{
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         ActivityManager.getInstance().startActivity(intent);
     }
-    public ObservableField<String> account = new ObservableField<>("mahe");
-    public ObservableField<String> password = new ObservableField<>("111111");
+    public ObservableField<String> account = new ObservableField<>(DefaultUtils.isRelease() ? "" : "mahe");
+//    public ObservableField<String> account = new ObservableField<>("");
+    public ObservableField<String> password = new ObservableField<>(DefaultUtils.isRelease() ? "" : "111111");
+//    public ObservableField<String> password = new ObservableField<>("");
     public ObservableBoolean autoLogin = new ObservableBoolean(true);
 
     @Override
@@ -77,7 +79,9 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding>{
             new RxOHCUtils<>(LoginActivity.this).executeApi(BaseApplication.apiService.login(account.get(), password.get()), new BaseSubscriber<Boolean>(LoginActivity.this) {
                 @Override
                 public void success(Boolean data) {
-                    SharedPreferenceUtil.setShareBool(LoginActivity.this, "autoLogin", autoLogin.get());
+                    if(!autoLogin.get()){
+                        SharedPreferenceUtil.clear(ActivityManager.getInstance(), "cookie");
+                    }
                     SharedPreferenceUtil.setShareString(LoginActivity.this, "account", account.get());
                     SharedPreferenceUtil.setShareString(LoginActivity.this, "password", password.get());
                     MainActivity.goMain();

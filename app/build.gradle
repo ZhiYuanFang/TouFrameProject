@@ -59,7 +59,12 @@ dependencies {
 //    implementation 'cn.bingoogolapple:bga-photopicker:2.0.2@aar'
 //    implementation 'com.github.bingoogolapple:BGAPhotoPicker-Android:latestVersion'
 //    https://github.com/ZhiYuanFang/BGAPhotoPicker-Android
-    implementation 'com.github.bingoogolapple:BGABaseAdapter-Android:2.0.1'
+//    implementation 'com.github.bingoogolapple:BGABaseAdapter-Android:2.0.1'
+
+    implementation 'cn.bingoogolapple:bga-photopicker:2.0.2@aar'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'cn.bingoogolapple:bga-baseadapter:2.0.0@aar'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'com.github.xiaohaibin:XBanner:androidx_v1.1.3'
     implementation files('libs/uhf.jar')
 }

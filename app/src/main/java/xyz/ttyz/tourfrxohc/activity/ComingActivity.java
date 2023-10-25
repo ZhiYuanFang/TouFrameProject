@@ -9,6 +9,7 @@ import android.os.Handler;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.Observable;
+import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableField;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -61,6 +62,7 @@ public class ComingActivity extends BaseActivity<ActivityComingBinding>{
 
     ToolBarViewModel toolBarViewModel;
     public int type;
+    public ObservableBoolean searchShowFiled = new ObservableBoolean(false);
     public ObservableField<String> inputCodeFiled =  new ObservableField<>("");//输入的货品码
 
     List<GoodsListFragment> fragmentList;
@@ -98,6 +100,13 @@ public class ComingActivity extends BaseActivity<ActivityComingBinding>{
                                 fragmentRefresh();
                             }
                         });
+                    }
+                })
+                .shareDraResID(R.drawable.search)
+                .shareClick(new OnClickAdapter.onClickCommand() {
+                    @Override
+                    public void click() {
+                        searchShowFiled.set(!searchShowFiled.get());
                     }
                 })
                 .build();

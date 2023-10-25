@@ -1,6 +1,7 @@
 package xyz.ttyz.tourfrxohc.models;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,7 +16,7 @@ public class GoodsModel implements Serializable {
     String exitingTimeStr;
     String goodsActualNo;
     long id;
-    List<String> imageUrls;
+    ArrayList<String> imageUrls;
     String priceMinStr;
     String quantity;
     String remark;
@@ -86,11 +87,11 @@ public class GoodsModel implements Serializable {
         this.id = id;
     }
 
-    public List<String> getImageUrls() {
+    public ArrayList<String> getImageUrls() {
         return imageUrls;
     }
 
-    public void setImageUrls(List<String> imageUrls) {
+    public void setImageUrls(ArrayList<String> imageUrls) {
         this.imageUrls = imageUrls;
     }
 

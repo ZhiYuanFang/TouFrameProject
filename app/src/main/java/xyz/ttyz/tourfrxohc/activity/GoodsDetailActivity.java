@@ -7,8 +7,11 @@ import android.content.Intent;
 import android.content.IntentFilter;
 
 import androidx.annotation.Nullable;
+import androidx.databinding.Bindable;
+import androidx.databinding.Observable;
 import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableInt;
+import androidx.databinding.PropertyChangeRegistry;
 
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
@@ -32,11 +35,14 @@ import xyz.ttyz.toubasemvvm.utils.StringUtil;
 import xyz.ttyz.toubasemvvm.utils.ToastUtil;
 import xyz.ttyz.toubasemvvm.utils.TouUtils;
 import xyz.ttyz.toubasemvvm.vm.ToolBarViewModel;
+import xyz.ttyz.tourfrxohc.BR;
 import xyz.ttyz.tourfrxohc.BaseApplication;
 import xyz.ttyz.tourfrxohc.DefaultUtils;
 import xyz.ttyz.tourfrxohc.MainActivity;
 import xyz.ttyz.tourfrxohc.R;
+import xyz.ttyz.tourfrxohc.adapter.NinePhotoAdapter;
 import xyz.ttyz.tourfrxohc.databinding.ActivityGoodsDetailBinding;
+import xyz.ttyz.tourfrxohc.dialog.PicDialog;
 import xyz.ttyz.tourfrxohc.event.GoodsOperatorEvent;
 import xyz.ttyz.tourfrxohc.http.BaseSubscriber;
 import xyz.ttyz.tourfrxohc.models.GoodsModel;
@@ -48,7 +54,7 @@ import xyz.ttyz.tourfrxohc.utils.ImageUploader;
  * @date 2023/10/16
  * @email 343315792@qq.com
  */
-public class GoodsDetailActivity extends BaseActivity<ActivityGoodsDetailBinding>{
+public class GoodsDetailActivity extends BaseActivity<ActivityGoodsDetailBinding> implements Observable {
 
     public static void show(@Nullable GoodsModel goodsModel, boolean isEdit) {
         Intent intent = new Intent(ActivityManager.getInstance(), GoodsDetailActivity.class);
@@ -85,6 +91,12 @@ public class GoodsDetailActivity extends BaseActivity<ActivityGoodsDetailBinding
         goodsModel = (GoodsModel) getIntent().getSerializableExtra("goodsModel");
         isEdit.set((boolean) getIntent().getBooleanExtra("isEdit", false));
         mBinding.setGoodsModel(goodsModel);
+        selectList = goodsModel.getImageUrls();
+        if(selectList == null){
+            selectList = new ArrayList<>();
+        }
+        hasAddNumber.set(selectList.size());
+
     }
 
     @Override
@@ -118,7 +130,8 @@ public class GoodsDetailActivity extends BaseActivity<ActivityGoodsDetailBinding
                     .forResult(PictureConfig.CHOOSE_REQUEST);
         }
     };
-    public ArrayList<String> selectList = new ArrayList<>();
+    @Bindable
+    public ArrayList<String> selectList;//图片
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -130,8 +143,10 @@ public class GoodsDetailActivity extends BaseActivity<ActivityGoodsDetailBinding
                 ImageUploader.upload(GoodsDetailActivity.this, filePath, new ImageUploader.Callback() {
                     @Override
                     public void success(String qiniuPath) {
+                        System.out.println("测试 : " + qiniuPath);
                         selectList.add(qiniuPath);
-//                        mBinding.bgaNine.setData(selectList);
+                        hasAddNumber.set(selectList.size());
+                        notifyChange(BR.selectList);
                     }
 
                     @Override
@@ -155,6 +170,7 @@ public class GoodsDetailActivity extends BaseActivity<ActivityGoodsDetailBinding
             map.put("goodsPriceMin", StringUtil.convertStr2Long(goodsModel.getPriceMinStr()));
             map.put("warehouseAreaId", DefaultUtils.getLocalLocationModel().warehouseAreaId);
             map.put("warehouseId", DefaultUtils.getLocalLocationModel().warehouseId);
+            map.put("imageUrls", selectList);
             if(isEdit.get()){
                 map.put("id", goodsModel.getId());
                 new RxOHCUtils<>(GoodsDetailActivity.this).executeApi(BaseApplication.apiService.updateGoods(RetrofitUtils.getNormalBody(map)), new BaseSubscriber<Boolean>(GoodsDetailActivity.this) {
@@ -177,4 +193,44 @@ public class GoodsDetailActivity extends BaseActivity<ActivityGoodsDetailBinding
             }
         }
     };
+
+    public NinePhotoAdapter.ClickDelegate clickDelegate = new NinePhotoAdapter.ClickDelegate() {
+        @Override
+        public void singleClick(int position) {
+            PicDialog.show(selectList, position);
+        }
+
+        @Override
+        public void doubleClick(int position) {
+//            selectList.remove(position);
+//            hasAddNumber.set(selectList.size());
+//            notifyChange(BR.selectList);
+        }
+    };
+
+
+    private transient PropertyChangeRegistry propertyChangeRegistry = new PropertyChangeRegistry();
+
+    protected synchronized void notifyChange(int propertyId) {
+        if (propertyChangeRegistry == null) {
+            propertyChangeRegistry = new PropertyChangeRegistry();
+        }
+        propertyChangeRegistry.notifyChange(this, propertyId);
+    }
+
+    @Override
+    public synchronized void addOnPropertyChangedCallback(OnPropertyChangedCallback callback) {
+        if (propertyChangeRegistry == null) {
+            propertyChangeRegistry = new PropertyChangeRegistry();
+        }
+        propertyChangeRegistry.add(callback);
+
+    }
+
+    @Override
+    public synchronized void removeOnPropertyChangedCallback(OnPropertyChangedCallback callback) {
+        if (propertyChangeRegistry != null) {
+            propertyChangeRegistry.remove(callback);
+        }
+    }
 }

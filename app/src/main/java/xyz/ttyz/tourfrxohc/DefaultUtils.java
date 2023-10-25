@@ -28,21 +28,20 @@ public class DefaultUtils {
         return locationModel;
     }
     public static String getIp () {
-        if( BuildConfig.BUILD_TYPE.equals("release")){
-            return "https://eevee.maihaoche.net/api";
+        if(isRelease()){
+            return "https://emerald.maihaoche.com";
         } else {
             return "https://emerald-u.maihaoche.net";
         }
     }
 
+    public static boolean isRelease () {
+        return BuildConfig.BUILD_TYPE.equals("release");
+    }
+
     private static HashSet<String> cookie;
     public static void setCookie(HashSet<String> cookies) {
-        boolean autoLogin = SharedPreferenceUtil.getShareBool(ActivityManager.getInstance(), "autoLogin");//自动登陆，通过cookie的缓存与否来执行
-        if(autoLogin){
-            SharedPreferenceUtil.setShareString(ActivityManager.getInstance(), "cookie", cookies);
-        } else {
-            SharedPreferenceUtil.setShareString(ActivityManager.getInstance(), "cookie", new HashSet<>());
-        }
+        SharedPreferenceUtil.setShareString(ActivityManager.getInstance(), "cookie", cookies);
         cookie = cookies;
     }
 
@@ -53,6 +52,7 @@ public class DefaultUtils {
     }
 
     public static void removeCookie() {
+        cookie = null;
         SharedPreferenceUtil.clear(ActivityManager.getInstance(), "cookie");
     }
 

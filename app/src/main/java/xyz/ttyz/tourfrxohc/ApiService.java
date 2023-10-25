@@ -12,6 +12,7 @@ import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
+import retrofit2.http.Url;
 import xyz.ttyz.mylibrary.method.BaseModule;
 import xyz.ttyz.mylibrary.method.RecordsModule;
 import xyz.ttyz.tourfrxohc.models.GoodsModel;
@@ -71,9 +72,10 @@ public interface ApiService {
 
     /**
      * 获取七牛存储凭证，非私有
+     * https://b.maihaoche.com/
      */
-    @POST("/v1/common/qiniuAuthInfo.json")
-    Observable<TokenResponse> getToken(@Body RequestBody data);
+    @GET("/common/upload/token")
+    Observable<BaseModule<String>> getToken();
 //    @Headers("Content-type:text/x-plain-rsa-json")
 //    @POST("api/Account/phoneCode")
 //    Observable<BaseModule<PhoneCodeModule>> phoneCode(@Body RequestBody data);

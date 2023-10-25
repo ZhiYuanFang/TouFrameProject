@@ -17,35 +17,45 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_vertical"
         binding:onClickCommand="@{context.clickToDetail}"
-        android:layout_margin="8dp">
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
+        <RelativeLayout
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            tools:background="@color/black"
             android:gravity="center_horizontal"
             android:orientation="vertical">
             <xyz.ttyz.toubasemvvm.weight.CardImageView
-                android:layout_width="120dp"
-                android:layout_height="120dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 binding:imageUrl="@{goodsModel.coverImageUrl}"/>
+
             <TextView
-                binding:visible="@{context.isPantFiled}"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
                 android:layout_marginTop="5dp"
+                android:background="#97D1D1D1"
+                android:gravity="center"
                 android:text="@{goodsModel.detailStatusDesc}"
-                tools:text="异常"/>
-        </LinearLayout>
+                android:textColor="@color/black"
+                binding:visible="@{context.isPantFiled}"
+                tools:text="异常" />
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:divider="@drawable/divider_form"
+            android:divider="@drawable/divider_goods_form"
             android:showDividers="middle"
-            android:layout_margin="5dp">
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

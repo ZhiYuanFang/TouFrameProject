@@ -38,7 +38,7 @@ import xyz.ttyz.toubasemvvm.weight.CardImageView;
  */
 public class ImageLoaderUtil {
     public static final String testPic2 = "http://pic67.nipic.com/file/20150517/20795124_080722702002_2.jpg";
-    public static final String testPic = "http://k.zol-img.com.cn/sjbbs/7692/a7691515_s.jpg";
+    public static final String testPic = "https://img-qn.51miz.com/preview/photo/00/01/57/36/P-1573636-42FEDBBA.jpg";
 public static final String testGif = "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1604055493280&di=4fcc6be45149c9a65813706d22e8dd77&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201611%2F04%2F20161104110413_XzVAk.gif";
     private static int placeholderResId, placeholderCircleResId, errorResId, errorCircleResId;
     private static ImageLoaderDelegate imageLoaderDelegate;

@@ -113,6 +113,16 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         locationModelObservableField.set(DefaultUtils.getLocalLocationModel());
 
         mBinding.setStatisticsModel(new StatisticsModel());
+
+        if(DefaultUtils.getCookie() == null){
+            LoginActivity.toLogin();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        refreshStatistics();
     }
 
     @Override

@@ -20,8 +20,10 @@ import xyz.ttyz.toubasemvvm.vm.ToolBarViewModel;
 import xyz.ttyz.tourfrxohc.BaseApplication;
 import xyz.ttyz.tourfrxohc.MainActivity;
 import xyz.ttyz.tourfrxohc.R;
+import xyz.ttyz.tourfrxohc.adapter.NinePhotoAdapter;
 import xyz.ttyz.tourfrxohc.databinding.ActivityGoodsDetailBinding;
 import xyz.ttyz.tourfrxohc.databinding.ActivityGoodsDetailOperatorBinding;
+import xyz.ttyz.tourfrxohc.dialog.PicDialog;
 import xyz.ttyz.tourfrxohc.event.GoodsOperatorEvent;
 import xyz.ttyz.tourfrxohc.http.BaseSubscriber;
 import xyz.ttyz.tourfrxohc.models.GoodsModel;
@@ -102,6 +104,18 @@ public class GoodsDetailOperatorActivity extends BaseActivity<ActivityGoodsDetai
                     });
                 }
             }));
+        }
+    };
+
+    public NinePhotoAdapter.ClickDelegate clickDelegate = new NinePhotoAdapter.ClickDelegate() {
+        @Override
+        public void singleClick(int position) {
+            PicDialog.show(mBinding.getGoodsModel().getImageUrls(), position);
+        }
+
+        @Override
+        public void doubleClick(int position) {
+            PicDialog.show(mBinding.getGoodsModel().getImageUrls(), position);
         }
     };
 

@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.qiniu.android.storage.UploadManager;
+import com.trello.rxlifecycle2.LifecycleProvider;
 
 import org.reactivestreams.Subscription;
 
@@ -16,6 +17,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
+import xyz.ttyz.mylibrary.method.ActivityManager;
 import xyz.ttyz.mylibrary.method.RfRxOHCBaseModule;
 import xyz.ttyz.mylibrary.method.RxOHCUtils;
 import xyz.ttyz.tourfrxohc.BaseApplication;
@@ -53,24 +55,37 @@ public class ImageUploader {
         } else {
             System.out.println("图片路径:" + path);
         }
-        new RxOHCUtils<>(context).executeApi(BaseApplication.apiService.getToken(null), new BaseSubscriber(null) {
-
+        new Thread(new Runnable() {
             @Override
-            public void onNext(Object o) {
-                System.out.println("测试：next");
-                upload(path, "tokenResponse.mToken", callback);
+            public void run() {
+                new RxOHCUtils<>(context).executeApi(BaseApplication.apiService.getToken(), new BaseSubscriber<String>((LifecycleProvider) ActivityManager.getInstance()) {
+
+                    @Override
+                    public void success(String data) {
+                        upload(path, data, callback);
+                    }
+
+//                    @Override
+//                    public void onNext(Object o) {
+//                        if(o instanceof TokenResponse){
+//                            String token = ((TokenResponse)o).uptoken;
+//                            upload(path, token, callback);
+//                        }
+//                    }
+
+//                    @Override
+//                    public void success(Object data) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onRfRxNext(RfRxOHCBaseModule rfRxOHCBaseModule) {
+//
+//                    }
+                });
             }
+        }).start();
 
-            @Override
-            public void success(Object data) {
-
-            }
-
-            @Override
-            public void onRfRxNext(RfRxOHCBaseModule rfRxOHCBaseModule) {
-
-            }
-        });
     }
 
     private static void upload(String path, String token,
