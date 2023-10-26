@@ -70,7 +70,7 @@ public class ComingActivity extends BaseActivity<ActivityComingBinding>{
     GoodsListFragment outFragment = new GoodsListFragment(NowOut, false);
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void hasOperator(GoodsOperatorEvent goodsOperatorEvent){
-        doInit();
+        fragmentRefresh();
     }
 
     @Override
@@ -134,6 +134,9 @@ public class ComingActivity extends BaseActivity<ActivityComingBinding>{
             }
         });
         mBinding.recyclerTabLayout.setupWithViewPager(mBinding.vpager);
+        if(type == NowOut){
+            mBinding.vpager.setCurrentItem(1);
+        }
 
         fragmentRefresh();
     }

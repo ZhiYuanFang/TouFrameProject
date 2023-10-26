@@ -27,163 +27,168 @@
         <include
             layout="@layout/layout_toolbar"
             binding:toolBarViewModel="@{toolBarViewModel}" />
-        <LinearLayout
-            android:orientation="horizontal"
+        <com.scwang.smart.refresh.layout.SmartRefreshLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp">
-
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            binding:enableRefresh="@{true}"
+            binding:loadEnd="@{context.loadEnd}"
+            binding:refreshListener="@{context.refreshListener}">
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:layout_marginTop="15dp"
-                android:orientation="vertical">
-                <xyz.ttyz.toubasemvvm.weight.CardImageView
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
-                    binding:imageUrl="@{goodsModel.coverImageUrl}"/>
-            </LinearLayout>
-
-            <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:divider="@drawable/divider_form"
-                android:showDividers="middle"
-                android:layout_margin="5dp">
+                android:layout_margin="8dp">
+
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        style="@style/goods_form_title"
-                        android:text="条形码"/>
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        style="@style/goods_form_context"
-                        android:text="@{goodsModel.barcodeNo}"
-                        tools:text="140293fapoiuq1"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        style="@style/goods_form_title"
-                        android:text="货品码"/>
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        style="@style/goods_form_context"
-                        android:text="@{goodsModel.goodsActualNo}"
-                        tools:text="140293fapoiuq1"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        style="@style/goods_form_title"
-                        android:text="包含件数"/>
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        style="@style/goods_form_context"
-                        android:text="@{goodsModel.quantity}"
-                        tools:text="140293fapoiuq1"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        style="@style/goods_form_title"
-                        android:text="入库时间"/>
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        style="@style/goods_form_context"
-                        android:text="@{goodsModel.enteringTimeStr}"
-                        tools:text="140293fapoiuq1"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        style="@style/goods_form_title"
-                        android:text="货主信息"/>
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        style="@style/goods_form_context"
-                        android:text="@{goodsModel.remark}"
-                        tools:text="140293fapoiuq1"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        style="@style/goods_form_title"
-                        android:text="货品价格(元)"/>
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        style="@style/goods_form_context"
-                        android:text="@{goodsModel.priceMinStr}"
-                        tools:text="140293fapoiuq1"/>
-                </LinearLayout>
-
-                <cn.bingoogolapple.photopicker.widget.BGANinePhotoLayout
-                    android:layout_marginTop="5dp"
-                    binding:clickDelegate="@{context.clickDelegate}"
-                    binding:nineData="@{goodsModel.imageUrls}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:bga_npl_itemCornerRadius="3dp"
-                    app:bga_npl_itemSpanCount="3"
-                    app:bga_npl_itemWhiteSpacing="4dp"
-                    app:bga_npl_itemWidth="60dp"
-                    app:bga_npl_otherWhiteSpacing="64dp"
-                    app:bga_npl_placeholderDrawable="@mipmap/bga_pp_ic_holder_light"
-                    app:bga_npl_showAsLargeWhenOnlyOne="false"
-                    tools:background="@color/black"
-                    tools:layout_height="60dp"
-                    tools:layout_width="60dp"/>
+                    android:gravity="center_horizontal"
+                    android:layout_marginTop="15dp"
+                    android:orientation="vertical">
+                    <xyz.ttyz.toubasemvvm.weight.CardImageView
+                        android:layout_width="120dp"
+                        android:layout_height="120dp"
+                        binding:imageUrl="@{goodsModel.coverImageUrl}"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:divider="@drawable/divider_form"
+                    android:showDividers="middle"
+                    android:layout_margin="5dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="@style/goods_form_title"
+                            android:text="条形码"/>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            style="@style/goods_form_context"
+                            android:text="@{goodsModel.barcodeNo}"
+                            tools:text="140293fapoiuq1"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="@style/goods_form_title"
+                            android:text="货品码"/>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            style="@style/goods_form_context"
+                            android:text="@{goodsModel.goodsActualNo}"
+                            tools:text="140293fapoiuq1"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="@style/goods_form_title"
+                            android:text="包含件数"/>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            style="@style/goods_form_context"
+                            android:text="@{goodsModel.quantity}"
+                            tools:text="140293fapoiuq1"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="@style/goods_form_title"
+                            android:text="入库时间"/>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            style="@style/goods_form_context"
+                            android:text="@{goodsModel.enteringTimeStr}"
+                            tools:text="140293fapoiuq1"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="@style/goods_form_title"
+                            android:text="货主信息"/>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            style="@style/goods_form_context"
+                            android:text="@{goodsModel.remark}"
+                            tools:text="140293fapoiuq1"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="@style/goods_form_title"
+                            android:text="货品价格(元)"/>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            style="@style/goods_form_context"
+                            android:text="@{goodsModel.priceMinStr}"
+                            tools:text="140293fapoiuq1"/>
+                    </LinearLayout>
+
+                    <cn.bingoogolapple.photopicker.widget.BGANinePhotoLayout
+                        android:layout_marginTop="5dp"
+                        binding:clickDelegate="@{context.clickDelegate}"
+                        binding:nineData="@{goodsModel.imageUrls}"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:bga_npl_itemCornerRadius="3dp"
+                        app:bga_npl_itemSpanCount="3"
+                        app:bga_npl_itemWhiteSpacing="4dp"
+                        app:bga_npl_itemWidth="60dp"
+                        app:bga_npl_otherWhiteSpacing="64dp"
+                        app:bga_npl_placeholderDrawable="@mipmap/bga_pp_ic_holder_light"
+                        app:bga_npl_showAsLargeWhenOnlyOne="false"
+                        tools:background="@color/black"
+                        tools:layout_height="60dp"
+                        tools:layout_width="60dp"/>
+                </LinearLayout>
+
             </LinearLayout>
 
-        </LinearLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"/>
+        </com.scwang.smart.refresh.layout.SmartRefreshLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

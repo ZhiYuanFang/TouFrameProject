@@ -74,6 +74,11 @@ public class GoodsDetailOperatorActivity extends BaseActivity<ActivityGoodsDetai
                 mBinding.setGoodsModel(data);
             }
 
+            @Override
+            public void onComplete() {
+                super.onComplete();
+                loadEnd.set(true);
+            }
         });
     }
 

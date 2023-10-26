@@ -70,6 +70,7 @@ public abstract class BaseTouActivity<T extends ViewDataBinding> extends SwipeBa
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setSwipeBackEnable(false);
         ActivityManager.popActivity(this);
         lifecycleSubject.onNext(ActivityEvent.CREATE);
         if (!EventBus.getDefault().isRegistered(this))

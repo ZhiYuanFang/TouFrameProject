@@ -127,7 +127,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
 
     @Override
     protected void initServer() {
-
+        refreshStatistics();
     }
 
     private void refreshStatistics(){
@@ -140,6 +140,12 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
             @Override
             public void success(StatisticsModel data) {
                 mBinding.setStatisticsModel(data);
+            }
+
+            @Override
+            public void onComplete() {
+                super.onComplete();
+                loadEnd.set(true);
             }
         });
     }

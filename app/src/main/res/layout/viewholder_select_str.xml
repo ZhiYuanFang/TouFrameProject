@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="context"
+            type="xyz.ttyz.tourfrxohc.fragment.SelectStrViewHolder"/>
+        <variable
+            name="selectItemModel"
+            type="xyz.ttyz.tourfrxohc.models.SelectItemModel"/>
+    </data>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:background="?selectableItemBackground"
+        android:text="@{selectItemModel.selectStr}"
+        android:gravity="center"
+        android:textSize="16sp"
+        tools:text="删除4项"
+        android:textStyle="bold"
+        tools:textColor="#CC1717"
+        android:textColor="@{selectItemModel.strColor}"
+        android:onClick="@{()->context.selectItem(selectItemModel)}"/>
+</layout>

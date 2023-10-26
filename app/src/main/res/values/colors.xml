@@ -5,4 +5,5 @@
     <color name="colorAccent">#FF4081</color>
     <!--图片选择器-->
     <color name="green">#3CB715</color>
+    <color name="white_pressed">#E5E5E5</color>
 </resources>

@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
@@ -16,6 +17,7 @@ import androidx.databinding.PropertyChangeRegistry;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.luck.picture.lib.PictureSelectionModel;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
@@ -48,10 +50,12 @@ import xyz.ttyz.tourfrxohc.R;
 import xyz.ttyz.tourfrxohc.adapter.NinePhotoAdapter;
 import xyz.ttyz.tourfrxohc.databinding.ActivityGoodsDetailBinding;
 import xyz.ttyz.tourfrxohc.dialog.PicDialog;
+import xyz.ttyz.tourfrxohc.dialog.SingleSelectDialog;
 import xyz.ttyz.tourfrxohc.event.GoodsOperatorEvent;
 import xyz.ttyz.tourfrxohc.http.BaseSubscriber;
 import xyz.ttyz.tourfrxohc.models.GoodsModel;
 import xyz.ttyz.tourfrxohc.models.LocationModel;
+import xyz.ttyz.tourfrxohc.models.SelectItemModel;
 import xyz.ttyz.tourfrxohc.utils.ImageUploader;
 import xyz.ttyz.tourfrxohc.viewholder.PicAddingViewHolder;
 
@@ -152,25 +156,40 @@ public class GoodsDetailActivity extends BaseActivity<ActivityGoodsDetailBinding
     public OnClickAdapter.onClickCommand clickUpImg = new OnClickAdapter.onClickCommand() {
         @Override
         public void click() {
-            //  上传照片 选择图
-            PictureSelector.create(ActivityManager.getInstance())
-                    .openGallery(PictureMimeType.ofImage())
-                    .imageEngine(new NormalImageEngine())
-                    .theme(R.style.picture_custom_style)
-                    .maxSelectNum(maxAddNumber.get() - hasAddNumber.get())
-                    .minSelectNum(1)
-                    .isPreviewImage(true)
-                    .isEnablePreviewAudio(true)
-                    .isCamera(false)
-                    .circleDimmedLayer(true)
-                    .showCropFrame(false)
-                    .showCropGrid(false)
-                    .isCompress(true)
-                    .withAspectRatio(1, 1)
-                    .minimumCompressSize(100)
-                    .freeStyleCropEnabled(true)
-                    .rotateEnabled(false)
-                    .forResult(PictureConfig.CHOOSE_REQUEST);
+            List<SelectItemModel> list = new ArrayList<SelectItemModel>() {{
+                add(new SelectItemModel("拍照", Color.BLACK));
+                add(new SelectItemModel("图库", Color.BLACK));
+            }};
+            SingleSelectDialog.getInstance(list, new SingleSelectDialog.SingleSelectDelegate() {
+                @Override
+                public void selectItem(SelectItemModel selectItemModel) {
+                    PictureSelectionModel pictureSelectionModel = null;
+                    if (selectItemModel.getSelectStr().equals("拍照")) {
+                        pictureSelectionModel = PictureSelector.create(ActivityManager.getInstance())
+                                .openCamera(PictureMimeType.ofImage());
+                    } else {
+                        pictureSelectionModel = PictureSelector.create(ActivityManager.getInstance())
+                                .openGallery(PictureMimeType.ofImage());
+                    }
+
+                    pictureSelectionModel.imageEngine(new NormalImageEngine())
+                            .theme(R.style.picture_custom_style)
+                            .maxSelectNum(maxAddNumber.get() - hasAddNumber.get())
+                            .minSelectNum(1)
+                            .isPreviewImage(true)
+                            .isEnablePreviewAudio(true)
+                            .isCamera(false)
+                            .circleDimmedLayer(true)
+                            .showCropFrame(false)
+                            .showCropGrid(false)
+                            .isCompress(true)
+                            .withAspectRatio(1, 1)
+                            .minimumCompressSize(100)
+                            .freeStyleCropEnabled(true)
+                            .rotateEnabled(false)
+                            .forResult(PictureConfig.CHOOSE_REQUEST);
+                }
+            }).show(getSupportFragmentManager());
         }
     };
 
