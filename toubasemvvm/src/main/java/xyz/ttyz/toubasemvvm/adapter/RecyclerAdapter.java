@@ -35,7 +35,7 @@ public class RecyclerAdapter {
             GridLayoutAnimationController gridLayoutAnimationController = new GridLayoutAnimationController(AnimationUtils.loadAnimation(recyclerView.getContext(), R.anim.item_anim));
             gridLayoutAnimationController.setOrder(LayoutAnimationController.ORDER_REVERSE);
             gridLayoutAnimationController.setDelay(0.15f);
-            recyclerView.setLayoutAnimation(gridLayoutAnimationController);
+//            recyclerView.setLayoutAnimation(gridLayoutAnimationController);//会闪退
         } else {
             //默认给每一个列表添加动画展示效果
             LayoutAnimationController layoutAnimationController = new LayoutAnimationController(AnimationUtils.loadAnimation(recyclerView.getContext(), R.anim.item_anim));

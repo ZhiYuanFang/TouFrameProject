@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:binding="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="context"
+            type="xyz.ttyz.tourfrxohc.viewholder.PicAddingViewHolder" />
+        <variable
+            name="imageUrl"
+            type="String" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginTop="5dp"
+        tools:background="@color/black">
+
+        <xyz.ttyz.toubasemvvm.weight.CardImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            binding:onClickCommand="@{context.clickLook}"
+            binding:imageUrl="@{imageUrl}"/>
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:foreground="?selectableItemBackground"
+            android:padding="5dp"
+            binding:onClickCommand="@{context.clickDelete}"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="-13dp"
+            android:layout_marginEnd="-13dp"
+            android:src="@android:drawable/ic_delete"/>
+    </RelativeLayout>
+</layout>

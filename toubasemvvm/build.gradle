@@ -53,6 +53,7 @@ dependencies {
     api 'com.github.bigmanLau:CardviewFix:1.0.3'
     // 选择图片
     api 'com.github.LuckSiege.PictureSelector:picture_library:v2.6.0'
+
     //更新下载
     api 'com.squareup.okhttp3:okhttp:3.14.2'
 }

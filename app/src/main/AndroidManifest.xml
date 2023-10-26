@@ -8,11 +8,11 @@
         android:required="false" />
 
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
-    <uses-permission android:name="android.permission.BLUETOOTH"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:name=".BaseApplication"
@@ -33,30 +33,34 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
-        <activity android:name=".MainActivity"
-            android:launchMode="singleTop"
-            android:exported="true">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.LoginActivity"
+        <activity
+            android:name=".activity.LoginActivity"
             android:launchMode="singleTop"
-            android:screenOrientation="fullSensor"/>
-        <activity android:name=".activity.ComingActivity"
+            android:screenOrientation="fullSensor" />
+        <activity
+            android:name=".activity.ComingActivity"
             android:windowSoftInputMode="adjustNothing">
 
         </activity>
-        <activity android:name=".activity.ScanActivity"/>
-        <activity android:name=".activity.ComSuccessActivity"/>
-        <activity android:name=".activity.GoodsDetailActivity"/>
-        <activity android:name=".activity.PandingActivity"/>
-        <activity android:name=".activity.HistoryActivity"/>
-        <activity android:name=".activity.GoodsDetailOperatorActivity"/>
-        <activity android:name=".activity.PantDetailListActivity"/>
-        <activity android:name=".activity.WebActivity"/>
+        <activity android:name=".activity.ScanActivity" />
+        <activity android:name=".activity.ComSuccessActivity" />
+        <activity android:name=".activity.GoodsDetailActivity" />
+        <activity android:name=".activity.PandingActivity" />
+        <activity android:name=".activity.HistoryActivity" />
+        <activity android:name=".activity.GoodsDetailOperatorActivity" />
+        <activity android:name=".activity.PantDetailListActivity" />
+        <activity android:name=".activity.WebActivity" />
 
     </application>
 

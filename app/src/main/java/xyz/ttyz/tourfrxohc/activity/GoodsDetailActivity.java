@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 import androidx.databinding.Bindable;
@@ -12,6 +13,8 @@ import androidx.databinding.Observable;
 import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableInt;
 import androidx.databinding.PropertyChangeRegistry;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
@@ -30,6 +33,8 @@ import xyz.ttyz.mylibrary.method.RxOHCUtils;
 import xyz.ttyz.mylibrary.protect.SharedPreferenceUtil;
 import xyz.ttyz.tou_example.ActivityManager;
 import xyz.ttyz.toubasemvvm.adapter.OnClickAdapter;
+import xyz.ttyz.toubasemvvm.adapter.utils.BaseEmptyAdapterParent;
+import xyz.ttyz.toubasemvvm.adapter.utils.BaseRecyclerAdapter;
 import xyz.ttyz.toubasemvvm.utils.NormalImageEngine;
 import xyz.ttyz.toubasemvvm.utils.StringUtil;
 import xyz.ttyz.toubasemvvm.utils.ToastUtil;
@@ -48,13 +53,14 @@ import xyz.ttyz.tourfrxohc.http.BaseSubscriber;
 import xyz.ttyz.tourfrxohc.models.GoodsModel;
 import xyz.ttyz.tourfrxohc.models.LocationModel;
 import xyz.ttyz.tourfrxohc.utils.ImageUploader;
+import xyz.ttyz.tourfrxohc.viewholder.PicAddingViewHolder;
 
 /**
  * @author 投投
  * @date 2023/10/16
  * @email 343315792@qq.com
  */
-public class GoodsDetailActivity extends BaseActivity<ActivityGoodsDetailBinding> implements Observable {
+public class GoodsDetailActivity extends BaseActivity<ActivityGoodsDetailBinding> {
 
     public static void show(@Nullable GoodsModel goodsModel, boolean isEdit) {
         Intent intent = new Intent(ActivityManager.getInstance(), GoodsDetailActivity.class);
@@ -66,6 +72,10 @@ public class GoodsDetailActivity extends BaseActivity<ActivityGoodsDetailBinding
     ToolBarViewModel toolBarViewModel;
     public GoodsModel goodsModel;
     public ObservableBoolean isEdit = new ObservableBoolean(false);
+
+    public GridLayoutManager picGridManager = new GridLayoutManager(this, 3);
+    public BaseEmptyAdapterParent adapterPic;
+    public ArrayList<String> selectList;//图片
 
     @Override
     protected int initLayoutId() {
@@ -92,10 +102,42 @@ public class GoodsDetailActivity extends BaseActivity<ActivityGoodsDetailBinding
         isEdit.set((boolean) getIntent().getBooleanExtra("isEdit", false));
         mBinding.setGoodsModel(goodsModel);
         selectList = goodsModel.getImageUrls();
-        if(selectList == null){
+        if (selectList == null) {
             selectList = new ArrayList<>();
         }
         hasAddNumber.set(selectList.size());
+
+        adapterPic = new BaseEmptyAdapterParent(this, new BaseRecyclerAdapter.NormalAdapterDelegate() {
+            @Override
+            public int getItemViewType(int position) {
+                return 0;
+            }
+
+            @Override
+            public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+                return new PicAddingViewHolder(GoodsDetailActivity.this, new PicAddingViewHolder.ClickDelegate() {
+                    @Override
+                    public void delete(int pos) {
+                        selectList.remove(pos);
+                        adapterPic.setList(selectList);
+                        hasAddNumber.set(selectList.size());
+                    }
+
+                    @Override
+                    public void look(int pos) {
+                        PicDialog.show(selectList, pos);
+
+                    }
+                }, parent);
+            }
+
+            @Override
+            public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+                ((PicAddingViewHolder) holder).bindData((String) adapterPic.getItem(position), position);
+            }
+        });
+        adapterPic.setList(selectList);
+        mBinding.setAdapterPic(adapterPic);
 
     }
 
@@ -103,6 +145,7 @@ public class GoodsDetailActivity extends BaseActivity<ActivityGoodsDetailBinding
     protected void initServer() {
 
     }
+
     public ObservableInt hasAddNumber = new ObservableInt(0);
     public ObservableInt maxAddNumber = new ObservableInt(5);
 
@@ -130,8 +173,7 @@ public class GoodsDetailActivity extends BaseActivity<ActivityGoodsDetailBinding
                     .forResult(PictureConfig.CHOOSE_REQUEST);
         }
     };
-    @Bindable
-    public ArrayList<String> selectList;//图片
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -145,8 +187,8 @@ public class GoodsDetailActivity extends BaseActivity<ActivityGoodsDetailBinding
                     public void success(String qiniuPath) {
                         System.out.println("测试 : " + qiniuPath);
                         selectList.add(qiniuPath);
+                        adapterPic.setList(selectList);
                         hasAddNumber.set(selectList.size());
-                        notifyChange(BR.selectList);
                     }
 
                     @Override
@@ -158,6 +200,7 @@ public class GoodsDetailActivity extends BaseActivity<ActivityGoodsDetailBinding
         }
 
     }
+
     public OnClickAdapter.onClickCommand clickSave = new OnClickAdapter.onClickCommand() {
         @Override
         public void click() {
@@ -171,7 +214,7 @@ public class GoodsDetailActivity extends BaseActivity<ActivityGoodsDetailBinding
             map.put("warehouseAreaId", DefaultUtils.getLocalLocationModel().warehouseAreaId);
             map.put("warehouseId", DefaultUtils.getLocalLocationModel().warehouseId);
             map.put("imageUrls", selectList);
-            if(isEdit.get()){
+            if (isEdit.get()) {
                 map.put("id", goodsModel.getId());
                 new RxOHCUtils<>(GoodsDetailActivity.this).executeApi(BaseApplication.apiService.updateGoods(RetrofitUtils.getNormalBody(map)), new BaseSubscriber<Boolean>(GoodsDetailActivity.this) {
                     @Override
@@ -193,44 +236,4 @@ public class GoodsDetailActivity extends BaseActivity<ActivityGoodsDetailBinding
             }
         }
     };
-
-    public NinePhotoAdapter.ClickDelegate clickDelegate = new NinePhotoAdapter.ClickDelegate() {
-        @Override
-        public void singleClick(int position) {
-            PicDialog.show(selectList, position);
-        }
-
-        @Override
-        public void doubleClick(int position) {
-//            selectList.remove(position);
-//            hasAddNumber.set(selectList.size());
-//            notifyChange(BR.selectList);
-        }
-    };
-
-
-    private transient PropertyChangeRegistry propertyChangeRegistry = new PropertyChangeRegistry();
-
-    protected synchronized void notifyChange(int propertyId) {
-        if (propertyChangeRegistry == null) {
-            propertyChangeRegistry = new PropertyChangeRegistry();
-        }
-        propertyChangeRegistry.notifyChange(this, propertyId);
-    }
-
-    @Override
-    public synchronized void addOnPropertyChangedCallback(OnPropertyChangedCallback callback) {
-        if (propertyChangeRegistry == null) {
-            propertyChangeRegistry = new PropertyChangeRegistry();
-        }
-        propertyChangeRegistry.add(callback);
-
-    }
-
-    @Override
-    public synchronized void removeOnPropertyChangedCallback(OnPropertyChangedCallback callback) {
-        if (propertyChangeRegistry != null) {
-            propertyChangeRegistry.remove(callback);
-        }
-    }
 }
