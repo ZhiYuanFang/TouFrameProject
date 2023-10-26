@@ -57,7 +57,7 @@ public class PandingActivity extends BaseActivity<ActivityPandingBinding> {
 
     public static void show() {
 
-        if (DefaultUtils.getLocalLocationModel().warehouseAreaId < 0){
+        if (DefaultUtils.getLocalLocationModel().warehouseAreaId < 0) {
             ToastUtil.showToast("请先选择仓库区域");
             return;
         }
@@ -103,20 +103,26 @@ public class PandingActivity extends BaseActivity<ActivityPandingBinding> {
                 .titleClick(new OnClickAdapter.onClickCommand() {
                     @Override
                     public void click() {
-                        LocationDialog.showDialog(new LocationDialog.CallBackDelegate() {
-                            @Override
-                            public void select(LocationModel model) {
-                                DefaultUtils.setLocationModel(model);
-                                toolBarViewModel.title.set(DefaultUtils.getLocalLocationModel().selectOne + "-" + DefaultUtils.getLocalLocationModel().selectTwo);
-                            }
-                        });
+                        if (uhfService.isOpen()) {
+                            clickPand.click();
+                        } else
+                            LocationDialog.showDialog(new LocationDialog.CallBackDelegate() {
+                                @Override
+                                public void select(LocationModel model) {
+                                    DefaultUtils.setLocationModel(model);
+                                    toolBarViewModel.title.set(DefaultUtils.getLocalLocationModel().selectOne + "-" + DefaultUtils.getLocalLocationModel().selectTwo);
+                                }
+                            });
                     }
                 })
                 .rightTxt("记录")
                 .rightClick(new OnClickAdapter.onClickCommand() {
                     @Override
                     public void click() {
-                        HistoryActivity.show();
+                        if (uhfService.isOpen()) {
+                            clickPand.click();
+                        } else
+                            HistoryActivity.show();
                     }
                 })
                 .build();
@@ -145,27 +151,27 @@ public class PandingActivity extends BaseActivity<ActivityPandingBinding> {
         isPandingFiled.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
             @Override
             public void onPropertyChanged(Observable sender, int propertyId) {
-                if(isPandingFiled.get()){
+                if (isPandingFiled.get()) {
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            if(isPandingFiled.get()){
+                            if (isPandingFiled.get()) {
                                 epcList = uhfService.getTagIDs();
-                                if(epcList != null){
+                                if (epcList != null) {
                                     int errorPos = -1;
-                                    for (EPC epc: epcList) {
-                                        if(epc.getId().equals("000000000000000000000000")){
+                                    for (EPC epc : epcList) {
+                                        if (epc.getId().equals("000000000000000000000000")) {
                                             errorPos = epcList.indexOf(epc);
                                             break;
                                         }
                                     }
-                                    if(errorPos > -1)
+                                    if (errorPos > -1)
                                         epcList.remove(errorPos);
                                 }
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        if(!pandingEndAdapter.getData().equals(epcList)){
+                                        if (!pandingEndAdapter.getData().equals(epcList)) {
                                             pandingEndAdapter.setList(epcList);
                                         }
                                     }
@@ -203,9 +209,9 @@ public class PandingActivity extends BaseActivity<ActivityPandingBinding> {
         fragmentRefresh();
     }
 
-    private void fragmentRefresh(){
-        waitFragment.reSetLocationModel(DefaultUtils.getLocalLocationModel(),"");
-        pantFragment.reSetLocationModel(DefaultUtils.getLocalLocationModel(),"");
+    private void fragmentRefresh() {
+        waitFragment.reSetLocationModel(DefaultUtils.getLocalLocationModel(), "");
+        pantFragment.reSetLocationModel(DefaultUtils.getLocalLocationModel(), "");
     }
 
     @Override
@@ -220,11 +226,12 @@ public class PandingActivity extends BaseActivity<ActivityPandingBinding> {
     }
 
     private void closeUhf() {
-        isPandingFiled.set(!uhfService.inventoryStop());
         uhfService.close();
-        ToastUtil.showToast("已结束盘点");
+        if (isPandingFiled.get()) {
+            ToastUtil.showToast("已结束盘点");
+        }
+        isPandingFiled.set(false);
     }
-
 
 
     //endregion
@@ -256,8 +263,16 @@ public class PandingActivity extends BaseActivity<ActivityPandingBinding> {
     };
 
     @Override
+    public void finish() {
+        if (uhfService.isOpen()) {
+            clickPand.click();
+        } else
+            super.finish();
+    }
+
+    @Override
     protected void onDestroy() {
-        super.onDestroy();
         closeUhf();
+        super.onDestroy();
     }
 }

@@ -27,6 +27,7 @@ import xyz.ttyz.toubasemvvm.adapter.utils.BaseEmptyAdapterParent;
 import xyz.ttyz.toubasemvvm.adapter.utils.BaseRecyclerAdapter;
 import xyz.ttyz.toubasemvvm.event.NetEvent;
 import xyz.ttyz.toubasemvvm.utils.DialogUtils;
+import xyz.ttyz.toubasemvvm.utils.ToastUtil;
 import xyz.ttyz.toubasemvvm.vm.ToolBarViewModel;
 import xyz.ttyz.tourfrxohc.activity.BaseActivity;
 import xyz.ttyz.tourfrxohc.activity.ComingActivity;
@@ -131,7 +132,11 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     }
 
     private void refreshStatistics(){
-        if(locationModelObservableField.get().warehouseAreaId < 0) return;
+        if(locationModelObservableField.get().warehouseAreaId < 0) {
+            ToastUtil.showToast("请选择仓库");
+            loadEnd.set(true);
+            return;
+        }
         //首屏的在库货品统计信息
         Map map = new HashMap();
         map.put("warehouseAreaId", locationModelObservableField.get().warehouseAreaId);

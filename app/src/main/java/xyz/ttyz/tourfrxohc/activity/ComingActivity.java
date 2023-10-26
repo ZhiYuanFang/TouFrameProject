@@ -134,9 +134,9 @@ public class ComingActivity extends BaseActivity<ActivityComingBinding>{
             }
         });
         mBinding.recyclerTabLayout.setupWithViewPager(mBinding.vpager);
-        if(type == NowOut){
-            mBinding.vpager.setCurrentItem(1);
-        }
+//        if(type == NowOut){
+//            mBinding.vpager.setCurrentItem(1);
+//        }
 
         fragmentRefresh();
     }
