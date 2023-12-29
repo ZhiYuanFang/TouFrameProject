@@ -49,6 +49,7 @@ import xyz.ttyz.toubasemvvm.event.NetEvent;
 import xyz.ttyz.toubasemvvm.utils.Constants;
 import xyz.ttyz.toubasemvvm.utils.DensityUtil;
 import xyz.ttyz.toubasemvvm.utils.DialogUtils;
+import xyz.ttyz.toubasemvvm.utils.NetworkUtil;
 import xyz.ttyz.toubasemvvm.utils.StatusBarUtil;
 import xyz.ttyz.toubasemvvm.utils.ToastUtil;
 
@@ -86,6 +87,14 @@ public abstract class BaseTouActivity<T extends ViewDataBinding> extends SwipeBa
             //这样半透明+白=灰, 状态栏的文字能看得清
             StatusBarUtil.setStatusBarColor(this, 0x55000000);
         }
+
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP) {
+            //低版本网络监听
+            Intent intent = new Intent();
+            intent.setAction("service.NetworkStateService");
+            startService(intent);
+        }
+
         mBinding = DataBindingUtil.setContentView(this, initLayoutId());
         //页面基础渲染之后，延迟300毫秒做逻辑渲染，防止逻辑渲染卡顿，做延迟加载，会导致需要在onResume做功能的时候，onCreate没有初始化好，导致功能异常
 //        Observable.timer(300, TimeUnit.MILLISECONDS)
@@ -111,11 +120,18 @@ public abstract class BaseTouActivity<T extends ViewDataBinding> extends SwipeBa
 //                    }
 //                });
         doInit();
+
+        if(NetworkUtil.isNetWorkConnected(this)){
+            missNoNetControl();
+        } else {
+            showNoNetControl();
+        }
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
+        if(mBinding == null){return;}
         doInit();
     }
 

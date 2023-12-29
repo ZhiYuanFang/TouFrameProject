@@ -11,6 +11,7 @@ import retrofit2.http.POST;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 import xyz.ttyz.mylibrary.method.BaseModule;
+import xyz.ttyz.tourfrxohc.models.CarModel;
 import xyz.ttyz.tourfrxohc.models.MainModel;
 import xyz.ttyz.tourfrxohc.models.UserModel;
 
@@ -20,8 +21,14 @@ import xyz.ttyz.tourfrxohc.models.UserModel;
  */
 
 public interface ApiService {
-    @POST("msu/v1/signin/code")
-    Observable<BaseModule<UserModel>> login(@Body RequestBody data);
+    @POST("/newKeyCabinet/verifyCabinetInit.json")
+    Observable<BaseModule> verifyCabinetInit(@Body RequestBody data);
+    //根据入柜校验码获取待入柜车辆信息
+    @POST("/newKeyCabinet/getInterBoxCarInfo.json")
+    Observable<BaseModule<CarModel>> getInterBoxCarInfo(@Body RequestBody data);
+    //获取可出柜的车辆信息列表
+    @POST("/newKeyCabinet/canOutBoxKeyList.json")
+    Observable<BaseModule<CarModel>> canOutBoxKeyList(@Body RequestBody data);
 
     @GET("msr/v1/app/personal/index")
     Observable<BaseModule<MainModel>> getHistory(@QueryMap Map<String, Object> map);

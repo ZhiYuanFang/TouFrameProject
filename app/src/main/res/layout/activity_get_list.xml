@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:binding="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="context"
+            type="xyz.ttyz.tourfrxohc.activity.GetListActivity" />
+
+        <variable
+            name="toolBarViewModel"
+            type="xyz.ttyz.toubasemvvm.vm.ToolBarViewModel" />
+        <variable
+            name="adapter"
+            type="xyz.ttyz.toubasemvvm.adapter.BaseGridAdapter" />
+    </data>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@mipmap/bg"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <include layout="@layout/layout_top"/>
+
+        <include
+            layout="@layout/layout_toolbar"
+            binding:toolBarViewModel="@{toolBarViewModel}" />
+
+        <com.scwang.smart.refresh.layout.SmartRefreshLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            binding:enableLoadMore="@{false}"
+            binding:loadEnd="@{context.loadEnd}"
+            binding:refreshListener="@{context.refreshListener}">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="vertical"
+                binding:adapter="@{adapter}"
+                binding:isNotLinearLayoutManager="@{true}"
+                binding:layoutManager="@{adapter.gridLayoutManager}"
+                binding:itemDecoration="@{adapter.itemDecoration}"
+                tools:listitem="@layout/viewholder_car_item"/>
+        </com.scwang.smart.refresh.layout.SmartRefreshLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:paddingTop="11dp"
+            android:paddingBottom="11dp"
+            android:paddingStart="26dp"
+            android:paddingEnd="26dp"
+            android:showDividers="middle"
+            android:divider="@drawable/bg_divider_three"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:foreground="?selectableItemBackground"
+                tools:text="全选"
+                android:text='@{context.isSelectAllFiled ? "取消全选" : "全选"}'
+                android:textSize="15sp"
+                binding:onClickCommand="@{context.onClickSelectAll}"
+                android:gravity="center"
+                android:background="@drawable/bg_safe_alert_back"
+                android:textColor="@color/white"
+                android:layout_weight="1"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:text="确认取用"
+                android:textSize="15sp"
+                android:foreground="?selectableItemBackground"
+                binding:onClickCommand="@{context.onClickConfirm}"
+                android:gravity="center"
+                android:background="@drawable/bg_conor_lightblue_white"
+                android:textColor="@color/black"
+                android:layout_weight="1"/>
+        </LinearLayout>
+    </LinearLayout>
+</layout>

@@ -13,7 +13,7 @@ import xyz.ttyz.toubasemvvm.adapter.OnClickAdapter;
 
 
 public class BaseViewModle {
-    public ObservableInt bacColor = new ObservableInt(ContextCompat.getColor(ActivityManager.getInstance(), android.R.color.white));
+    public ObservableInt bacColor = new ObservableInt(ContextCompat.getColor(ActivityManager.getInstance(), android.R.color.transparent));
     public ObservableInt bacDraID = new ObservableInt(-1);
     public ObservableField<Drawable> bacDra = new ObservableField<>();
     public ObservableField<OnClickAdapter.onClickCommand> onClickCommand = new ObservableField<>();

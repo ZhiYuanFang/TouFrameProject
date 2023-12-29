@@ -13,7 +13,7 @@ import xyz.ttyz.toubasemvvm.adapter.OnClickAdapter;
 
 public class ToolBarViewModel extends BaseViewModle{
     public ObservableField<String> title = new ObservableField<>("");
-    public ObservableInt titleColor = new ObservableInt(ContextCompat.getColor(ActivityManager.getInstance(), R.color.black));
+    public ObservableInt titleColor = new ObservableInt(ContextCompat.getColor(ActivityManager.getInstance(), R.color.white));
     public ObservableBoolean notJudgeLogin = new ObservableBoolean(true);
     public ObservableField<OnClickAdapter.onClickCommand> backClick;
     public ObservableField<OnClickAdapter.onClickCommand> saveClick;
@@ -49,7 +49,7 @@ public class ToolBarViewModel extends BaseViewModle{
 
 
     public static final class Builder {
-        public ObservableInt titleColor = new ObservableInt(ContextCompat.getColor(ActivityManager.getInstance(), R.color.black));
+        public ObservableInt titleColor = new ObservableInt(ContextCompat.getColor(ActivityManager.getInstance(), R.color.white));
         public ObservableBoolean rightNoBac = new ObservableBoolean(false);
         private ObservableField<String> title = new ObservableField<>("");
         private ObservableBoolean notJudgeLogin = new ObservableBoolean(true);

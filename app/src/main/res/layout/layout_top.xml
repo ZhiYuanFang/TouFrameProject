@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="32dp"
+    android:gravity="center_vertical"
+    android:background="@drawable/bg_top">
+    <ImageView
+        android:layout_width="67dp"
+        android:layout_height="14dp"
+        android:layout_marginStart="15dp"
+        android:src="@mipmap/logo"/>
+    <View
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"/>
+    <ImageView
+        android:id="@+id/iv_net"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:src="@mipmap/net"/>
+    <ImageView
+        android:id="@+id/iv_wifi"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginStart="7dp"
+        android:layout_marginEnd="15dp"
+        android:src="@mipmap/wifi"/>
+
+</LinearLayout>

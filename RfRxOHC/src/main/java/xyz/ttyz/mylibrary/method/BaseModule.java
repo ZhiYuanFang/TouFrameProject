@@ -6,7 +6,7 @@ package xyz.ttyz.mylibrary.method;
 
 public class BaseModule<D> extends RfRxOHCBaseModule {
     int code;
-    String msg;
+    String message;
     D data;
 
     Page paging;
@@ -20,7 +20,7 @@ public class BaseModule<D> extends RfRxOHCBaseModule {
     }
 
     public String getMsg() {
-        return msg;
+        return message;
     }
 
     public D getData() {

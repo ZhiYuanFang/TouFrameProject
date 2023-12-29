@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:binding="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="carModel"
+            type="xyz.ttyz.tourfrxohc.models.CarModel" />
+        <variable
+            name="context"
+            type="xyz.ttyz.tourfrxohc.activity.GetSuccessActivity" />
+    </data>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@mipmap/bg"
+        android:orientation="vertical">
+
+        <include layout="@layout/layout_top"/>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingStart="30dp"
+            android:paddingEnd="30dp"
+            android:gravity="center">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical">
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@mipmap/success"/>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="取用成功"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="wrap_content"
+                android:layout_marginTop="23dp"
+                android:layout_height="38dp"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <Button
+                    android:layout_width="257dp"
+                    android:layout_height="match_parent"
+                    android:textColor="@color/white"
+                    android:text="回到首页"
+                    binding:onClickCommand="@{context.onClickExit}"
+                    android:background="@drawable/bg_safe_alert_back"/>
+
+                <Button
+                    binding:visible="@{context.comingType == context.ListComing}"
+                    android:layout_width="257dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="15dp"
+                    android:textColor="@color/white"
+                    android:text="继续取用"
+                    binding:onClickCommand="@{context.onClickContinue}"
+                    android:background="@drawable/bg_safe_alert_back"/>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:textColor="@color/white"
+                android:textSize="11sp"
+                tools:text="30s后自动退出本次验证"
+                android:text="@{context.autoFiled}"/>
+        </LinearLayout>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</layout>

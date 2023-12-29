@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:binding="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="context"
+            type="xyz.ttyz.tourfrxohc.activity.ResetSuperPwdActivity" />
+    </data>
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@mipmap/bg"
+        android:orientation="vertical">
+        <include layout="@layout/layout_top"/>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@mipmap/alert"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:layout_marginTop="14dp"
+                android:layout_marginBottom="23dp"
+                android:text="因已进行过应急开箱，若要继续使用，请点击下方按钮"/>
+            <Button
+                android:layout_width="257dp"
+                android:layout_height="wrap_content"
+                binding:onClickCommand="@{context.onClickReset}"
+                android:background="@drawable/bg_conor_lightblue_white"
+                android:textColor="@color/black"
+                android:text="点击重置紧急密码"/>
+        </LinearLayout>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</layout>

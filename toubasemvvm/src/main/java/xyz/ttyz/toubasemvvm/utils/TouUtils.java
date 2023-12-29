@@ -17,8 +17,6 @@ import android.widget.ScrollView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.luck.picture.lib.PictureSelector;
-import com.luck.picture.lib.entity.LocalMedia;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -129,19 +127,6 @@ public class TouUtils {
         return 0;
     }
 
-    public static void filterResSelectResult(Intent data, ArrayList<String> selectPics){
-        List<LocalMedia> selectList = PictureSelector.obtainMultipleResult(data);
-        if (selectList.size() > 0) {
-            for (LocalMedia media : selectList) {
-                String filePath = media.getPath();
-                if (media.isCompressed()) {
-                    filePath = media.getCompressPath();
-                }
-                filePath = FileUtil.getRealPathFromUri(ActivityManager.getInstance(), Uri.parse(filePath));
-                selectPics.add(filePath);
-            }
-        }
-    }
     public static String jumpString;//通知点击跳转的链接
 
     public static boolean equalsList(List list1, List list2) throws Exception{

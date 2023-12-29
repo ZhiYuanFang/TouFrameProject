@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:binding="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="context"
+            type="xyz.ttyz.tourfrxohc.activity.GetDetailActivity" />
+
+        <variable
+            name="toolBarViewModel"
+            type="xyz.ttyz.toubasemvvm.vm.ToolBarViewModel" />
+        <variable
+            name="adapter"
+            type="xyz.ttyz.toubasemvvm.adapter.BaseGridAdapter" />
+    </data>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:background="@mipmap/bg">
+        <include layout="@layout/layout_top"/>
+
+        <include layout="@layout/layout_toolbar"
+            binding:toolBarViewModel="@{toolBarViewModel}" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:scrollbars="vertical"
+            binding:adapter="@{adapter}"
+            binding:isNotLinearLayoutManager="@{true}"
+            binding:layoutManager="@{adapter.gridLayoutManager}"
+            binding:itemDecoration="@{adapter.itemDecoration}"
+            tools:listitem="@layout/viewholder_car_item"/>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="wrap_content"
+            android:paddingStart="35dp"
+            android:paddingEnd="35dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp"
+            android:layout_height="67dp"
+            android:background="@drawable/bg_step"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center">
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@mipmap/door"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="1.等待格口弹开"
+                    android:textSize="11sp"
+                    android:textColor="@color/white"/>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+            <ImageView
+                android:layout_width="21dp"
+                android:layout_height="21dp"
+                android:src="@mipmap/right"/>
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center">
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@mipmap/key"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="2.取出钥匙"
+                    android:textSize="11sp"
+                    android:textColor="@color/white"/>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+            <ImageView
+                android:layout_width="21dp"
+                android:layout_height="21dp"
+                android:src="@mipmap/right"/>
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center">
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@mipmap/close"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="3.关上柜内完成取出"
+                    android:textSize="11sp"
+                    android:textColor="@color/white"/>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </LinearLayout>
+</layout>

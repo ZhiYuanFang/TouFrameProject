@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:binding="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="context"
+            type="xyz.ttyz.tourfrxohc.activity.PannelActivity" />
+    </data>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@mipmap/bg">
+        <include layout="@layout/layout_top"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="100dp"
+                android:orientation="horizontal"
+                android:showDividers="middle"
+                android:divider="@drawable/bg_divider_pannel"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="129dp"
+                    android:layout_height="129dp"
+                    binding:onClickCommand="@{context.onClickGet}"
+                    android:src="@mipmap/get"/>
+                <ImageView
+                    android:layout_width="129dp"
+                    android:layout_height="129dp"
+                    binding:onClickCommand="@{context.onClickPut}"
+                    android:src="@mipmap/save"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="106dp"
+                android:layout_height="32dp"
+                android:layout_marginBottom="40dp"
+                android:layout_marginEnd="38dp"
+                android:gravity="center"
+                android:foreground="?selectableItemBackground"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                binding:onClickCommand="@{context.onClickSafeOpen}"
+                android:background="@drawable/bg_safe_alert_back"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="21dp"
+                    android:layout_height="21dp"
+                    android:src="@mipmap/safe_alert"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="3dp"
+                    android:text="应急开箱"
+                    android:textColor="@color/white"/>
+            </LinearLayout>
+
+        </RelativeLayout>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</layout>

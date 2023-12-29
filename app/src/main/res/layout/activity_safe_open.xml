@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:binding="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="context"
+            type="xyz.ttyz.tourfrxohc.activity.SafeOpenActivity" />
+
+        <variable
+            name="toolBarViewModel"
+            type="xyz.ttyz.toubasemvvm.vm.ToolBarViewModel" />
+    </data>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:background="@mipmap/bg"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <include layout="@layout/layout_top"/>
+
+            <include
+                layout="@layout/layout_toolbar"
+                binding:toolBarViewModel="@{toolBarViewModel}" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:textSize="20sp"
+                android:textColor="@color/white"
+                android:text="密码取用"/>
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginStart="115dp"
+                android:layout_marginEnd="115dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/shape_alpha_white_conor"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <EditText
+                    android:id="@+id/et_pwd"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp"
+                    android:textSize="15sp"
+                    android:text="@={context.pwdFiled}"
+                    android:background="@null"
+                    android:hint="联系卖好车管理员获取钥匙取用密码"
+                    android:layout_weight="1"/>
+                <Button
+                    android:layout_width="78dp"
+                    android:layout_height="38dp"
+                    android:text="确定"
+                    android:foreground="?selectableItemBackground"
+                    binding:onClickCommand="@{context.onClickConfirm}"
+                    android:background="@drawable/bg_conor_lightblue_white"
+                    android:layout_marginEnd="7dp"
+                    android:textColor="@color/black"/>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+        </LinearLayout>
+        <include
+            layout="@layout/layout_keyboardview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"/>
+    </RelativeLayout>
+</layout>

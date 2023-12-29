@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:binding="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="context"
+            type="xyz.ttyz.tourfrxohc.activity.PwdActivity" />
+
+        <variable
+            name="toolBarViewModel"
+            type="xyz.ttyz.toubasemvvm.vm.ToolBarViewModel" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:focusable="true">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:background="@mipmap/bg">
+            <include layout="@layout/layout_top"/>
+
+            <include
+                layout="@layout/layout_toolbar"
+                binding:toolBarViewModel="@{toolBarViewModel}" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:layout_centerHorizontal="true"
+                android:textSize="20sp"
+                android:layout_marginTop="28dp"
+                android:text="开柜密码"/>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_below="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:layout_centerHorizontal="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <xyz.ttyz.tourfrxohc.weight.VerificationCodeView
+                    android:id="@+id/vcv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    app:vcv_et_bg="@drawable/et_code_bg"
+                    android:orientation="horizontal"
+                    app:vcv_et_number="4"
+                    app:vcv_et_spacing="6dp"
+                    app:vcv_et_width="50dp"
+                    app:vcv_et_text_color="@color/white"
+                    app:vcv_et_text_size="25sp" />
+                <Button
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:text="确定"
+                    binding:onClickCommand="@{context.onClickConfirm}"
+                    android:textSize="15sp"
+                    android:textColor="@color/black"
+                    android:background="@drawable/bg_conor_lightblue_white"/>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+
+            <LinearLayout
+                android:layout_width="128dp"
+                android:layout_height="32dp"
+                android:layout_marginBottom="40dp"
+                android:layout_marginEnd="38dp"
+                android:layout_gravity="end"
+                android:gravity="center"
+                android:foreground="?selectableItemBackground"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                binding:onClickCommand="@{context.onClickSafeOpen}"
+                android:background="@drawable/bg_safe_alert_back"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="21dp"
+                    android:layout_height="21dp"
+                    android:src="@mipmap/breaknet"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="断网密码验证"
+                    android:textColor="@color/white"/>
+            </LinearLayout>
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <include
+            layout="@layout/layout_keyboardview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"/>
+    </RelativeLayout>
+</layout>

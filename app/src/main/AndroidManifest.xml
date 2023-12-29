@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="xyz.ttyz.tourfrxohc">
+    package="xyz.ttyz.tourfrxohc"
+    android:installLocation="internalOnly">
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
+
     <application
         android:name=".BaseApplication"
         android:allowBackup="true"
@@ -24,6 +29,7 @@
                 android:resource="@xml/provider_paths" />
         </provider>
         <activity android:name=".MainActivity"
+            android:screenOrientation="landscape"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,6 +37,58 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activity.WarehouseBindActivity"
+            android:screenOrientation="landscape"
+            android:launchMode="singleTop"/>
+        <activity android:name=".activity.ResetSuperPwdActivity"
+            android:screenOrientation="landscape"
+            android:launchMode="singleTop"/>
+        <activity android:name=".activity.PannelActivity"
+            android:screenOrientation="landscape"
+            android:launchMode="singleTop"/>
+        <activity android:name=".activity.PwdActivity"
+            android:screenOrientation="landscape"
+            android:launchMode="singleTop"/>
+        <activity android:name=".activity.PutDetailActivity"
+            android:screenOrientation="landscape"
+            android:launchMode="singleTop"/>
+        <activity android:name=".activity.PutSuccessActivity"
+            android:screenOrientation="landscape"
+            android:launchMode="singleTop"/>
+        <activity android:name=".activity.GetListActivity"
+            android:screenOrientation="landscape"
+            android:launchMode="singleTop"/>
+        <activity android:name=".activity.GetDetailActivity"
+            android:screenOrientation="landscape"
+            android:launchMode="singleTop"/>
+        <activity android:name=".activity.GetSuccessActivity"
+            android:screenOrientation="landscape"
+            android:launchMode="singleTop"/>
+        <activity android:name=".activity.SafeOpenActivity"
+            android:screenOrientation="landscape"
+            android:launchMode="singleTop"/>
+        <activity android:name=".activity.SafeOpenSuccessActivity"
+            android:screenOrientation="landscape"
+            android:launchMode="singleTop"/>
+        <activity android:name=".activity.PwdSuperActivity"
+            android:screenOrientation="landscape"
+            android:launchMode="singleTop"/>
+        <receiver
+            android:name=".MyReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter android:priority="1000">
+                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+            </intent-filter>
+        </receiver>
+
+        <service android:name="xyz.ttyz.toubasemvvm.service.NetworkStateService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter android:priority="1000">
+                <action android:name="service.NetworkStateService"/>
+            </intent-filter>
+        </service>
 
     </application>
 

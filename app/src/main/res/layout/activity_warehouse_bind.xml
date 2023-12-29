@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:binding="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="context"
+            type="xyz.ttyz.tourfrxohc.activity.WarehouseBindActivity" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:background="@mipmap/bg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <include layout="@layout/layout_top"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="90dp"
+                android:textSize="20sp"
+                android:textColor="@color/white"
+                android:text="仓库绑定"/>
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginStart="115dp"
+                android:layout_marginEnd="115dp"
+                android:layout_marginTop="22dp"
+                android:background="@drawable/shape_alpha_white_conor"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <EditText
+                    android:id="@+id/et_pwd"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp"
+                    android:textSize="15sp"
+                    android:background="@null"
+                    android:hint="请输入设备号"
+                    android:text="@={context.pwdFiled}"
+                    android:layout_weight="1"/>
+                <Button
+                    android:layout_width="78dp"
+                    android:layout_height="38dp"
+                    android:text="确定"
+                    android:foreground="?selectableItemBackground"
+                    binding:onClickCommand="@{context.onClickConfirm}"
+                    android:background="@drawable/bg_conor_lightblue_white"
+                    android:layout_marginEnd="7dp"
+                    android:textColor="@color/black"/>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+        </LinearLayout>
+
+        <include
+            layout="@layout/layout_keyboardview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"/>
+    </RelativeLayout>
+</layout>
