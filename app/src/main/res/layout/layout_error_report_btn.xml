@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:binding="http://schemas.android.com/apk/res-auto">
+
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="xyz.ttyz.toubasemvvm.vm.BaseViewModle" />
+    </data>
+
+    <LinearLayout
+        binding:onClickCommand="@{viewModel.onClickCommand}"
+        android:orientation="horizontal"
+        android:layout_width="72dp"
+        android:layout_height="21dp"
+        android:background="@drawable/bg_safe_alert_back"
+        android:gravity="center">
+
+        <ImageView
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            android:src="@mipmap/error_manager" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:layout_marginStart="5dp"
+            android:textSize="11sp"
+            android:text="故障上报" />
+    </LinearLayout>
+</layout>

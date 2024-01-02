@@ -78,37 +78,9 @@ public class PwdSuperActivity extends BaseActivity<ActivityPwdSuperBinding>{
                 ToastUtils.showError("密码错误");
                 return;
             }
-            //发送全部开箱指令
-            PwdUtils.clearSuperPwd();
-            LockUtil.getInstance(new LockUtil.LockDelegate() {
-                @Override
-                public void callBackOpen(int keyNumber) {
 
-                }
-
-                @Override
-                public void callBackState(boolean[] readArr) {
-                    boolean openAll = true;
-                    for (boolean isOpen :
-                            readArr) {
-                        if (!isOpen) {
-                            openAll = false;
-                            break;
-                        }
-                    }
-                    if(openAll){
-                        //应急开箱完成
-                        ResetSuperPwdActivity.show();
-                        finish();
-                    }
-                }
-            }).openAllKey();
+            ResetSuperPwdActivity.show(true);
+            finish();
         }
     };
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        LockUtil.clearCallBack();
-    }
 }

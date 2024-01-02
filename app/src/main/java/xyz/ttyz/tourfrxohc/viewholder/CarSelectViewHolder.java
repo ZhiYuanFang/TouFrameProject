@@ -5,6 +5,8 @@ import android.view.ViewGroup;
 
 import xyz.ttyz.toubasemvvm.adapter.OnClickAdapter;
 import xyz.ttyz.toubasemvvm.adapter.utils.viewholder.BaseNormalViewHolder;
+import xyz.ttyz.toubasemvvm.vm.BaseViewModle;
+import xyz.ttyz.tourfrxohc.DefaultUtils;
 import xyz.ttyz.tourfrxohc.R;
 import xyz.ttyz.tourfrxohc.databinding.ViewholderCarItemBinding;
 import xyz.ttyz.tourfrxohc.models.CarModel;
@@ -19,6 +21,9 @@ public class CarSelectViewHolder extends BaseNormalViewHolder<CarModel, Viewhold
     public int doorClose = R.mipmap.close;
     public int doorOpen = R.mipmap.door;
     CarSelectDelegate carSelectDelegate;
+
+    public BaseViewModle retryModel;
+    public BaseViewModle reportModel;
     public CarSelectViewHolder(Context context, ViewGroup parent,CarSelectDelegate carSelectDelegate) {
         this(context, parent, true, carSelectDelegate);
     }
@@ -32,6 +37,25 @@ public class CarSelectViewHolder extends BaseNormalViewHolder<CarModel, Viewhold
     protected void initVariable(ViewholderCarItemBinding mBinding) {
 
         mBinding.setContext(this);
+        retryModel = new BaseViewModle();
+        reportModel = new BaseViewModle();
+        retryModel.onClickCommand.set(new OnClickAdapter.onClickCommand() {
+            @Override
+            public void click() {
+                if(carSelectDelegate != null){
+                    carSelectDelegate.retry(mBinding.getCarModel());
+                }
+            }
+        });
+        reportModel.onClickCommand.set(new OnClickAdapter.onClickCommand() {
+            @Override
+            public void click() {
+                if(carSelectDelegate != null){
+                    carSelectDelegate.setErrorDoor(mBinding.getCarModel());
+                }
+            }
+        });
+
     }
 
     @Override
@@ -50,6 +74,9 @@ public class CarSelectViewHolder extends BaseNormalViewHolder<CarModel, Viewhold
 
     public interface CarSelectDelegate{
         void selectItem(CarModel carModel);
+
+        void setErrorDoor(CarModel carModel);
+        void retry(CarModel carModel);
     }
 
 }

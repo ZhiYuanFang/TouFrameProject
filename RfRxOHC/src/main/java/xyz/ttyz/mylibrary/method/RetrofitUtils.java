@@ -9,6 +9,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import okhttp3.MediaType;
@@ -26,6 +27,11 @@ public class RetrofitUtils {
     public static RequestBody getNormalBody(Map hashMap){
         String str = new Gson().toJson(hashMap);
         Log.i(TAG, "request中传递的json数据：" + str);
+        return RequestBody.create(MediaType.parse("application/json; charset=utf-8"), str);
+    }
+    public static RequestBody getNormalBody(List<Object> list){
+        String str = new Gson().toJson(list);
+        Log.i(TAG, "request中传递的json数据list：" + str);
         return RequestBody.create(MediaType.parse("application/json; charset=utf-8"), str);
     }
     public static RequestBody getRSARequestBody(Map hashMap) {

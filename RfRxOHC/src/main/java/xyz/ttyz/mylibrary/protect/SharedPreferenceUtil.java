@@ -69,10 +69,10 @@ public class SharedPreferenceUtil {
 
     public static HashSet<String> getShareStringSet(Context c, String key) {
         if(c == null || key == null){
-            return null;
+            return new HashSet<>();
         }
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(c);
-        return (HashSet<String>) sharedPreferences.getStringSet(key, null);
+        return (HashSet<String>) sharedPreferences.getStringSet(key, new HashSet<>());
     }
 
     public static void clear(Context c, String key){

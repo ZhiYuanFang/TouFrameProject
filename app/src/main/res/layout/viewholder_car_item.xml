@@ -37,30 +37,50 @@
                 android:maxLines="1"
                 tools:ignore="EllipsizeMaxLines"
                 tools:text="LSVNY4BR8HN255136"
-                android:text="LSVNY4BR8HN255136"
+                android:text="@{carModel.carUnique}"
                 android:textSize="20sp"
                 android:textColor="@color/white"
                 android:ellipsize="middle"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:maxLines="1"
+                android:maxLines="2"
+                android:minLines="2"
                 tools:ignore="EllipsizeMaxLines"
                 tools:text="大众 桑塔纳 1.6L "
-                android:text="大众 桑塔纳 1.6L "
+                android:text="@{carModel.carModel}"
                 android:textSize="12sp"
                 android:textColor="@color/white"
                 android:ellipsize="middle"/>
-            <TextView
-                android:layout_width="wrap_content"
+            <androidx.appcompat.widget.LinearLayoutCompat
+                binding:visible="@{!context.showSelect}"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxLines="1"
-                tools:text="黑色白色"
-                android:text="黑色白色"
-                android:textSize="12sp"
-                android:textColor="@color/white"
-                android:ellipsize="middle"
-                tools:ignore="EllipsizeMaxLines" />
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#FF852C"
+                    android:textSize="15sp"
+                    android:text='@{"柜号 " + carModel.doorNumber}'
+                    tools:text="柜号 23" />
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"/>
+
+                <include
+                    layout="@layout/layout_error_report_btn"
+                    binding:viewModel="@{context.reportModel}" />
+                <View
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"/>
+                <include
+                    layout="@layout/layout_retry_btn"
+                    binding:viewModel="@{context.retryModel}" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
         </androidx.appcompat.widget.LinearLayoutCompat>
 
 

@@ -80,7 +80,7 @@ public class SafeOpenActivity extends BaseActivity<ActivitySafeOpenBinding>{
             // TODO: 2023/12/27 judge pwdFiled
             switch (type){
                 case PwdActivity.PUT:
-                    PutDetailActivity.show(new CarModel());
+                    //不存在
                     break;
                 case PwdActivity.GET:
                     //打开所有门

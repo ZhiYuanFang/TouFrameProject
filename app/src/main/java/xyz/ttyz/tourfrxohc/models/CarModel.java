@@ -6,6 +6,7 @@ import androidx.databinding.Observable;
 import androidx.databinding.PropertyChangeRegistry;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import xyz.ttyz.tourfrxohc.BR;
 import xyz.ttyz.tourfrxohc.R;
@@ -16,11 +17,19 @@ import xyz.ttyz.tourfrxohc.R;
  * @email 343315792@qq.com
  */
 public class CarModel implements Serializable, Observable {
+    public String carUnique;//"VNNBBGC33SEG4DC23"
+    public String carModel;//"中规 奥迪 奥迪A6L 奥迪A6L 2023款 改款 40 TFSI 豪华致雅型 白金色 黑色"
+    public String staffId;//405
+    public String keyId;//02287E26
+
+
+    //以下为本地逻辑辅助处理
     private boolean isSelect;
 
     private boolean isOpen;
 
     private int doorNumber;//对应的是哪个门，由 DefaultUtils.getDoorAddress 赋值
+    public boolean isErrorDoor;//取钥匙的时候作为辅助判断 本地数据
 
     @Bindable
     public boolean isSelect() {
@@ -75,5 +84,18 @@ public class CarModel implements Serializable, Observable {
         if (propertyChangeRegistry != null) {
             propertyChangeRegistry.remove(callback);
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CarModel carModel = (CarModel) o;
+        return carUnique.equals(carModel.carUnique);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(carUnique);
     }
 }

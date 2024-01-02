@@ -175,7 +175,7 @@ public abstract class BaseTouActivity<T extends ViewDataBinding> extends SwipeBa
         } else  init();
     }
 
-    private void init(){
+    protected void init(){
         initData();
         initServer();
     }

@@ -34,6 +34,19 @@ public class DefaultUtils {
         if(isPut){
             //获取没有钥匙的列表
             List<Integer> noneKeyList =  getNoneKeyList();
+            //避免故障柜
+            HashSet<String> errorList = getErrorKeyList();
+            for (String error : errorList) {
+                int errorDoor;
+                try {
+                    errorDoor = Integer.parseInt(error);
+                    if(noneKeyList.contains(errorDoor)){
+                        noneKeyList.remove(noneKeyList.indexOf(errorDoor));//不能简化，数字
+                    }
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                }
+            }
             if(noneKeyList.size() > 0){
                 doorAddress = noneKeyList.get(0);
             }
@@ -65,6 +78,23 @@ public class DefaultUtils {
 
         }
         return noneKeyList;
+    }
+
+    //获取故障柜列表
+    public static HashSet<String> getErrorKeyList(){
+        return SharedPreferenceUtil.getShareStringSet(ActivityManager.getInstance(), "errorDoor");
+    }
+
+    //设置为故障柜
+    public static void setErrorDoor(int errorDoor){
+        HashSet<String> errorList=  getErrorKeyList();
+        errorList.add(errorDoor + "");
+        SharedPreferenceUtil.setShareString(ActivityManager.getInstance(), "errorDoor", errorList);
+    }
+
+    //清除故障柜
+    public static void clearErrorDoor(){
+        SharedPreferenceUtil.setShareString(ActivityManager.getInstance(), "errorDoor", new HashSet<>());
     }
 
     // 获取本地的状态hex字符串

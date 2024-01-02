@@ -8,17 +8,24 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import xyz.ttyz.mylibrary.method.ActivityManager;
+import xyz.ttyz.mylibrary.method.RetrofitUtils;
+import xyz.ttyz.mylibrary.method.RxOHCUtils;
 import xyz.ttyz.toubasemvvm.adapter.BaseGridAdapter;
 import xyz.ttyz.toubasemvvm.adapter.OnClickAdapter;
 import xyz.ttyz.toubasemvvm.adapter.utils.BaseEmptyAdapterParent;
 import xyz.ttyz.toubasemvvm.adapter.utils.BaseRecyclerAdapter;
 import xyz.ttyz.toubasemvvm.vm.ToolBarViewModel;
+import xyz.ttyz.tourfrxohc.BaseApplication;
 import xyz.ttyz.tourfrxohc.R;
 import xyz.ttyz.tourfrxohc.databinding.ActivityGetListBinding;
+import xyz.ttyz.tourfrxohc.http.BaseSubscriber;
 import xyz.ttyz.tourfrxohc.models.CarModel;
+import xyz.ttyz.tourfrxohc.utils.PwdUtils;
 import xyz.ttyz.tourfrxohc.utils.ToastUtils;
 import xyz.ttyz.tourfrxohc.viewholder.CarSelectViewHolder;
 
@@ -28,13 +35,14 @@ import xyz.ttyz.tourfrxohc.viewholder.CarSelectViewHolder;
  * @email 343315792@qq.com
  */
 public class GetListActivity extends BaseActivity<ActivityGetListBinding>{
-    public static void show(CarModel carModel){
+    public static void show(String keyOutBoxCheckCode){
         Intent intent = new Intent(ActivityManager.getInstance(), GetListActivity.class);
-        intent.putExtra("carModel", carModel);
+        intent.putExtra("keyOutBoxCheckCode", keyOutBoxCheckCode);
         ActivityManager.getInstance().startActivity(intent);
     }
     ToolBarViewModel toolBarViewModel;
     BaseGridAdapter adapterParent;
+    String keyOutBoxCheckCode;
     @Override
     protected int initLayoutId() {
         return R.layout.activity_get_list;
@@ -48,6 +56,7 @@ public class GetListActivity extends BaseActivity<ActivityGetListBinding>{
     @Override
     protected void initData() {
         mBinding.setContext(this);
+        keyOutBoxCheckCode = getIntent().getStringExtra("keyOutBoxCheckCode");
         toolBarViewModel = new ToolBarViewModel.Builder()
                 .title("取用列表")
                 .build();
@@ -78,6 +87,16 @@ public class GetListActivity extends BaseActivity<ActivityGetListBinding>{
                             isSelectAllFiled.set(false);
                         }
                     }
+
+                    @Override
+                    public void setErrorDoor(CarModel carModel) {
+                        // 列表没有
+                    }
+
+                    @Override
+                    public void retry(CarModel carModel) {
+                        // 列表没有
+                    }
                 });
             }
 
@@ -95,6 +114,12 @@ public class GetListActivity extends BaseActivity<ActivityGetListBinding>{
     }
 
     @Override
+    protected void init() {
+        initData();
+        //不要请求接口
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         initServer();
@@ -102,10 +127,21 @@ public class GetListActivity extends BaseActivity<ActivityGetListBinding>{
 
     @Override
     protected void initServer() {
-        adapterParent.clear();
-        for(int i = 0 ; i < 5; i ++){
-            adapterParent.add(new CarModel());
-        }
+        Map map = new HashMap();
+        map.put("keyCabinetType", 2);
+        map.put("keyOutBoxCheckCode", keyOutBoxCheckCode);
+        map.put("keyCabinetId", PwdUtils.getWareHouseCode());
+        new RxOHCUtils<>(ActivityManager.getInstance()).executeApi(BaseApplication.apiService.canOutBoxKeyList(RetrofitUtils.getNormalBody(map)), new BaseSubscriber<List<CarModel>>(GetListActivity.this) {
+            @Override
+            public void success(List<CarModel> data) {
+                if(data == null || data.isEmpty()){
+                    finish();
+                    ToastUtils.showError("已无待取用列表");
+                    return;
+                }
+                adapterParent.setList(data);
+            }
+        });
     }
 
     public ObservableBoolean isSelectAllFiled = new ObservableBoolean(false);
@@ -133,7 +169,7 @@ public class GetListActivity extends BaseActivity<ActivityGetListBinding>{
             if(selectModelList.isEmpty()){
                 ToastUtils.showError("请选择");
             } else
-                GetDetailActivity.show(selectModelList);
+                GetDetailActivity.show(selectModelList, keyOutBoxCheckCode);
         }
     };
 }

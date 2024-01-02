@@ -39,7 +39,7 @@ public class EncrUtil {
      */
     public static final String decrypt(String encrypted) {
         if (StringUtils.isBlank(encrypted)) {
-            return null;
+            return "";
         }
 
         BigInteger biConfuse = new BigInteger(SEED);
@@ -50,7 +50,7 @@ public class EncrUtil {
 
             return new String(bi_r0.toByteArray());
         } catch (Exception e) {
-            return null;
+            return "";
         }
     }
 

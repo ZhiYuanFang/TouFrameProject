@@ -75,7 +75,6 @@ public class WarehouseBindActivity extends BaseActivity<ActivityWarehouseBindBin
     public OnClickAdapter.onClickCommand onClickConfirm = new OnClickAdapter.onClickCommand() {
         @Override
         public void click() {
-            pwdFiled.set("23122539");
             if(pwdFiled.get().isEmpty()){
                 ToastUtils.showError("请输入设备号");
                 return;
@@ -84,7 +83,7 @@ public class WarehouseBindActivity extends BaseActivity<ActivityWarehouseBindBin
             Map map = new HashMap();
             map.put("emergencyPassword", superPwd);
             map.put("keyCabinetId", pwdFiled.get());
-            new RxOHCUtils<>(ActivityManager.getInstance()).executeApi(BaseApplication.apiService.verifyCabinetInit(RetrofitUtils.getNormalBody(map)), new BaseSubscriber(WarehouseBindActivity.this) {
+            new RxOHCUtils<>(ActivityManager.getInstance()).executeApi(BaseApplication.apiService.verifyCabinetInit(RetrofitUtils.getNormalBody(map)), new BaseSubscriber<Object>(WarehouseBindActivity.this) {
                 @Override
                 public void success(Object data) {
                     PwdUtils.setSuperPwd(superPwd);
@@ -93,16 +92,6 @@ public class WarehouseBindActivity extends BaseActivity<ActivityWarehouseBindBin
                     ToastUtils.showSuccess("绑定成功");
                     PannelActivity.show();
                     finish();
-                }
-
-                @Override
-                public void onRfRxNext(RfRxOHCBaseModule rfRxOHCBaseModule) {
-
-                }
-
-                @Override
-                public void onNext(Object o) {
-
                 }
             });
         }

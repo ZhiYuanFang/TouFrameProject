@@ -51,19 +51,20 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         if(!isSuccessConnectSerial.get()){
             return;
         }
+        DefaultUtils.clearErrorDoor();
         // 判断是否绑定仓库
-        Log.i(TAG, "initData: PwdUtils.getWareHouseCode() -> " + PwdUtils.getWareHouseCode().isEmpty());
-        if(!PwdUtils.getWareHouseCode().isEmpty()){
+        Log.i(TAG, "initData: PwdUtils.getSuperPwd() -> " + PwdUtils.getSuperPwd().isEmpty());
+        if(PwdUtils.getWareHouseCode().isEmpty()){
             // 未曾绑定
             WarehouseBindActivity.show();
         } else {
             // 已绑定过了, 判断是否有超级密码
             if(PwdUtils.getSuperPwd().isEmpty()){
+                // 没有超级密码
+                ResetSuperPwdActivity.show(false);
+            } else {
                 // 有超级密码
                 PannelActivity.show();
-            } else {
-                // 没有超级密码
-                ResetSuperPwdActivity.show();
             }
         }
         finish();

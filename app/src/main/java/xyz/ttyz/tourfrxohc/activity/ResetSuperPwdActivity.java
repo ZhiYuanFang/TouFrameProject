@@ -6,12 +6,23 @@ import androidx.annotation.NonNull;
 
 import com.trello.rxlifecycle2.LifecycleTransformer;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import xyz.ttyz.mylibrary.method.ActivityManager;
+import xyz.ttyz.mylibrary.method.RetrofitUtils;
+import xyz.ttyz.mylibrary.method.RxOHCUtils;
 import xyz.ttyz.mylibrary.protect.SharedPreferenceUtil;
 import xyz.ttyz.toubasemvvm.adapter.OnClickAdapter;
+import xyz.ttyz.tourfrxohc.BaseApplication;
 import xyz.ttyz.tourfrxohc.R;
 import xyz.ttyz.tourfrxohc.databinding.ActivityResetSuperPwdBinding;
+import xyz.ttyz.tourfrxohc.http.BaseSubscriber;
 import xyz.ttyz.tourfrxohc.utils.Constans;
+import xyz.ttyz.tourfrxohc.utils.EncrUtil;
+import xyz.ttyz.tourfrxohc.utils.LockUtil;
+import xyz.ttyz.tourfrxohc.utils.PwdUtils;
+import xyz.ttyz.tourfrxohc.utils.ToastUtils;
 
 /**
  * @author 投投
@@ -20,13 +31,14 @@ import xyz.ttyz.tourfrxohc.utils.Constans;
  * 重制应急开箱密码
  */
 public class ResetSuperPwdActivity extends BaseActivity<ActivityResetSuperPwdBinding>{
-    public static void show(){
-        SharedPreferenceUtil.setShareString(ActivityManager.getInstance(), Constans.SuperOpenDoorPwdKey, "");
+    public static void show(boolean autoOpen){
         Intent intent = new Intent(ActivityManager.getInstance(), ResetSuperPwdActivity.class);
+        intent.putExtra("autoOpen", autoOpen);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         ActivityManager.getInstance().startActivity(intent);
     }
 
+    boolean autoOpen;
     @Override
     protected int initLayoutId() {
         return R.layout.activity_reset_super_pwd;
@@ -39,7 +51,23 @@ public class ResetSuperPwdActivity extends BaseActivity<ActivityResetSuperPwdBin
 
     @Override
     protected void initData() {
+        autoOpen = getIntent().getBooleanExtra("autoOpen", false);
         mBinding.setContext(this);
+        if(autoOpen){
+            //发送全部开箱指令
+            PwdUtils.clearSuperPwd();
+            LockUtil.getInstance(new LockUtil.LockDelegate() {
+                @Override
+                public void callBackOpen(int keyNumber) {
+
+                }
+
+                @Override
+                public void callBackState(boolean[] readArr) {
+
+                }
+            }).openAllKey();
+        }
     }
 
     @Override
@@ -50,8 +78,20 @@ public class ResetSuperPwdActivity extends BaseActivity<ActivityResetSuperPwdBin
     public OnClickAdapter.onClickCommand onClickReset = new OnClickAdapter.onClickCommand() {
         @Override
         public void click() {
-            SharedPreferenceUtil.setShareString(ActivityManager.getInstance(), Constans.SuperOpenDoorPwdKey, "1234");
-            PannelActivity.show();
+            String superPwd = EncrUtil.encrypt(PwdUtils.generateRandomPwd());
+            Map map = new HashMap();
+            map.put("emergencyPassword", superPwd);
+            map.put("keyCabinetId", PwdUtils.getWareHouseCode());
+            new RxOHCUtils<>(ActivityManager.getInstance()).executeApi(BaseApplication.apiService.initEmergencyPassword(RetrofitUtils.getNormalBody(map)), new BaseSubscriber<Object>(ResetSuperPwdActivity.this) {
+                @Override
+                public void success(Object data) {
+                    PwdUtils.setSuperPwd(superPwd);
+                    //请求接口绑定成功， 跳转到pannel页
+                    ToastUtils.showSuccess("重置成功");
+                    PannelActivity.show();
+                    finish();
+                }
+            });
         }
     };
 }

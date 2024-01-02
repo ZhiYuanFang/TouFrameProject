@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:binding="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -7,148 +8,203 @@
         <variable
             name="carModel"
             type="xyz.ttyz.tourfrxohc.models.CarModel" />
+
         <variable
             name="context"
             type="xyz.ttyz.tourfrxohc.activity.PutDetailActivity" />
+
     </data>
+
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@mipmap/bg"
         android:orientation="vertical">
-        <include layout="@layout/layout_top"/>
+
+        <include layout="@layout/layout_top" />
+
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="放入钥匙"
-                android:textStyle="bold"
+                android:text="确定存钥匙的车辆"
                 android:textColor="@color/white"
-                android:textSize="20sp"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:textColor="@color/white"
-                android:textSize="11sp"
-                tools:text="30s后自动退出本次验证"
-                android:text="@{context.autoFiled}"/>
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
-                android:layout_marginEnd="30dp"
                 android:layout_marginTop="30dp"
-                android:paddingBottom="18dp"
-                android:gravity="center"
+                android:layout_marginEnd="30dp"
                 android:background="@drawable/shape_alpha_white_conor"
-                android:orientation="vertical">
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingTop="18dp"
+                android:paddingBottom="18dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:textSize="17sp"
-                    android:layout_marginTop="18dp"
-                    android:text="钥匙对应车辆:"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:textSize="22sp"
-                    android:textColor="@color/white"
-                    android:text="LSVNY4BR8HN255136"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="13sp"
-                    android:layout_marginTop="4dp"
-                    android:textColor="@color/white"
-                    android:text="大众 桑塔纳 1.6L /黑色白色"/>
+                    android:layout_marginStart="25dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_weight="1"
+                    android:gravity="start"
+                    android:orientation="vertical">
 
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="钥匙对应车辆:"
+                            android:textColor="@color/white"
+                            android:textSize="17sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="#FF852C"
+                            android:textSize="15sp"
+                            android:text='@{"柜号 " + context.openDoorFiled}'
+                            tools:text="柜号 23" />
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        tools:text="LSVNY4BR8HN255136"
+                        android:text="@{carModel.carUnique}"
+                        android:textColor="@color/white"
+                        android:textSize="22sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="@{carModel.carModel}"
+                        tools:text="大众 桑塔纳 1.6L /黑色白色"
+                        android:textColor="@color/white"
+                        android:textSize="13sp" />
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <include
+                        layout="@layout/layout_retry_btn"
+                        binding:viewModel="@{context.retryModel}" />
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="15dp"/>
+                    <include
+                        layout="@layout/layout_error_report_btn"
+                        binding:viewModel="@{context.reportModel}" />
+                </androidx.appcompat.widget.LinearLayoutCompat>
             </androidx.appcompat.widget.LinearLayoutCompat>
+
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="17dp"
                 android:text="请按以下步骤进行操作"
-                android:textSize="14sp"
                 android:textColor="@color/white"
-                android:layout_marginTop="17dp"/>
+                android:textSize="14sp" />
+
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="wrap_content"
-                android:paddingStart="35dp"
-                android:paddingEnd="35dp"
-                android:layout_marginTop="12dp"
                 android:layout_height="67dp"
+                android:layout_marginTop="12dp"
                 android:background="@drawable/bg_step"
+                android:gravity="center"
                 android:orientation="horizontal"
-                android:gravity="center">
+                android:paddingStart="35dp"
+                android:paddingEnd="35dp">
 
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:orientation="vertical">
+
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:src="@mipmap/door"/>
+                        android:src="@mipmap/door" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="6dp"
                         android:text="1.等待格口弹开"
-                        android:textSize="11sp"
-                        android:textColor="@color/white"/>
+                        android:textColor="@color/white"
+                        android:textSize="11sp" />
                 </androidx.appcompat.widget.LinearLayoutCompat>
+
                 <ImageView
                     android:layout_width="21dp"
                     android:layout_height="21dp"
-                    android:src="@mipmap/right"/>
+                    android:src="@mipmap/right" />
+
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:orientation="vertical">
+
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:src="@mipmap/key"/>
+                        android:src="@mipmap/key" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="6dp"
                         android:text="2.放入钥匙"
-                        android:textSize="11sp"
-                        android:textColor="@color/white"/>
+                        android:textColor="@color/white"
+                        android:textSize="11sp" />
                 </androidx.appcompat.widget.LinearLayoutCompat>
+
                 <ImageView
                     android:layout_width="21dp"
                     android:layout_height="21dp"
-                    android:src="@mipmap/right"/>
+                    android:src="@mipmap/right" />
+
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:orientation="vertical">
+
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:src="@mipmap/close"/>
+                        android:src="@mipmap/close" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="6dp"
                         android:text="3.关上柜内完成存放"
-                        android:textSize="11sp"
-                        android:textColor="@color/white"/>
+                        android:textColor="@color/white"
+                        android:textSize="11sp" />
                 </androidx.appcompat.widget.LinearLayoutCompat>
             </androidx.appcompat.widget.LinearLayoutCompat>
         </LinearLayout>

@@ -15,6 +15,8 @@ import xyz.ttyz.toubasemvvm.event.NetEvent;
 import xyz.ttyz.toubasemvvm.ui.BaseTouActivity;
 import xyz.ttyz.tourfrxohc.R;
 import xyz.ttyz.tourfrxohc.models.NetEventModel;
+import xyz.ttyz.tourfrxohc.utils.LockUtil;
+import xyz.ttyz.tourfrxohc.utils.NetUtils;
 
 public abstract class BaseActivity<T extends ViewDataBinding> extends BaseTouActivity<T> {
 
@@ -64,6 +66,7 @@ public abstract class BaseActivity<T extends ViewDataBinding> extends BaseTouAct
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        LockUtil.clearCallBack();
         ActivityManager.exitActivity(this);
     }
 }

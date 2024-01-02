@@ -8,6 +8,7 @@ import android.widget.EditText;
 import com.dilusense.customkeyboard.KeyboardUtils;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import xyz.ttyz.mylibrary.method.ActivityManager;
@@ -37,7 +38,7 @@ public class PwdActivity extends BaseActivity<ActivityPwdBinding>{
     public static final int GET = 2;
     private static final String TAG = "PwdActivity";
 
-    int type;// 取还是存
+    public int type;// 取还是存
     public static void show(int type){
         Intent intent = new Intent(ActivityManager.getInstance(), PwdActivity.class);
         intent.putExtra("type", type);
@@ -112,12 +113,15 @@ public class PwdActivity extends BaseActivity<ActivityPwdBinding>{
                switch (type){
                    case PUT:{
                        Map map = new HashMap();
-                       map.put("checkCode", mBinding.vcv.getResult());
+                       map.put("keyInterBoxCode", mBinding.vcv.getResult());
                        map.put("keyCabinetId", PwdUtils.getWareHouseCode());
                        new RxOHCUtils<>(ActivityManager.getInstance()).executeApi(BaseApplication.apiService.getInterBoxCarInfo(RetrofitUtils.getNormalBody(map)), new BaseSubscriber<CarModel>(PwdActivity.this) {
                            @Override
                            public void success(CarModel data) {
-                               PutDetailActivity.show(data);
+
+                               PutDetailActivity.show(data, mBinding.vcv.getResult());
+                               mBinding.vcv.setEmpty();
+
                            }
                        });
                        break;}
@@ -126,16 +130,17 @@ public class PwdActivity extends BaseActivity<ActivityPwdBinding>{
                        map.put("keyCabinetType", 2);
                        map.put("keyOutBoxCheckCode", mBinding.vcv.getResult());
                        map.put("keyCabinetId", PwdUtils.getWareHouseCode());
-                       new RxOHCUtils<>(ActivityManager.getInstance()).executeApi(BaseApplication.apiService.canOutBoxKeyList(RetrofitUtils.getNormalBody(map)), new BaseSubscriber<CarModel>(PwdActivity.this) {
+                       new RxOHCUtils<>(ActivityManager.getInstance()).executeApi(BaseApplication.apiService.canOutBoxKeyList(RetrofitUtils.getNormalBody(map)), new BaseSubscriber<List<CarModel>>(PwdActivity.this) {
                            @Override
-                           public void success(CarModel data) {
-                               GetListActivity.show(data);
+                           public void success(List<CarModel> data) {
+                               // 成功才进入
+                               GetListActivity.show(mBinding.vcv.getResult());
+                               mBinding.vcv.setEmpty();
                            }
                        });
                        break;}
                    default:
                }
-               mBinding.vcv.setEmpty();
            } else {
                ToastUtils.showError("请输入4位开柜密码");
            }

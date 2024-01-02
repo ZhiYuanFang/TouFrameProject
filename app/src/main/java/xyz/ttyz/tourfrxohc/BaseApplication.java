@@ -105,40 +105,51 @@ public class BaseApplication extends MultiDexApplication {
         });
         RfRxOHCUtil.initApiService(this, BuildConfig.BUILD_TYPE.equals("release") ? "https://eye.maihaoche.com/" : "https://eye-c.maihaoche.net/", "",getPackageName() + "-cache",
                 2 * 1024 * 1024, 30, BuildConfig.BUILD_TYPE.equals("release"), BuildConfig.DEBUG, BuildConfig.VERSION_NAME,
-                "huawei", "android", 0, new RfRxOHCUtil.TouRRCDelegate() {
+                "huawei", "android", 200, new RfRxOHCUtil.TouRRCDelegate() {
                     @Override
                     public void addMoreForOkHttpClient(OkHttpClient.Builder httpBuilder) {
                         //https://github.com/square/okhttp/issues/2372#issuecomment-244807676
-//                        if (Build.VERSION.SDK_INT >= 16 && Build.VERSION.SDK_INT < 22) {
-//                            try {
-//                                TrustManager[] trustAllCerts = new TrustManager[1];
-//                                TrustManager tm = new miTM();
-//                                trustAllCerts[0] = tm;
-//                                SSLContext sc = SSLContext.getInstance("TLSv1.2");
-////                                sc.init(null, trustAllCerts, new SecureRandom());
-//                                sc.init(null, null, null);
-//                                httpBuilder.sslSocketFactory(new Tls12SocketFactory(sc.getSocketFactory()));
-//
-//                                ConnectionSpec cs = new ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
-//                                        .tlsVersions(TlsVersion.TLS_1_2)
-//                                        .build();
-//
-//                                List<ConnectionSpec> specs = new ArrayList<>();
-//                                specs.add(cs);
-//                                specs.add(ConnectionSpec.COMPATIBLE_TLS);
-//                                specs.add(ConnectionSpec.CLEARTEXT);
-//
-//                                httpBuilder.connectionSpecs(specs);
-//                                httpBuilder.hostnameVerifier(new HostnameVerifier() {
-//                                    @Override
-//                                    public boolean verify(String s, SSLSession sslSession) {
-//                                        return true;
-//                                    }
-//                                });
-//                            } catch (Exception exc) {
-//                                Log.e("OkHttpTLSCompat", "Error while setting TLS 1.2", exc);
-//                            }
-//                        }
+                        if (Build.VERSION.SDK_INT >= 16 && Build.VERSION.SDK_INT < 22) {
+                            try {
+                                TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
+                                    public X509Certificate[] getAcceptedIssuers() {
+                                        return new X509Certificate[0];
+                                    }
+
+                                    @Override
+                                    public void checkClientTrusted(X509Certificate[] certs, String authType) {
+                                    }
+
+                                    @Override
+                                    public void checkServerTrusted(X509Certificate[] certs, String authType) {
+                                    }
+                                }};
+
+                                SSLContext sc = SSLContext.getInstance("TLS");
+                                // trustAllCerts信任所有的证书
+                                sc.init(null, trustAllCerts, new SecureRandom());
+                                httpBuilder.sslSocketFactory(new Tls12SocketFactory(sc.getSocketFactory()));
+
+                                ConnectionSpec cs = new ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
+                                        .tlsVersions(TlsVersion.TLS_1_2)
+                                        .build();
+
+                                List<ConnectionSpec> specs = new ArrayList<>();
+                                specs.add(cs);
+                                specs.add(ConnectionSpec.COMPATIBLE_TLS);
+                                specs.add(ConnectionSpec.CLEARTEXT);
+
+                                httpBuilder.connectionSpecs(specs);
+                                httpBuilder.hostnameVerifier(new HostnameVerifier() {
+                                    @Override
+                                    public boolean verify(String s, SSLSession sslSession) {
+                                        return true;
+                                    }
+                                });
+                            } catch (Exception exc) {
+                                Log.e("OkHttpTLSCompat", "Error while setting TLS 1.2", exc);
+                            }
+                        }
                         //动态值
 //                        httpBuilder.addInterceptor(new Interceptor() {
 //                            @Override
