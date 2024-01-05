@@ -135,7 +135,7 @@ public class BaseRecyclerAdapter extends RecyclerView.Adapter implements Observa
 
 
     public void remove(Object o) {
-        if (null != list && list.contains(o)) {
+        if (null != o && null != list && list.contains(o)) {
             int pos = list.indexOf(o);
             list.remove(o);
             notifyItemRemoved(pos);

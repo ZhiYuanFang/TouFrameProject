@@ -1,9 +1,11 @@
 package xyz.ttyz.tou_example.init;
 
 public interface TouDelegate {
-    boolean isLogin();
 
-    void gotoLoginActivity();
+    boolean isBindWareHouse();//是否绑定仓库
+    boolean isConnectSerial();//是否连接设备
+
+    void gotoBindWareHouseActivity();
 
     void checkVersion(VersionDelegate versionDelegate);
 
@@ -16,6 +18,6 @@ public interface TouDelegate {
     void cacheMainThrowable(Throwable e);
 
     interface VersionDelegate {
-        void installVersion(String mUpdateUrl, String updateMSG, int versionCode);
+        void installVersion(String mUpdateUrl, String updateMSG, int versionCode, boolean isForceUpdate);
     }
 }

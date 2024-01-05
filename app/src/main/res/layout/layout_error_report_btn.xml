@@ -11,6 +11,7 @@
     </data>
 
     <LinearLayout
+        android:foreground="?selectableItemBackground"
         binding:onClickCommand="@{viewModel.onClickCommand}"
         android:orientation="horizontal"
         android:layout_width="72dp"

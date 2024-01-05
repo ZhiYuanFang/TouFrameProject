@@ -1,6 +1,7 @@
 package xyz.ttyz.toubasemvvm.adapter;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -15,47 +16,66 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import xyz.ttyz.tou_example.init.ApplicationUtils;
 import xyz.ttyz.toubasemvvm.utils.DialogUtils;
+import xyz.ttyz.toubasemvvm.utils.NetworkUtil;
 
 public class OnClickAdapter {
     //防重复点击间隔(毫秒)
     public static final int CLICK_INTERVAL = 300;
 
     @SuppressLint("CheckResult")
-    @BindingAdapter(value = {"onClickCommand", "noteJudgeLogin"}, requireAll = false)
-    public static void onClickCommand(View view, final onClickCommand onClickCommand, final boolean noteJudgeLogin) {
+    @BindingAdapter(value = {"onClickCommand", "noteJudgeBindWareHouse", "noteJudgeNet","noteJudgeWifi"}, requireAll = false)
+    public static void onClickCommand(View view, final onClickCommand onClickCommand, final boolean noteJudgeBindWareHouse, final boolean noteJudgeNet, final boolean noteJudgeWifi) {
         Observable<? super Object> observable = RxView.clicks(view);
         observable = observable.throttleFirst(CLICK_INTERVAL, TimeUnit.MILLISECONDS);
         observable.subscribe(new Consumer<Object>() {
             @Override
             public void accept(Object o) throws Exception {
                 if (onClickCommand != null) {
-                    if (!noteJudgeLogin) {
-                        if (!ApplicationUtils.touDelegate.isLogin()) {
-                            curClickCommand = onClickCommand;
-                            DialogUtils.showDialog("登录失效", "请重新登录后体验", new DialogUtils.DialogButtonModule("前往登录", new DialogUtils.DialogClickDelegate() {
+                    //判断设备
+                    if(!ApplicationUtils.touDelegate.isConnectSerial() && !noteJudgeNet){
+                        DialogUtils.showSingleDialog("钥匙柜未链接", "请重新插拔钥匙柜链接端口重试");
+                        return;
+                    }
+                    //判断网络
+                    if(!NetworkUtil.isNetWorkConnected(view.getContext()) && !noteJudgeWifi){
+                        DialogUtils.showDialog("网络未链接", "请重新连接网络后重试", new DialogUtils.DialogButtonModule("前往wifi设置", new DialogUtils.DialogClickDelegate() {
+                            @Override
+                            public void click(DialogUtils.DialogButtonModule dialogButtonModule) {
+                                Intent intent = new Intent();
+
+                                intent.setAction("android.net.wifi.PICK_WIFI_NETWORK");
+
+                                view.getContext().startActivity(intent);
+                            }
+                        }));
+                        return;
+                    }
+
+                    //判断仓库
+                    if (!noteJudgeBindWareHouse) {
+                        if (!ApplicationUtils.touDelegate.isBindWareHouse()) {
+                            DialogUtils.showDialog("仓库未绑定", "请绑定仓库后使用", new DialogUtils.DialogButtonModule("前往绑定", new DialogUtils.DialogClickDelegate() {
                                 @Override
                                 public void click(DialogUtils.DialogButtonModule dialogButtonModule) {
-                                    ApplicationUtils.touDelegate.gotoLoginActivity();
+                                    ApplicationUtils.touDelegate.gotoBindWareHouseActivity();
                                 }
                             }));
                             return;
                         }
                     }
-                    curClickCommand = null;
                     onClickCommand.click();
                 }
             }
         });
     }
 
-    public static onClickCommand curClickCommand;//服务登录事件
 
     public abstract static class onClickCommand {
         public abstract void click();
     }
 
-    @BindingAdapter(value = {"doubleClickCommand", "noteJudgeLogin"}, requireAll = false)
-    public static void doubleClickCommand(View view,final onClickCommand onClickCommand,final boolean noteJudgeLogin) {
+    @BindingAdapter(value = {"doubleClickCommand"}, requireAll = false)
+    public static void doubleClickCommand(View view,final onClickCommand onClickCommand) {
         Observable<? super Object> observable = RxView.clicks(view).share();
         observable
                 .buffer(observable.debounce(CLICK_INTERVAL, TimeUnit.MILLISECONDS))
@@ -64,19 +84,6 @@ public class OnClickAdapter {
                     @Override
                     public void accept(Object o) throws Exception {
                         if (onClickCommand != null) {
-                            if (!noteJudgeLogin && false) {
-                                if (!ApplicationUtils.touDelegate.isLogin()) {
-                                    DialogUtils.showDialog("登录失效", "请重新登录后体验", new DialogUtils.DialogButtonModule("确定", new DialogUtils.DialogClickDelegate() {
-                                        @Override
-                                        public void click(DialogUtils.DialogButtonModule dialogButtonModule) {
-                                            curClickCommand = onClickCommand;
-                                            ApplicationUtils.touDelegate.gotoLoginActivity();
-                                        }
-                                    }));
-                                    return;
-                                }
-                            }
-                            curClickCommand = null;
                             onClickCommand.click();
                         }
                     }

@@ -1,6 +1,7 @@
 package xyz.ttyz.tourfrxohc.activity;
 
 import android.content.Intent;
+import android.view.View;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
@@ -19,6 +20,7 @@ import xyz.ttyz.mylibrary.method.RxOHCUtils;
 import xyz.ttyz.mylibrary.protect.SharedPreferenceUtil;
 import xyz.ttyz.toubasemvvm.adapter.OnClickAdapter;
 import xyz.ttyz.tourfrxohc.BaseApplication;
+import xyz.ttyz.tourfrxohc.DefaultUtils;
 import xyz.ttyz.tourfrxohc.R;
 import xyz.ttyz.tourfrxohc.databinding.ActivityWarehouseBindBinding;
 import xyz.ttyz.tourfrxohc.http.BaseSubscriber;
@@ -63,6 +65,15 @@ public class WarehouseBindActivity extends BaseActivity<ActivityWarehouseBindBin
             @Override
             public void onOkClick() {
                 onClickConfirm.click();
+            }
+        });
+
+        View view = findViewById(R.id.lv_top).findViewById(R.id.iv_tolauncher);
+        view.setVisibility(View.VISIBLE);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DefaultUtils.toLauncher();
             }
         });
     }

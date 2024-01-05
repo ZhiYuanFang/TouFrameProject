@@ -14,6 +14,7 @@ import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -33,9 +34,17 @@ import okhttp3.Response;
 import okhttp3.TlsVersion;
 import retrofit2.Retrofit;
 import xyz.ttyz.mylibrary.RfRxOHCUtil;
+import xyz.ttyz.mylibrary.method.ActivityManager;
+import xyz.ttyz.mylibrary.method.RetrofitUtils;
+import xyz.ttyz.mylibrary.method.RxOHCUtils;
 import xyz.ttyz.mylibrary.protect.CustomTrust;
 import xyz.ttyz.tou_example.init.ApplicationUtils;
 import xyz.ttyz.tou_example.init.TouDelegate;
+import xyz.ttyz.tourfrxohc.activity.GetDetailActivity;
+import xyz.ttyz.tourfrxohc.activity.WarehouseBindActivity;
+import xyz.ttyz.tourfrxohc.http.BaseSubscriber;
+import xyz.ttyz.tourfrxohc.models.UpdateModel;
+import xyz.ttyz.tourfrxohc.utils.PwdUtils;
 import xyz.ttyz.tourfrxohc.utils.Tls12SocketFactory;
 
 /**
@@ -45,6 +54,7 @@ import xyz.ttyz.tourfrxohc.utils.Tls12SocketFactory;
 public class BaseApplication extends MultiDexApplication {
     private static final String TAG = "BaseApplication";
     public static ApiService apiService;
+    public static boolean isSerialConnected = false;
     static class miTM implements TrustManager, X509TrustManager {
         @Override
         public X509Certificate[] getAcceptedIssuers() {
@@ -76,21 +86,31 @@ public class BaseApplication extends MultiDexApplication {
         super.onCreate();
         ApplicationUtils.init(this, 1280, 800, new TouDelegate() {
             @Override
-            public boolean isLogin() {
-                return DefaultUtils.token != null;//当前用户是否登录
+            public boolean isBindWareHouse() {
+                return !PwdUtils.getWareHouseCode().isEmpty();
             }
 
             @Override
-            public void gotoLoginActivity() {
-                //前往登录界面
+            public boolean isConnectSerial() {
+                return isSerialConnected;
+            }
+
+            @Override
+            public void gotoBindWareHouseActivity() {
+                WarehouseBindActivity.show();
             }
 
             @Override
             public void checkVersion(VersionDelegate versionDelegate) {
                 //请求接口判断是否需要更新
-                if (true) {
-                    versionDelegate.installVersion("", "更新了一些功能", BuildConfig.VERSION_CODE);
-                }
+                new RxOHCUtils<>(ActivityManager.getInstance()).executeApi(BaseApplication.apiService.checkKeyCabinetUpdate(), new BaseSubscriber<UpdateModel>(null) {
+                    @Override
+                    public void success(UpdateModel data) {
+                        if(data.versionCode > BuildConfig.VERSION_CODE){
+                            versionDelegate.installVersion(data.downloadUrl, data.description, data.versionCode, data.forceUpgrade == 1);
+                        }
+                    }
+                });
             }
 
             @Override
@@ -105,7 +125,7 @@ public class BaseApplication extends MultiDexApplication {
         });
         RfRxOHCUtil.initApiService(this, BuildConfig.BUILD_TYPE.equals("release") ? "https://eye.maihaoche.com/" : "https://eye-c.maihaoche.net/", "",getPackageName() + "-cache",
                 2 * 1024 * 1024, 30, BuildConfig.BUILD_TYPE.equals("release"), BuildConfig.DEBUG, BuildConfig.VERSION_NAME,
-                "huawei", "android", 200, new RfRxOHCUtil.TouRRCDelegate() {
+                "normal", "android", 200, new RfRxOHCUtil.TouRRCDelegate() {
                     @Override
                     public void addMoreForOkHttpClient(OkHttpClient.Builder httpBuilder) {
                         //https://github.com/square/okhttp/issues/2372#issuecomment-244807676

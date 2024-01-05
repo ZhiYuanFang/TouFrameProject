@@ -47,44 +47,42 @@ public class RxOHCUtils<M extends RfRxOHCBaseModule> {
         if(NetworkUtil.isNetWorkConnected(ActivityManager.getInstance().getApplication())){
             Log.i(TAG, "executeApi: 请求接口");
             uiSubscriber.setLocalObserver(false);//网络数据获取，可以做本地数据缓存
+            if(uiSubscriber.lifeCycle != null){
+                apiObservable.compose(uiSubscriber.lifeCycle.bindToLifecycle());
+            }
             apiObservable
-                    .compose(uiSubscriber.lifeCycle == null ? new ObservableTransformer() {
-                        @Override
-                        public ObservableSource apply(Observable upstream) {
-                            return null;
-                        }
-                    } : uiSubscriber.lifeCycle.bindToLifecycle())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(uiSubscriber);
-        } else {
-            //本地缓存处理被观察者定义
-            Observable cacheObservable = Observable.create(new ObservableOnSubscribe<Object>() {
-                @Override
-                public void subscribe(ObservableEmitter<Object> emitter) throws Exception {
-                    //定义订阅关系
-                    Log.i(TAG, "subscribe: 获取缓存数据");
-                    //获取本地缓存
-                    Object cacheObj = StringUtil.string2Object(SharedPreferenceUtil.getShareString(c, uiSubscriber.initCacheKey()));
-                    //如果有本地缓存则通知订阅
-                    if (cacheObj instanceof BaseModule) {
-                        uiSubscriber.setLocalObserver(true);//本地数据获取，不做本地数据缓存
-                        Log.i(TAG, "subscribe: 缓存渲染");
-                        emitter.onNext(cacheObj);
-                        emitter.onComplete();
-                    }
-                }
-            });
-
-            //绑定缓存被观察者和观察者
-            cacheObservable.subscribeOn(Schedulers.io())//获取本地信息操作在子线程处理， subscribeOn 定义上面运行的在哪个线程
-                    .compose(uiSubscriber.lifeCycle == null ? new ObservableTransformer() {
-                        @Override
-                        public ObservableSource apply(Observable upstream) {
-                            return null;
-                        }
-                    } : uiSubscriber.lifeCycle.bindToLifecycle())
-                    .observeOn(AndroidSchedulers.mainThread())//observeOn 定义接下来运行的在哪个线程
-                    .subscribe(uiSubscriber);
         }
+//        else {
+//            //本地缓存处理被观察者定义
+//            Observable cacheObservable = Observable.create(new ObservableOnSubscribe<Object>() {
+//                @Override
+//                public void subscribe(ObservableEmitter<Object> emitter) throws Exception {
+//                    //定义订阅关系
+//                    Log.i(TAG, "subscribe: 获取缓存数据");
+//                    //获取本地缓存
+//                    Object cacheObj = StringUtil.string2Object(SharedPreferenceUtil.getShareString(c, uiSubscriber.initCacheKey()));
+//                    //如果有本地缓存则通知订阅
+//                    if (cacheObj instanceof BaseModule) {
+//                        uiSubscriber.setLocalObserver(true);//本地数据获取，不做本地数据缓存
+//                        Log.i(TAG, "subscribe: 缓存渲染");
+//                        emitter.onNext(cacheObj);
+//                        emitter.onComplete();
+//                    }
+//                }
+//            });
+//
+//            //绑定缓存被观察者和观察者
+//            cacheObservable.subscribeOn(Schedulers.io())//获取本地信息操作在子线程处理， subscribeOn 定义上面运行的在哪个线程
+//                    .compose(uiSubscriber.lifeCycle == null ? new ObservableTransformer() {
+//                        @Override
+//                        public ObservableSource apply(Observable upstream) {
+//                            return null;
+//                        }
+//                    } : uiSubscriber.lifeCycle.bindToLifecycle())
+//                    .observeOn(AndroidSchedulers.mainThread())//observeOn 定义接下来运行的在哪个线程
+//                    .subscribe(uiSubscriber);
+//        }
     }
 }

@@ -51,7 +51,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         if(!isSuccessConnectSerial.get()){
             return;
         }
-        DefaultUtils.clearErrorDoor();
+
         // 判断是否绑定仓库
         Log.i(TAG, "initData: PwdUtils.getSuperPwd() -> " + PwdUtils.getSuperPwd().isEmpty());
         if(PwdUtils.getWareHouseCode().isEmpty()){

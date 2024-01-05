@@ -21,8 +21,7 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center_horizontal"
-        android:background="@mipmap/bg">
+        android:gravity="center_horizontal">
         <include layout="@layout/layout_top"/>
 
         <include layout="@layout/layout_toolbar"
@@ -105,7 +104,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
-                    android:text="3.关上柜内完成取出"
+                    android:text="3.关上柜门完成取出"
                     android:textSize="11sp"
                     android:textColor="@color/white"/>
             </androidx.appcompat.widget.LinearLayoutCompat>

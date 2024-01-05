@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import xyz.ttyz.mylibrary.method.ActivityManager;
+import xyz.ttyz.mylibrary.method.BaseModule;
 import xyz.ttyz.mylibrary.method.RetrofitUtils;
 import xyz.ttyz.mylibrary.method.RxOHCUtils;
 import xyz.ttyz.toubasemvvm.adapter.OnClickAdapter;
@@ -76,6 +77,10 @@ public class GetSuccessActivity extends BaseActivity<ActivityGetSuccessBinding>{
 
     @Override
     protected void initServer() {
+        if(comingType.get() == PwdComing){
+            //如果是密码取用，不用检查列表
+            return;
+        }
 
         Map map = new HashMap();
         map.put("keyCabinetType", 2);
@@ -89,6 +94,7 @@ public class GetSuccessActivity extends BaseActivity<ActivityGetSuccessBinding>{
                     comingType.set(PwdComing);
                 }
             }
+
         });
     }
 

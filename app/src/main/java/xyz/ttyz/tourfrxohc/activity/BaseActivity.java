@@ -13,6 +13,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import xyz.ttyz.mylibrary.method.ActivityManager;
 import xyz.ttyz.toubasemvvm.event.NetEvent;
 import xyz.ttyz.toubasemvvm.ui.BaseTouActivity;
+import xyz.ttyz.tourfrxohc.BaseApplication;
 import xyz.ttyz.tourfrxohc.R;
 import xyz.ttyz.tourfrxohc.models.NetEventModel;
 import xyz.ttyz.tourfrxohc.utils.LockUtil;
@@ -22,6 +23,7 @@ public abstract class BaseActivity<T extends ViewDataBinding> extends BaseTouAct
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void seriChange(NetEventModel seriNetEvent){
+        BaseApplication.isSerialConnected = seriNetEvent.netConnected;
         View view = findViewById(R.id.iv_net);
         if(view != null){
             if(seriNetEvent.netConnected){
@@ -43,13 +45,10 @@ public abstract class BaseActivity<T extends ViewDataBinding> extends BaseTouAct
         if(view != null){
             ((ImageView)view).setImageResource(R.mipmap.wifi);
         }
-
-        //todo 将本地的锁状态同步服务
     }
 
     @Override
     public void showNoNetControl() {
-        super.showNoNetControl();
         //无网络
         View view = findViewById(R.id.iv_wifi);
         if(view != null){

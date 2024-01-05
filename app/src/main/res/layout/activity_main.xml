@@ -14,7 +14,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="@mipmap/bg"
         tools:context="xyz.ttyz.tourfrxohc.MainActivity">
 
         <include layout="@layout/layout_top"/>
@@ -25,6 +24,9 @@
             android:textColor="@color/white"
             android:textSize="35sp"
             tools:text="@string/app_name"
+            binding:noteJudgeBindWareHouse="@{true}"
+            binding:noteJudgeNet="@{true}"
+            binding:noteJudgeWifi="@{true}"
             binding:onClickCommand="@{context.onClickRetry}"
             android:text='@{context.isSuccessConnectSerial ? @string/app_name : "端口打开失败，点击重试"}'/>
 

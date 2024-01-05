@@ -22,7 +22,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_horizontal"
-            android:background="@mipmap/bg"
             android:orientation="vertical">
             <include layout="@layout/layout_top"/>
 
@@ -66,6 +65,7 @@
                     android:layout_height="38dp"
                     android:text="确定"
                     android:foreground="?selectableItemBackground"
+                    binding:noteJudgeWifi="@{true}"
                     binding:onClickCommand="@{context.onClickConfirm}"
                     android:background="@drawable/bg_conor_lightblue_white"
                     android:layout_marginEnd="7dp"

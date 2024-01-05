@@ -14,6 +14,7 @@ import java.util.concurrent.locks.Lock;
 import xyz.ttyz.mylibrary.method.ActivityManager;
 import xyz.ttyz.toubasemvvm.adapter.OnClickAdapter;
 import xyz.ttyz.toubasemvvm.vm.ToolBarViewModel;
+import xyz.ttyz.tourfrxohc.DefaultUtils;
 import xyz.ttyz.tourfrxohc.R;
 import xyz.ttyz.tourfrxohc.databinding.ActivitySafeOpenBinding;
 import xyz.ttyz.tourfrxohc.models.CarModel;
@@ -77,7 +78,6 @@ public class SafeOpenActivity extends BaseActivity<ActivitySafeOpenBinding>{
                 ToastUtils.showError("请输入密码");
                 return;
             }
-            // TODO: 2023/12/27 judge pwdFiled
             switch (type){
                 case PwdActivity.PUT:
                     //不存在
@@ -85,45 +85,31 @@ public class SafeOpenActivity extends BaseActivity<ActivitySafeOpenBinding>{
                 case PwdActivity.GET:
                     //打开所有门
                     //通过pwdFiled获取对应车得到门
-                    List<CarModel> carList = new ArrayList<>();
-                    for(int i = 0; i < 5; i ++){
-                        CarModel carModel = new CarModel();
-                        carModel.setDoorNumber(i + 1);
-                        carList.add(carModel);
-                    }
-                    LockUtil.LockDelegate lockDelegate = new LockUtil.LockDelegate() {
-                        @Override
-                        public void callBackOpen(int keyNumber) {
-                            boolean isAllOpen = true;
-                            for (CarModel carModel :
-                                    carList) {
-                                if(carModel.getDoorNumber() == keyNumber)
-                                    carModel.setOpen(true);
-
-                                if(!carModel.isOpen()){
-                                    isAllOpen = false;
-                                }
-                            }
-                            if(isAllOpen){
+                    int doorNumber = PwdUtils.getDoor(pwdFiled.get());
+                    if(doorNumber > 0){
+                        ToastUtils.showSuccess("密码正确");
+                        LockUtil.getInstance(new LockUtil.LockDelegate() {
+                            @Override
+                            public void callBackOpen(int keyNumber) {
+                                //重置锁存在状态
+                                DefaultUtils.resetDoorWithKey(doorNumber, false);
+                                //将密码门关系删除
+                                PwdUtils.removeDoor(doorNumber);
                                 GetSuccessActivity.show(GetSuccessActivity.PwdComing);
+                                finish();
                             }
-                        }
 
-                        @Override
-                        public void callBackState(boolean[] readArr) {
+                            @Override
+                            public void callBackState(boolean[] readArr) {
 
-                        }
-                    };
-                    for (CarModel carModel : carList) {
-                        carModel.setOpen(false);
-                        //todo 得到doorNumber
-                        LockUtil.getInstance(lockDelegate).openKey(carModel.getDoorNumber());
+                            }
+                        }).openKey(doorNumber);
+                    } else {
+                        ToastUtils.showError("密码不正确");
                     }
-
                     break;
                 default:
             }
-            finish();
         }
     };
 

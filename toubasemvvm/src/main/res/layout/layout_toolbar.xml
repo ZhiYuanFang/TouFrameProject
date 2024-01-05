@@ -31,9 +31,9 @@
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="?selectableItemBackgroundBorderless"
+                    android:background="?selectableItemBackground"
                     android:layout_gravity="center_vertical"
-                    binding:noteJudgeLogin="@{toolBarViewModel.notJudgeLogin}"
+                    binding:noteJudgeWifi="@{true}"
                     binding:onClickCommand="@{toolBarViewModel.backClick}"
                     binding:visible="@{toolBarViewModel.backClick != null}"
                     android:orientation="horizontal">
@@ -103,11 +103,9 @@
                         android:background="?selectableItemBackgroundBorderless"
                         android:contentDescription="@null"
                         android:padding="11dp"
-                        binding:noteJudgeLogin="@{toolBarViewModel.notJudgeLogin}"
                         binding:onClickCommand="@{toolBarViewModel.saveClick}"
                         binding:srcRes="@{toolBarViewModel.isFavored ? toolBarViewModel.saveLikeDraResID : toolBarViewModel.saveNoLikeDraResID}"
-                        binding:visible="@{toolBarViewModel.saveClick != null}"
-                        tools:src="@drawable/picture_ic_camera" />
+                        binding:visible="@{toolBarViewModel.saveClick != null}" />
 
                     <ImageView
                         android:layout_width="45dp"
@@ -115,11 +113,9 @@
                         android:background="?selectableItemBackgroundBorderless"
                         android:contentDescription="@null"
                         android:padding="11dp"
-                        binding:noteJudgeLogin="@{toolBarViewModel.notJudgeLogin}"
                         binding:onClickCommand="@{toolBarViewModel.shareClick}"
                         binding:srcRes="@{toolBarViewModel.shareDraResID}"
-                        binding:visible="@{toolBarViewModel.shareClick != null}"
-                        tools:src="@drawable/picture_ic_camera" />
+                        binding:visible="@{toolBarViewModel.shareClick != null}"/>
                 </LinearLayout>
             </androidx.appcompat.widget.Toolbar>
         </LinearLayout>

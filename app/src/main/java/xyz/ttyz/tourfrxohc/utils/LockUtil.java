@@ -57,7 +57,7 @@ public class LockUtil {
     private static final String INTENT_ACTION_GRANT_USB = BuildConfig.APPLICATION_ID + ".GRANT_USB";
 
     private LockDelegate lockDelegate;
-    UsbSerialPort usbSerialPort = null;
+    public UsbSerialPort usbSerialPort = null;
     UsbDevice device = null;
     private LockUtil(LockDelegate lockDelegate) {
         this.lockDelegate = lockDelegate;
@@ -76,6 +76,7 @@ public class LockUtil {
             lockUtil.lockDelegate = null;
         }
     }
+
 
     public boolean connectSerialPort(){
         //查找USB驱动
@@ -258,7 +259,7 @@ public class LockUtil {
     // 打开全部钥匙
     public void openAllKey(){
         for(int i = 1; i <= BankNumber; i ++){
-            multiOpen(i, 0, MAX_JI);
+            multiOpen(i, 0, 50);
         }
         readAllKeyState();// 跟读状态
     }
@@ -334,14 +335,12 @@ public class LockUtil {
         for (int i = 0; i < 20; i++) {
             data[i] = (byte) 0xff;
         }
-        int nData = 1;
-        data[0] = (byte) 0xff;
-        if (nCoils > 8) {
-            nData = 2;
+        int nData;
+        if(nCoils % 8 == 0 ){
+            nData = nCoils/ 8;
         } else {
-            nData = 1;
+            nData = (nCoils/ 8) + 1;
         }
-
         byte[] m_cmd = new byte[128];
         int nLen = Tools.BulidModbusWriteMultipleCoils(m_cmd, address, nStartAddr, nCoils, nData, data);
         sendSerialPort(new SendModel(nLen, m_cmd));

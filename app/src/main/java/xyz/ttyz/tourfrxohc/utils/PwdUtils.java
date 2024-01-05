@@ -30,6 +30,7 @@ public class PwdUtils {
         //生成密码
         Random random = new Random();
         int randomNumber = random.nextInt(900000) + 100000;
+        Log.i(TAG, "setSuperPwd: 设置超级密码 -> " + randomNumber);
         return randomNumber + "";
     }
     // 加密后的
@@ -58,9 +59,9 @@ public class PwdUtils {
         Random random = new Random();
         int randomNumber = random.nextInt(90000) + 10000;
         String pwd = randomNumber + "" + doorNumber;
-        //将密码与门对应并存入本地
+        //将密码与门对应并存入本地,明文存
         putPwdLocal(doorNumber, pwd);
-        return pwd;
+        return EncrUtil.encrypt(pwd);
     }
     private static final String pwdSplit = "-";
     //获取本地记录：密码-门
@@ -79,9 +80,14 @@ public class PwdUtils {
     public static void putPwdLocal(int doorNumber, String pwd){
         HashMap<String, Integer> localMap = getPwdArray();
         localMap.put(pwd, doorNumber);
+        savePwdLocal(localMap);
+    }
+
+    private static void savePwdLocal(HashMap<String, Integer> localMap){
+
         HashSet<String> hashSet = new HashSet<>();
         for (String localPwd :localMap.keySet()) {
-            hashSet.add(localPwd + pwdSplit + doorNumber);
+            hashSet.add(localPwd + pwdSplit + localMap.get(localPwd));
         }
         SharedPreferenceUtil.setShareString(ActivityManager.getInstance(), "pwdArray", hashSet);
     }
@@ -89,11 +95,26 @@ public class PwdUtils {
 
     public static int getDoor(String pwd){
         HashMap<String, Integer> localDoorArr = getPwdArray();
-        if(localDoorArr.containsKey(pwd)){
+        if(localDoorArr.containsKey(pwd)){//明文取
             return localDoorArr.get(pwd);
         } else return 0;
     }
 
+    //将门和密码移除
+    public static void removeDoor(int doorNumber){
+        HashMap<String, Integer> pwdMap = getPwdArray();
+        String waitDeleteKey = null;
+        for (String pwd : pwdMap.keySet()) {
+            if(pwdMap.get(pwd) != null && pwdMap.get(pwd) == doorNumber){
+                waitDeleteKey = pwd;
+                break;
+            }
+        }
+        if(waitDeleteKey != null){
+            pwdMap.remove(waitDeleteKey);
+            savePwdLocal(pwdMap);
+        }
+    }
 
     //endregion
 }

@@ -5,6 +5,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
+import androidx.databinding.ObservableField;
+
 import com.dilusense.customkeyboard.KeyboardUtils;
 
 import java.util.HashMap;
@@ -16,13 +18,17 @@ import xyz.ttyz.mylibrary.method.RetrofitUtils;
 import xyz.ttyz.mylibrary.method.RfRxOHCBaseModule;
 import xyz.ttyz.mylibrary.method.RxOHCUtils;
 import xyz.ttyz.toubasemvvm.adapter.OnClickAdapter;
+import xyz.ttyz.toubasemvvm.utils.VersionUtils;
 import xyz.ttyz.toubasemvvm.vm.ToolBarViewModel;
 import xyz.ttyz.tourfrxohc.BaseApplication;
+import xyz.ttyz.tourfrxohc.DefaultUtils;
 import xyz.ttyz.tourfrxohc.R;
 import xyz.ttyz.tourfrxohc.databinding.ActivityPwdBinding;
 import xyz.ttyz.tourfrxohc.http.BaseSubscriber;
 import xyz.ttyz.tourfrxohc.models.CarModel;
+import xyz.ttyz.tourfrxohc.utils.LockUtil;
 import xyz.ttyz.tourfrxohc.utils.PwdUtils;
+import xyz.ttyz.tourfrxohc.utils.TimeUtils;
 import xyz.ttyz.tourfrxohc.utils.ToastUtils;
 import xyz.ttyz.tourfrxohc.weight.KeyboardNext;
 import xyz.ttyz.tourfrxohc.weight.VerificationCodeView;
@@ -39,6 +45,7 @@ public class PwdActivity extends BaseActivity<ActivityPwdBinding>{
     private static final String TAG = "PwdActivity";
 
     public int type;// 取还是存
+    public ObservableField<String> pwdFiled = new ObservableField<>("");
     public static void show(int type){
         Intent intent = new Intent(ActivityManager.getInstance(), PwdActivity.class);
         intent.putExtra("type", type);
@@ -65,62 +72,46 @@ public class PwdActivity extends BaseActivity<ActivityPwdBinding>{
         mBinding.setToolBarViewModel(toolBarViewModel);
         type = getIntent().getIntExtra("type", PUT);
         KeyboardNext keyboardIdentity = new KeyboardNext();
-        mBinding.vcv.setOnCodeFinishListener(new VerificationCodeView.OnCodeFinishListener() {
-            @Override
-            public void onTextChange(View view, String content) {
-            }
-
-            @Override
-            public void onComplete(View view, String content) {
-            }
-
-            @Override
-            public void onFocusChanged(EditText editText) {
-                if(editText != null)
-                    keyboardIdentity.attachTo(editText);
-
-            }
-        });
-
-        KeyboardUtils.bindEditTextEvent(keyboardIdentity,(EditText) mBinding.vcv.getChildAt(0));
+        KeyboardUtils.bindEditTextEvent(keyboardIdentity, mBinding.etPwd);
         keyboardIdentity.setOnOkClick(new KeyboardNext.OnOkClick() {
             @Override
             public void onOkClick() {
                 onClickConfirm.click();
             }
         });
-        keyboardIdentity.setOnDeleteNoneClick(new KeyboardNext.OnDeleteNoneClick() {
-            @Override
-            public void onDeleteNoneClick(EditText editText) {
-                //focus 上一个
-                int pos = mBinding.vcv.indexOfChild(editText);
-                if(pos > 0){
-                    keyboardIdentity.attachTo((EditText) mBinding.vcv.getChildAt(pos - 1));
-                }
-            }
-        });
     }
 
     @Override
     protected void initServer() {
+        //检查更新
+        VersionUtils.check(this);
+        //同步故障柜
+        Map map = new HashMap();
+        map.put("syncDate", TimeUtils.getServerNeedDate());
+        map.put("keyCabinetId", PwdUtils.getWareHouseCode());
+        map.put("boxNum", DefaultUtils.getErrorKeyList());
+        new RxOHCUtils<>(ActivityManager.getInstance()).executeApi(BaseApplication.apiService.synFaultCabinet(RetrofitUtils.getNormalBody(map)), new BaseSubscriber<Object>(PwdActivity.this) {
+            @Override
+            public void success(Object data) {
 
+            }
+        });
     }
 
     public OnClickAdapter.onClickCommand onClickConfirm = new OnClickAdapter.onClickCommand() {
         @Override
         public void click() {
-           if(mBinding.vcv.getResult().length() == 4){
+           if(pwdFiled.get().length() == 4){
                switch (type){
                    case PUT:{
                        Map map = new HashMap();
-                       map.put("keyInterBoxCode", mBinding.vcv.getResult());
+                       map.put("keyInterBoxCode", pwdFiled.get());
                        map.put("keyCabinetId", PwdUtils.getWareHouseCode());
                        new RxOHCUtils<>(ActivityManager.getInstance()).executeApi(BaseApplication.apiService.getInterBoxCarInfo(RetrofitUtils.getNormalBody(map)), new BaseSubscriber<CarModel>(PwdActivity.this) {
                            @Override
                            public void success(CarModel data) {
 
-                               PutDetailActivity.show(data, mBinding.vcv.getResult());
-                               mBinding.vcv.setEmpty();
+                               PutDetailActivity.show(data, pwdFiled.get());
 
                            }
                        });
@@ -128,14 +119,14 @@ public class PwdActivity extends BaseActivity<ActivityPwdBinding>{
                    case GET:{
                        Map map = new HashMap();
                        map.put("keyCabinetType", 2);
-                       map.put("keyOutBoxCheckCode", mBinding.vcv.getResult());
+                       map.put("keyOutBoxCheckCode", pwdFiled.get());
                        map.put("keyCabinetId", PwdUtils.getWareHouseCode());
                        new RxOHCUtils<>(ActivityManager.getInstance()).executeApi(BaseApplication.apiService.canOutBoxKeyList(RetrofitUtils.getNormalBody(map)), new BaseSubscriber<List<CarModel>>(PwdActivity.this) {
                            @Override
                            public void success(List<CarModel> data) {
                                // 成功才进入
-                               GetListActivity.show(mBinding.vcv.getResult());
-                               mBinding.vcv.setEmpty();
+                               GetListActivity.show(pwdFiled.get());
+                               pwdFiled.set("");
                            }
                        });
                        break;}

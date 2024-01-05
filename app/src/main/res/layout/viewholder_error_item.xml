@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:binding="http://schemas.android.com/apk/res-auto"
+    tools:ignore="MissingDefaultResource">
+
+    <data>
+
+        <variable
+            name="context"
+            type="xyz.ttyz.tourfrxohc.viewholder.ErrorItemViewHolder" />
+        <variable
+            name="carModel"
+            type="xyz.ttyz.tourfrxohc.models.CarModel" />
+    </data>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginBottom="15dp"
+        android:gravity="center_vertical"
+        android:padding="15dp"
+        android:background="@drawable/shape_alpha_white_conor">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            tools:ignore="EllipsizeMaxLines"
+            android:text='@{"柜号 " + carModel.doorNumber}'
+            tools:text="柜号 23"
+            android:textSize="14sp"
+            android:textColor="@color/white"
+            android:ellipsize="middle"/>
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="已打开"
+            android:textSize="8sp"
+            android:textColor="#FFC162"
+            android:text='@{carModel.open ? "已打开" : "已关闭"}'/>
+        <TextView
+            android:layout_width="60dp"
+            android:layout_height="21dp"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:layout_marginStart="5dp"
+            android:background="@drawable/bg_safe_alert_back"
+            android:textSize="11sp"
+            binding:noteJudgeWifi="@{true}"
+            binding:onClickCommand="@{context.onClickVerify}"
+            android:text="验证开门" />
+        <TextView
+            android:layout_width="60dp"
+            android:layout_height="21dp"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:layout_marginStart="5dp"
+            binding:onClickCommand="@{context.onClickNormal}"
+            android:background="@drawable/bg_conor_lightblue_white"
+            android:textSize="11sp"
+            android:text="设为正常" />
+    </LinearLayout>
+</layout>

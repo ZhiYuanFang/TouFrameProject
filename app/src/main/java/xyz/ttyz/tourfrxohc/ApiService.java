@@ -14,6 +14,7 @@ import retrofit2.http.QueryMap;
 import xyz.ttyz.mylibrary.method.BaseModule;
 import xyz.ttyz.tourfrxohc.models.CarModel;
 import xyz.ttyz.tourfrxohc.models.MainModel;
+import xyz.ttyz.tourfrxohc.models.UpdateModel;
 import xyz.ttyz.tourfrxohc.models.UserModel;
 
 /**
@@ -22,6 +23,9 @@ import xyz.ttyz.tourfrxohc.models.UserModel;
  */
 
 public interface ApiService {
+    //检查钥匙柜更新
+    @GET("/newKeyCabinet/checkKeyCabinetUpdate.json")
+    Observable<BaseModule<UpdateModel>> checkKeyCabinetUpdate();
     //故障柜同步接口
     @POST("/newKeyCabinet/synFaultCabinet.json")
     Observable<BaseModule<Object>> synFaultCabinet(@Body RequestBody data);

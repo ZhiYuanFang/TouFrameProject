@@ -11,9 +11,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import xyz.ttyz.mylibrary.method.ActivityManager;
+import xyz.ttyz.mylibrary.method.BaseModule;
 import xyz.ttyz.mylibrary.method.RetrofitUtils;
 import xyz.ttyz.mylibrary.method.RxOHCUtils;
 import xyz.ttyz.toubasemvvm.adapter.OnClickAdapter;
+import xyz.ttyz.toubasemvvm.utils.DialogUtils;
 import xyz.ttyz.toubasemvvm.vm.BaseViewModle;
 import xyz.ttyz.tourfrxohc.BaseApplication;
 import xyz.ttyz.tourfrxohc.DefaultUtils;
@@ -78,9 +80,34 @@ public class PutDetailActivity extends BaseActivity<ActivityPutDetailBinding>{
         openDoorFiled.set(doorNumber);
 
         boxPassword = PwdUtils.getDoorPwd(doorNumber);
-        retryClick.click();
 
 
+        // 门想开
+        Map map = new HashMap();
+        map.put("applyInterBoxDate", TimeUtils.getServerNeedDate());
+        map.put("boxNum", openDoorFiled.get());
+        map.put("boxPassword", boxPassword);
+        map.put("keyCabinetId", PwdUtils.getWareHouseCode());
+        map.put("keyCabinetType", 2);
+        map.put("keyInterBoxCode", keyInterBoxCode);
+        new RxOHCUtils<>(ActivityManager.getInstance()).executeApi(BaseApplication.apiService.beforeInterBoxKey(RetrofitUtils.getNormalBody(map)), new BaseSubscriber<Object>(PutDetailActivity.this) {
+            @Override
+            public void success(Object data) {
+                //后端点了出柜之后，腾出了这个柜子，才能开柜
+                retryClick.click();
+            }
+
+            @Override
+            protected void fail(BaseModule<Object> baseModule) {
+                //接口不让出这个柜
+                DialogUtils.showSingleDialog("当前密码已失效，请重新申请密码开柜", new DialogUtils.DialogButtonModule("确定", new DialogUtils.DialogClickDelegate() {
+                    @Override
+                    public void click(DialogUtils.DialogButtonModule dialogButtonModule) {
+                        finish();
+                    }
+                }));
+            }
+        });
     }
 
     @Override
@@ -112,20 +139,6 @@ public class PutDetailActivity extends BaseActivity<ActivityPutDetailBinding>{
             }).openKey(openDoorFiled.get());
 
 
-            // 门想开
-            Map map = new HashMap();
-            map.put("applyInterBoxDate", TimeUtils.getServerNeedDate());
-            map.put("boxNum", openDoorFiled.get());
-            map.put("boxPassword", boxPassword);
-            map.put("keyCabinetId", PwdUtils.getWareHouseCode());
-            map.put("keyCabinetType", 2);
-            map.put("keyInterBoxCode", keyInterBoxCode);
-            new RxOHCUtils<>(ActivityManager.getInstance()).executeApi(BaseApplication.apiService.beforeInterBoxKey(RetrofitUtils.getNormalBody(map)), new BaseSubscriber<Object>(PutDetailActivity.this) {
-                @Override
-                public void success(Object data) {
-
-                }
-            });
 
         }
     };
@@ -141,8 +154,7 @@ public class PutDetailActivity extends BaseActivity<ActivityPutDetailBinding>{
             new RxOHCUtils<>(ActivityManager.getInstance()).executeApi(BaseApplication.apiService.cancelBeforeInterBoxKey(RetrofitUtils.getNormalBody(map)), new BaseSubscriber<Object>(PutDetailActivity.this) {
                 @Override
                 public void success(Object data) {
-                    //故障之后，直接跳转到首页
-                    PannelActivity.show();
+                    //故障之后，回到输入密码页
                     finish();
                 }
             });

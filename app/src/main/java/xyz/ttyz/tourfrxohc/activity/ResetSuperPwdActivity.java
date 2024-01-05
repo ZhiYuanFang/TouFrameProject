@@ -15,6 +15,7 @@ import xyz.ttyz.mylibrary.method.RxOHCUtils;
 import xyz.ttyz.mylibrary.protect.SharedPreferenceUtil;
 import xyz.ttyz.toubasemvvm.adapter.OnClickAdapter;
 import xyz.ttyz.tourfrxohc.BaseApplication;
+import xyz.ttyz.tourfrxohc.DefaultUtils;
 import xyz.ttyz.tourfrxohc.R;
 import xyz.ttyz.tourfrxohc.databinding.ActivityResetSuperPwdBinding;
 import xyz.ttyz.tourfrxohc.http.BaseSubscriber;
@@ -56,6 +57,8 @@ public class ResetSuperPwdActivity extends BaseActivity<ActivityResetSuperPwdBin
         if(autoOpen){
             //发送全部开箱指令
             PwdUtils.clearSuperPwd();
+            //将所有钥匙柜清空
+            DefaultUtils.resetAllDoorWithNoneKey();
             LockUtil.getInstance(new LockUtil.LockDelegate() {
                 @Override
                 public void callBackOpen(int keyNumber) {

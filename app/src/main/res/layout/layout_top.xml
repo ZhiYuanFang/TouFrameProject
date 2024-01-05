@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="32dp"
@@ -10,6 +11,26 @@
         android:layout_height="14dp"
         android:layout_marginStart="15dp"
         android:src="@mipmap/logo"/>
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/iv_tolauncher"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+        <View
+            android:layout_width="1dp"
+            android:layout_height="10dp"
+            android:layout_marginStart="7dp"
+            android:layout_marginEnd="7dp"
+            android:background="#DFDFDF"/>
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="14dp"
+            android:src="@mipmap/toluncher"/>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
     <View
         android:layout_width="0dp"
         android:layout_height="match_parent"

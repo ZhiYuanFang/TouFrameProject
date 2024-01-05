@@ -1,5 +1,6 @@
 package xyz.ttyz.toubasemvvm.ui;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -7,6 +8,7 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
@@ -14,6 +16,7 @@ import androidx.annotation.CallSuper;
 import androidx.annotation.CheckResult;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ViewDataBinding;
@@ -54,7 +57,7 @@ import xyz.ttyz.toubasemvvm.utils.StatusBarUtil;
 import xyz.ttyz.toubasemvvm.utils.ToastUtil;
 
 
-public abstract class BaseTouActivity<T extends ViewDataBinding> extends SwipeBackActivity implements LifecycleProvider<ActivityEvent> {
+public abstract class BaseTouActivity<T extends ViewDataBinding> extends Activity implements LifecycleProvider<ActivityEvent> {
     protected T mBinding;
 
     public ObservableBoolean loadEnd = new ObservableBoolean(true);
@@ -79,15 +82,20 @@ public abstract class BaseTouActivity<T extends ViewDataBinding> extends SwipeBa
             setTheme(R.style.MimeTheme);//设置全屏， 防止api 26闪退
         } else setTheme(R.style.TouTheme);//使用swipeBack 需要设置主题，否则会显示titlebar
         //当FitsSystemWindows设置 true 时，会在屏幕最上方预留出状态栏高度的 padding
-        StatusBarUtil.setRootViewFitsSystemWindows(this, true);
-        //设置状态栏透明
-        StatusBarUtil.setTranslucentStatus(this);
-        if (!StatusBarUtil.setStatusBarFontIconDark(this, true)) {
-            //如果不支持设置深色风格 为了兼容总不能让状态栏白白的看不清, 于是设置一个状态栏颜色为半透明,
-            //这样半透明+白=灰, 状态栏的文字能看得清
-            StatusBarUtil.setStatusBarColor(this, 0x55000000);
-        }
-
+//        StatusBarUtil.setRootViewFitsSystemWindows(this, true);
+//        //设置状态栏透明
+//        StatusBarUtil.setTranslucentStatus(this);
+//        if (!StatusBarUtil.setStatusBarFontIconDark(this, true)) {
+//            //如果不支持设置深色风格 为了兼容总不能让状态栏白白的看不清, 于是设置一个状态栏颜色为半透明,
+//            //这样半透明+白=灰, 状态栏的文字能看得清
+//            StatusBarUtil.setStatusBarColor(this, 0x55000000);
+//        }
+        //禁用状态栏
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        //将底部虚拟按钮隐藏
+        WindowManager.LayoutParams params = getWindow().getAttributes();
+        params.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION|View.SYSTEM_UI_FLAG_IMMERSIVE;
+        getWindow().setAttributes(params);
         if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP) {
             //低版本网络监听
             Intent intent = new Intent();

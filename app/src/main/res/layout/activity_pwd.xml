@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:binding="http://schemas.android.com/tools">
+    xmlns:binding="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -23,8 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:gravity="center_horizontal"
-            android:background="@mipmap/bg">
+            android:gravity="center_horizontal">
             <include layout="@layout/layout_top"/>
 
             <include
@@ -48,21 +47,22 @@
                 android:layout_centerHorizontal="true"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
-                <xyz.ttyz.tourfrxohc.weight.VerificationCodeView
-                    android:id="@+id/vcv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    app:vcv_et_bg="@drawable/et_code_bg"
-                    android:orientation="horizontal"
-                    app:vcv_et_number="4"
-                    app:vcv_et_spacing="6dp"
-                    app:vcv_et_width="50dp"
-                    app:vcv_et_text_color="@color/white"
-                    app:vcv_et_text_size="25sp" />
+                <EditText
+                    android:id="@+id/et_pwd"
+                    android:layout_width="200dp"
+                    android:layout_height="50dp"
+                    android:text="@={context.pwdFiled}"
+                    android:hint="请输入"
+                    android:focusable="false"
+                    android:inputType="number"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"
+                    android:paddingStart="15dp"
+                    android:background="@drawable/shape_alpha_white_conor"/>
                 <Button
                     android:layout_width="50dp"
                     android:layout_height="50dp"
+                    android:layout_marginStart="5dp"
                     android:text="确定"
                     binding:onClickCommand="@{context.onClickConfirm}"
                     android:textSize="15sp"
@@ -87,6 +87,7 @@
                 android:foreground="?selectableItemBackground"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
+                binding:noteJudgeWifi="@{true}"
                 binding:onClickCommand="@{context.onClickSafeOpen}"
                 android:background="@drawable/bg_safe_alert_back"
                 android:orientation="horizontal">

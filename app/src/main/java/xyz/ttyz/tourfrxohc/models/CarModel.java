@@ -28,7 +28,7 @@ public class CarModel implements Serializable, Observable {
 
     private boolean isOpen;
 
-    private int doorNumber;//对应的是哪个门，由 DefaultUtils.getDoorAddress 赋值
+    private int boxNum;//对应的是哪个门，由 DefaultUtils.getDoorAddress 赋值
     public boolean isErrorDoor;//取钥匙的时候作为辅助判断 本地数据
 
     @Bindable
@@ -53,11 +53,11 @@ public class CarModel implements Serializable, Observable {
 
     @Bindable
     public int getDoorNumber() {
-        return doorNumber;
+        return boxNum;
     }
 
     public void setDoorNumber(int doorNumber) {
-        this.doorNumber = doorNumber;
+        this.boxNum = doorNumber;
         notifyChange(BR.doorNumber);
     }
 
